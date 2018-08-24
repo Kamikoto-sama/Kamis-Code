@@ -20,8 +20,7 @@ QPushButton:pressed{
 QWidget{font-family: "Comic Sans MS";}
 QMessageBox{font-size: 20px;}
 QFrame{border: none;}
-QToolTip
-{	
+QToolTip{	
     border: 1px solid #6ebcd2;
     background: qlineargradient(spread:pad, x1:0.461, y1:1, x2:0.477682, y2:0, stop:0 rgba(189, 189, 189, 255), stop:1 rgba(255, 255, 255, 255));
     border-radius: 3px;
@@ -38,6 +37,7 @@ QToolTip
 	    border: none;
 	    height: 25px;
 	}
+	#sideBar QCheckBox{padding-left: 5px;}
 	#desc{background: #F2F2F2;border-radius: 5px;}
 	#closeSide{font-size: 12px;font-weight: bold;}
 
@@ -47,6 +47,7 @@ QToolTip
 	#t_row QPushButton{font-size: 16px;font-weight: bold;}
 	
 	#t_row #title_name,
+	#t_row #con_date,
 	#t_row #count{
 	background: #D9D9D9;
 	border: none;
@@ -62,7 +63,7 @@ QToolTip
 		border-top-left-radius: 5px;
 		border-bottom-left-radius: 5px;
 	}
-	#mark{font-size: 16px;}
+	#t_row #con_date{border-radius: 5px;margin-right: 5px;}
 
 	QMenu{
 		border: 1px solid red;

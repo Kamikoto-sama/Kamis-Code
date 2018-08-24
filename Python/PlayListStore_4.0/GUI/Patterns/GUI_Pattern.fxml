@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="592.0" prefWidth="793.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <AnchorPane prefHeight="70.0" style="-fx-background-color: silver;" VBox.vgrow="NEVER">
+         <children>
+            <Button layoutX="683.0" layoutY="15.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="39.0" prefWidth="96.0" text="ДОБАВИТЬ" textAlignment="CENTER" AnchorPane.rightAnchor="14.0">
+               <font>
+                  <Font name="Consolas Bold" size="16.0" />
+               </font>
+            </Button>
+            <Button layoutX="14.0" layoutY="17.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="128.0" text="ПРОДОЛЖЕНИЯ" textAlignment="CENTER" AnchorPane.leftAnchor="10.0">
+               <font>
+                  <Font name="Consolas Bold" size="16.0" />
+               </font>
+            </Button>
+            <Label layoutX="159.0" layoutY="25.0" text="Всего просмотрено:0">
+               <font>
+                  <Font name="Consolas Bold" size="17.0" />
+               </font>
+            </Label>
+            <ComboBox layoutX="358.0" layoutY="17.0" prefHeight="36.0" prefWidth="194.0" promptText="Список плейлистов" />
+         </children>
+      </AnchorPane>
+      <TabPane tabClosingPolicy="ALL_TABS" VBox.vgrow="ALWAYS">
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+         <tabs>
+            <Tab text="Плейлист 1">
+               <content>
+                  <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                     <children>
+                        <AnchorPane prefHeight="45.0" prefWidth="910.0" style="-fx-border-color: aqua;" VBox.vgrow="NEVER">
+                           <children>
+                              <Label layoutX="252.0" layoutY="8.0" text="Количество тайтлов:4">
+                                 <font>
+                                    <Font name="Consolas Bold" size="22.0" />
+                                 </font>
+                              </Label>
+                              <Button layoutX="860.0" layoutY="5.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="36.0" prefWidth="85.0" text="Удалить" textAlignment="CENTER" AnchorPane.rightAnchor="4.0">
+                                 <font>
+                                    <Font name="Consolas Bold" size="16.0" />
+                                 </font>
+                              </Button>
+                              <Button layoutX="6.0" layoutY="5.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="36.0" prefWidth="96.0" text="ДОБАВИТЬ" textAlignment="CENTER" AnchorPane.leftAnchor="4.0">
+                                 <font>
+                                    <Font name="Consolas Bold" size="16.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                        </AnchorPane>
+                        <VBox spacing="9.0" VBox.vgrow="ALWAYS">
+                           <children>
+                              <VBox prefHeight="315.0" prefWidth="902.0" style="-fx-border-color: orange; -fx-border-width: 2;" VBox.vgrow="NEVER">
+                                 <children>
+                                    <HBox prefHeight="36.0" prefWidth="910.0" spacing="3.0" VBox.vgrow="NEVER">
+                                       <children>
+                                          <TextField text="Название тайтла 1" HBox.hgrow="ALWAYS">
+                                             <font>
+                                                <Font name="Consolas Bold" size="20.0" />
+                                             </font>
+                                          </TextField>
+                                          <TextField layoutX="10.0" layoutY="10.0" prefWidth="60.0" text="125" HBox.hgrow="NEVER">
+                                             <font>
+                                                <Font name="Consolas Bold" size="20.0" />
+                                             </font>
+                                          </TextField>
+                                       </children>
+                                    </HBox>
+                                    <VBox prefHeight="217.0" prefWidth="906.0" spacing="2.0">
+                                       <children>
+                                          <TextField style="-fx-background-color: #ebebeb;" text="Жанры">
+                                             <font>
+                                                <Font name="Consolas Bold" size="20.0" />
+                                             </font>
+                                          </TextField>
+                                          <TextArea prefHeight="258.0" prefWidth="906.0" style="-fx-background-color: #ebebeb;" text="Описание">
+                                             <font>
+                                                <Font name="Consolas Bold" size="18.0" />
+                                             </font>
+                                          </TextArea>
+                                          <HBox prefHeight="100.0" prefWidth="200.0" spacing="2.0">
+                                             <children>
+                                                <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="36.0" prefWidth="101.0" text="открыть" textAlignment="CENTER">
+                                                   <font>
+                                                      <Font name="Consolas Bold" size="19.0" />
+                                                   </font>
+                                                </Button>
+                                                <TextField prefHeight="37.0" prefWidth="719.0" style="-fx-background-color: #ebebeb;" text="Ссылка" HBox.hgrow="ALWAYS">
+                                                   <font>
+                                                      <Font name="Consolas Bold" size="20.0" />
+                                                   </font>
+                                                </TextField>
+                                                <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="36.0" prefWidth="102.0" text="СОХРАНИТЬ" textAlignment="CENTER">
+                                                   <font>
+                                                      <Font name="Consolas Bold" size="16.0" />
+                                                   </font>
+                                                </Button>
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets top="5.0" />
+                                       </VBox.margin>
+                                    </VBox>
+                                    <AnchorPane prefHeight="29.0" prefWidth="906.0" VBox.vgrow="NEVER">
+                                       <children>
+                                          <Button layoutX="101.0" layoutY="2.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="144.0" text="Выбрать метку" textAlignment="CENTER" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="2.0">
+                                             <font>
+                                                <Font name="Consolas Bold" size="16.0" />
+                                             </font>
+                                          </Button>
+                                          <Button layoutX="833.0" layoutY="2.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="105.0" text="Удалить" textAlignment="CENTER" AnchorPane.rightAnchor="5.0">
+                                             <font>
+                                                <Font name="Consolas Bold" size="16.0" />
+                                             </font>
+                                          </Button>
+                                          <Button layoutX="311.0" layoutY="2.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="144.0" text="Переместить" textAlignment="CENTER">
+                                             <font>
+                                                <Font name="Consolas Bold" size="16.0" />
+                                             </font>
+                                          </Button>
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets top="15.0" />
+                                       </VBox.margin>
+                                    </AnchorPane>
+                                 </children>
+                              </VBox>
+                              <HBox prefHeight="36.0" prefWidth="910.0" spacing="3.0" style="-fx-border-color: orange;">
+                                 <children>
+                                    <TextField editable="false" text="Название тайтла 2" HBox.hgrow="ALWAYS">
+                                       <font>
+                                          <Font name="Consolas Bold" size="20.0" />
+                                       </font>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </TextField>
+                                    <TextField editable="false" layoutX="10.0" layoutY="10.0" prefWidth="60.0" text="125" HBox.hgrow="NEVER">
+                                       <font>
+                                          <Font name="Consolas Bold" size="20.0" />
+                                       </font>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </TextField>
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="36.0" prefWidth="910.0" spacing="3.0" style="-fx-border-color: orange;">
+                                 <children>
+                                    <TextField editable="false" text="Название тайтла 3" HBox.hgrow="ALWAYS">
+                                       <font>
+                                          <Font name="Consolas Bold" size="20.0" />
+                                       </font>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </TextField>
+                                    <TextField editable="false" layoutX="10.0" layoutY="10.0" prefWidth="60.0" text="125" HBox.hgrow="NEVER">
+                                       <font>
+                                          <Font name="Consolas Bold" size="20.0" />
+                                       </font>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </TextField>
+                                 </children>
+                              </HBox>
+                           </children>
+                           <padding>
+                              <Insets left="2.0" right="2.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                  </VBox>
+               </content>
+            </Tab>
+            <Tab text="Плейлист 2">
+               <content>
+                  <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="2.0">
+                     <children>
+                        <AnchorPane prefHeight="45.0" prefWidth="910.0" style="-fx-border-color: green; -fx-border-width: 2;" VBox.vgrow="NEVER">
+                           <children>
+                              <Label layoutX="269.0" layoutY="9.0" text="Количество тайтлов:3">
+                                 <font>
+                                    <Font name="Consolas Bold" size="22.0" />
+                                 </font>
+                              </Label>
+                              <Button layoutX="860.0" layoutY="5.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="36.0" prefWidth="85.0" text="Удалить" textAlignment="CENTER" AnchorPane.rightAnchor="4.0">
+                                 <font>
+                                    <Font name="Consolas Bold" size="16.0" />
+                                 </font>
+                              </Button>
+                              <Button layoutX="8.0" layoutY="5.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="36.0" prefWidth="93.0" text="ДОБАВИТЬ" textAlignment="CENTER" AnchorPane.leftAnchor="6.0">
+                                 <font>
+                                    <Font name="Consolas Bold" size="16.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                        </AnchorPane>
+                        <VBox spacing="3.0" VBox.vgrow="ALWAYS">
+                           <children>
+                              <HBox prefHeight="36.0" prefWidth="910.0" spacing="3.0" style="-fx-border-color: orange;">
+                                 <children>
+                                    <TextField editable="false" text="Title name 5" HBox.hgrow="ALWAYS">
+                                       <font>
+                                          <Font name="Consolas Bold" size="20.0" />
+                                       </font>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </TextField>
+                                    <TextField editable="false" layoutX="10.0" layoutY="10.0" prefWidth="60.0" text="125" HBox.hgrow="NEVER">
+                                       <font>
+                                          <Font name="Consolas Bold" size="20.0" />
+                                       </font>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </TextField>
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="36.0" prefWidth="910.0" spacing="3.0" style="-fx-border-color: orange;">
+                                 <children>
+                                    <TextField editable="false" text="Title name 6" HBox.hgrow="ALWAYS">
+                                       <font>
+                                          <Font name="Consolas Bold" size="20.0" />
+                                       </font>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </TextField>
+                                    <TextField editable="false" layoutX="10.0" layoutY="10.0" prefWidth="60.0" text="125" HBox.hgrow="NEVER">
+                                       <font>
+                                          <Font name="Consolas Bold" size="20.0" />
+                                       </font>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </TextField>
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="36.0" prefWidth="910.0" spacing="3.0" style="-fx-border-color: orange;">
+                                 <children>
+                                    <TextField editable="false" text="Title name 7" HBox.hgrow="ALWAYS">
+                                       <font>
+                                          <Font name="Consolas Bold" size="20.0" />
+                                       </font>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </TextField>
+                                    <TextField editable="false" layoutX="10.0" layoutY="10.0" prefWidth="60.0" text="125" HBox.hgrow="NEVER">
+                                       <font>
+                                          <Font name="Consolas Bold" size="20.0" />
+                                       </font>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </TextField>
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="36.0" prefWidth="910.0" spacing="3.0" style="-fx-border-color: orange;">
+                                 <children>
+                                    <TextField editable="false" text="Title name 7" HBox.hgrow="ALWAYS">
+                                       <font>
+                                          <Font name="Consolas Bold" size="20.0" />
+                                       </font>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </TextField>
+                                    <TextField editable="false" layoutX="10.0" layoutY="10.0" prefWidth="60.0" text="125" HBox.hgrow="NEVER">
+                                       <font>
+                                          <Font name="Consolas Bold" size="20.0" />
+                                       </font>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </TextField>
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="36.0" prefWidth="910.0" spacing="3.0" style="-fx-border-color: orange;">
+                                 <children>
+                                    <TextField editable="false" text="Title name 7" HBox.hgrow="ALWAYS">
+                                       <font>
+                                          <Font name="Consolas Bold" size="20.0" />
+                                       </font>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </TextField>
+                                    <TextField editable="false" layoutX="10.0" layoutY="10.0" prefWidth="60.0" text="125" HBox.hgrow="NEVER">
+                                       <font>
+                                          <Font name="Consolas Bold" size="20.0" />
+                                       </font>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </TextField>
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="36.0" prefWidth="910.0" spacing="3.0" style="-fx-border-color: orange;">
+                                 <children>
+                                    <TextField editable="false" text="Title name 7" HBox.hgrow="ALWAYS">
+                                       <font>
+                                          <Font name="Consolas Bold" size="20.0" />
+                                       </font>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </TextField>
+                                    <TextField editable="false" layoutX="10.0" layoutY="10.0" prefWidth="60.0" text="125" HBox.hgrow="NEVER">
+                                       <font>
+                                          <Font name="Consolas Bold" size="20.0" />
+                                       </font>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </TextField>
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="36.0" prefWidth="910.0" spacing="3.0" style="-fx-border-color: orange;">
+                                 <children>
+                                    <TextField editable="false" text="Title name 7" HBox.hgrow="ALWAYS">
+                                       <font>
+                                          <Font name="Consolas Bold" size="20.0" />
+                                       </font>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </TextField>
+                                    <TextField editable="false" layoutX="10.0" layoutY="10.0" prefWidth="60.0" text="125" HBox.hgrow="NEVER">
+                                       <font>
+                                          <Font name="Consolas Bold" size="20.0" />
+                                       </font>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </TextField>
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="36.0" prefWidth="910.0" spacing="3.0" style="-fx-border-color: orange;">
+                                 <children>
+                                    <TextField editable="false" text="Title name 7" HBox.hgrow="ALWAYS">
+                                       <font>
+                                          <Font name="Consolas Bold" size="20.0" />
+                                       </font>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </TextField>
+                                    <TextField editable="false" layoutX="10.0" layoutY="10.0" prefWidth="60.0" text="125" HBox.hgrow="NEVER">
+                                       <font>
+                                          <Font name="Consolas Bold" size="20.0" />
+                                       </font>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </TextField>
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="36.0" prefWidth="910.0" spacing="3.0" style="-fx-border-color: orange;">
+                                 <children>
+                                    <TextField editable="false" text="Title name 7" HBox.hgrow="ALWAYS">
+                                       <font>
+                                          <Font name="Consolas Bold" size="20.0" />
+                                       </font>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </TextField>
+                                    <TextField editable="false" layoutX="10.0" layoutY="10.0" prefWidth="60.0" text="125" HBox.hgrow="NEVER">
+                                       <font>
+                                          <Font name="Consolas Bold" size="20.0" />
+                                       </font>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </TextField>
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="36.0" prefWidth="910.0" spacing="3.0" style="-fx-border-color: orange;">
+                                 <children>
+                                    <TextField editable="false" text="Title name 7" HBox.hgrow="ALWAYS">
+                                       <font>
+                                          <Font name="Consolas Bold" size="20.0" />
+                                       </font>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </TextField>
+                                    <TextField editable="false" layoutX="10.0" layoutY="10.0" prefWidth="60.0" text="125" HBox.hgrow="NEVER">
+                                       <font>
+                                          <Font name="Consolas Bold" size="20.0" />
+                                       </font>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </TextField>
+                                 </children>
+                              </HBox>
+                           </children>
+                           <padding>
+                              <Insets left="2.0" right="2.0" />
+                           </padding>
+                        </VBox>
+                     </children></VBox>
+               </content>
+            </Tab>
+         </tabs>
+      </TabPane>
+   </children>
+</VBox>

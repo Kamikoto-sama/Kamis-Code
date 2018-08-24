@@ -1,0 +1,88 @@
+Create new playlist|Создать новый плейлист
+Delete selected playlist|Удалить выбранный плейлист
+Add new title to selected playlist|Добавть новый тайтл в выбранный плейлист
+ADD TITLE|ДОБАВИТЬ ТАЙТЛ
+ чтобы поделиться с обладателем проги или вывести в формате "txt" файл"",'Mark as "It''''s a continuation of another title"'|Пометить как "Это продолжение другого тайтла"
+This is a continuation*|Это продолжение*
+Mark as "title is not fifnished"|Пометить как "Тайтл незакончен"
+NFin!|НКон!
+DEL TITLE|УДАЛИТЬ
+Delete selected title|Удалить выбранный тайтл
+Choose mark|Выбрать пометку
+VIEWED|просмотрен
+Mark as "Viewed title"|Пометить как "ПРОСМОТРЕННО"
+TO BE CONTINUED|ПРОДОЛЖЕНИЕ
+Mark as "will be contiued" and add to continuation list|Пометить как "возможно продолжение" и добавить в список продолжений
+Mark as "unfinished view"|Пометить как "просмотр незакончен"
+PAUSE ON|ПАУЗА НА
+Continuation list|Список продолжений
+CONTINUATION|Продолжения
+Mark title as "watching now" \ Unmark it|Пометить тайтл как "уже смотрю" \ Снять отметку
+SEARCH TITLE|ИСКАТЬ ТАЙТЛ
+SETTINGS|настройки
+Added\Viewed|Добавленно\Просмотренно
+One or more of titles had a continuation !!|Один или несколько тайтлов получили продолжение!!
+Find selected title in the main list|Найти тайтл в его плейлисте
+Set date of selected title|Установить дату выбранного тайтла
+Search title in here|Искать тайтл здесь
+FIND TITLE|НАЙТИ ТАЙТЛ
+SEARCH|ИСКАТЬ
+Save crafted playlist|Сохранить собранный плейлист
+SEMPLE (TXT)|ПРОСТО (TXT)
+SEARCH TITLE MARKED AS "UNFINISHED VIEW"|Искать помеченные как "просмотр заброшен"
+Add all titles from choosed playlist|Добавить все тайтлы из выбранного плейлиста
+ADD ALL PLAYLIST|ДОБАВИТЬ ВЕСЬ ПЛЕЙЛИСТ
+Save as a simple text document \ ELSE Save for the same programm|Сохранить как простой текстовый документ \ ИНАЧЕ Сохранить для такой же программы
+SAVE|СОХРАНИТЬ
+CLEAR LIST|ОТЧИСТИТЬ СПИСОК
+Save playlist|Сохранить плейлист
+Total viewed:|Всего просмотренно:
+This is the count of all viewed titles|Количество всего просмотренных тайтлов
+When it will be continue?(Example:2000.01.21)|Когда предпологается продолжение?(Пример:2000.01.21)
+You can write here what series you watched|Можешь написать здесь на какой серии ты остановился
+Save playlist|Сохранить плейлист
+Add new playlist|Добавить новый плейлист
+[VIEWED]|ПРОСМОТРЕННО
+"move"-cut selected title And "insert" to insert|Врезать выбранный тайтл\Вставить в другой плейлист
+Open the link|Открыть ссылку
+OPEN|ОТКРЫТЬ
+Move selected playlist to the top of list|Переместить выбранный плейлист вверх списка
+MOVE UP|ВВЕРХ
+Move selected playlist to the end of list|Переместить выбранный плейлист в низ списка
+MOVE DOWN|ВНИЗ
+Rename selected playlist|Переименовать выбранный плейлист
+RENAME|переименовать
+This is the count of titles in this playlist|Количество тайтлов в данном плейлисте
+Titles in playlist:|Тайтлов в плейлисте:
+All added titles:|Всего добавленно:
+Mark as "It's a continuation of another title"|Пометить как "это продолжение другого тайтла"
+Are you sure want to delete filled play list ?|Уверен что хочешь удалить заполненный плейлист?
+Title with this name already exists !\r\nAre you sure want to creat a copy?|Тайтл с таким же названием уже существует!\r\nУвере что хочешь создать копию?"
+Empty title name !!!|Пустое имя тайтла!!!
+This title is added to continuation list !\r\nDo you want to delete it ?|Этот тайтл был добавлен в "список продолжений"!\r\nХочешь убрать его от туда?
+Title with this name already added !\r\nAre you sure want to make a copy ?|Тайтл с этим названием уже добавлен!\r\nУвере что хочешь сделать копию?"
+titles had a continuation !! Do you want to open it ?|тайтлов получили продолжение!!\r\nОткрыть их ?
+Such title already added !\r\nAre you sure want to creat a copy ?|Такой тайтл уже добавлен!\r\nУвере что хочешь сделать копию?"
+Playlist with same name already exists !Or you have used unrecognized char!|Плейлист с таким названием уже создан!\r\nИли ты использовал недопустимый символ!
+Необходимо перезагрузить программу|You need restart the program
+Title name|Название тайтла
+The count of episodes (x20min)|Количество серий (х20мин)
+Episode|Сейчас на серии
+Auto-clipboard|Автодобавление в буфер обмена
+Check updates|Проверить обновления
+A new update is available! Update now?|Доступно новое обновление! \nОбновить сейчас ?
+Open Dir|Открыть папку программы
+Neen help?|Помощь
+Insert|ВСТАВИТЬ
+MOVE|ПЕРЕМЕСТИТЬ
+VIEWING NOW|СМОТРЮ
+UNVIEW|ОТМЕНИТЬ
+Export|Экспорт
+Import playlist|Импортировать плейлист
+Export titles|Экспортировать тайтлы в плейлист
+All files|*.*|Все файлы|*.*
+DbClick to edit|Двойной щелчок для редактирования
+Set background of right bar|Установить фон правой панели
+Images|*.bmp;*.jpg|Картинки|*.bmp;*.jpg
+Choose playlist which you need|Список плейлистов
+Search by genre|Искать по жанру

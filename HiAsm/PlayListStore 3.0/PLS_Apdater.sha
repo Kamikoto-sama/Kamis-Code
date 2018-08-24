@@ -1,0 +1,531 @@
+Make(delphi)
+ver(4.04 build 184)
+Add(MainForm,2953706,130,370)
+{
+ Width=246
+ Height=122
+ Caption="PLS: Updater"
+ BorderStyle=3
+ Position=1
+ link(onCreate,13075698:doTimer,[])
+}
+Add(HTTP_Get,2667373,315,280)
+{
+ URL="http://apiexperts.ru/lib_pls/PLS_3.exe"
+ FileName="new.exe"
+ link(onStatus,11704670:doEvent1,[(360,286)(360,272)])
+ link(onDownload,1889217:doData,[(434,293)(434,230)])
+ link(onURLSize,10970548:doEvent1,[])
+ link(onStop,2262780:doCompare,[(363,307)(363,370)])
+ link(Position,2536380:Value,[])
+}
+Add(Memory,2536380,329,231)
+{
+ Default=Integer(0)
+}
+Add(GProgressBar,13330419,448,266)
+{
+ Width=240
+ Height=35
+ Align=2
+ Ctl3D=0
+ LightProgress=65280
+ DarkProgress=16776960
+ InvKindGrad=0
+ Point(doMax)
+}
+Add(Hub,10970548,375,294)
+{
+ OutCount=4
+ link(onEvent1,7564372:doValue,[(440,300)(440,318)])
+ link(onEvent2,2667373:doDownload,[(402,307)(402,338)(305,338)(305,286)])
+ link(onEvent3,13330419:doMax,[(424,314)(424,279)])
+ link(onEvent4,7466415:doCase,[(422,321)(422,332)])
+}
+Add(LedNumber,1682762,595,312)
+{
+ Left=130
+ Top=36
+ Width=111
+ Height=25
+ Font=[MS Sans Serif,10,0,0,1]
+ Alignment=0
+ Text=""
+ Point(doText)
+}
+Add(LedNumber,16526877,552,206)
+{
+ Top=36
+ Width=116
+ Height=25
+ WinStyle=3
+ Text=""
+ SegColor=255
+ Point(doText)
+ Point(doSegColor)
+}
+Add(Hub,11704670,373,266)
+{
+ link(onEvent1,13330419:doPosition,[])
+ link(onEvent2,5555506:doValue,[(410,279)(410,212)])
+}
+Add(Label,15408817,175,336)
+{
+ Left=115
+ Top=36
+ Width=16
+ Height=25
+ Color=0
+ Font=[Consolas,17,1,65535,204]
+ Caption="|"
+ AutoSize=1
+ Alignment=2
+}
+Add(DoData,1889217,448,224)
+{
+ Data=Integer(65280)
+ link(onEventData,14571360:doEvent1,[(489,230)(489,247)])
+}
+Add(Button,13201794,558,408)
+{
+ Top=63
+ Width=242
+ Height=30
+ Font=[Consolas,12,1,0,204]
+ Caption="CHECK UPDATE"
+ Point(doEnabled)
+ MakeTrans(Caption)
+ link(onClick,3574678:doEvent1,[])
+}
+Add(HTTP_Get,3602494,665,394)
+{
+ URL="http://apiexperts.ru/lib_pls/ver.txt"
+ link(onStatus,3055953:doValue,[])
+ link(onDownload,825475:doConvert,[(741,407)(741,360)])
+ link(onURLSize,2917570:doEvent1,[])
+ link(onStop,1368524:doCompare,[(706,421)(706,504)])
+ link(Position,5600774:Value,[])
+}
+Add(Case,7466415,434,326)
+{
+ Value=Integer(0)
+ link(onTrue,8061771:doMessage,[])
+}
+Add(Message,8061771,483,333)
+{
+ Message="CONNECTION ERROR"
+ Caption="PLS: Updataer"
+ Icon=1
+}
+Add(If_else,2262780,525,364)
+{
+ Type=1
+ link(onTrue,2746612:doMessage,[])
+ link(Op1,5555506:Value,[(531,301)(501,301)])
+ link(Op2,7564372:Value,[(538,354)(552,354)])
+}
+Add(Memory,7564372,546,312)
+{
+ link(onData,1682762:doText,[])
+}
+Add(Memory,5555506,495,206)
+{
+ link(onData,16526877:doText,[])
+}
+Add(Message,2746612,571,364)
+{
+ Message="SERVER ERROR !!!"
+ Caption="PLS: Updataer"
+ Icon=1
+}
+Add(Convertor,825475,771,354)
+{
+ Mode=11
+ link(onResult,2357353:doValue,[])
+}
+Add(Case,11975342,772,535)
+{
+ Value=Integer(0)
+ link(onTrue,16752006:doMessage,[])
+}
+Add(Message,16752006,816,542)
+{
+ Message="CONNECTION ERROR"
+ Caption="PLS: Update checker"
+ Icon=1
+ Point(onOK)
+}
+Add(Hub,2917570,730,408)
+{
+ OutCount=3
+ link(onEvent1,3602494:doDownload,[(761,414)(761,439)(653,439)(653,400)])
+ link(onEvent2,11975342:doCase,[(754,421)(754,541)])
+ link(onEvent3,10006871:doValue,[(767,428)(767,440)])
+}
+Add(Memory,5600774,679,345)
+{
+ Default=Integer(0)
+}
+Add(Memory,3055953,772,394)
+{
+ Default=Integer(0)
+}
+Add(If_else,1368524,772,498)
+{
+ Type=1
+ link(onTrue,11460347:doMessage,[])
+ link(Op1,3055953:Value,[])
+ link(Op2,10006871:Value,[(785,481)(796,481)])
+}
+Add(Message,11460347,816,498)
+{
+ Message="SERVER ERROR !!!"
+ Caption="PLS: Update checker"
+ Icon=1
+ Point(onOK)
+}
+Add(Memory,10006871,790,434)
+{
+}
+Add(DS_SQLite,3711990,225,384)
+{
+ @Hint=#9:DATA BASE|
+ Name="data"
+ FileName="Data.db"
+ link(onOpen,3970136:doQuery,[])
+}
+Add(DSC_Query,3970136,267,384)
+{
+ SQL="SELECT * FROM Data"
+ DSManager="data"
+ link(onQuery,11390197:doSeparateMT,[])
+ link(onError,15940895:doWork1,[(309,404)(309,439)])
+}
+Add(MT_MultiData,11390197,320,384)
+{
+ Count=6
+ link(onData6,5817227:doSplit,[])
+}
+Add(MultiElement,15940895,321,433)
+{
+ @Hint=#10:MESS ERROR|
+ @Color=5570560
+ AddHint(-32,48,87,13,@Hint)
+}
+BEGIN_SDK
+  Add(EditMulti,8893549,21,21)
+  {
+   WorkCount=1
+   Width=118
+   Height=74
+   link(doWork1,7807514:doValue,[(31,27)(31,48)])
+  }
+  Add(Message,6332176,91,42)
+  {
+   Message="EMPTY"
+   Caption="PLS: ERROR (for developer)"
+   Icon=3
+   link(Message,7807514:Value,[(97,32)(83,32)(83,86)(48,86)])
+  }
+  Add(Memory,7807514,42,42)
+  {
+   link(onData,6332176:doMessage,[])
+  }
+END_SDK
+Add(StrPart,5817227,364,419)
+{
+ Char="."
+ link(onSplit,11838066:In,[(405,425)(405,405)])
+ link(onPart,3444040:doCompare,[])
+}
+Add(If_else,3444040,410,426)
+{
+ Type=5
+ Op2=Integer(0)
+ link(onTrue,16762462:doEvent1,[])
+}
+Add(If_else,9854672,861,354)
+{
+ link(onTrue,1292377:doMessage,[(912,360)(912,334)])
+ link(onFalse,7924872:doMessage,[(900,367)(900,381)])
+ link(Op2,15025016:Value,[])
+}
+Add(Message,7924872,907,375)
+{
+ Message="A new update is available! Update now?"
+ Caption="PLS: Update checker"
+ Type=2
+ Icon=4
+ Point(onYES)
+ MakeTrans(Message)
+ link(onYES,13736055:doWork1,[(962,388)(962,199)(256,199)])
+}
+Add(Memory,15025016,868,309)
+{
+}
+Add(LineBreak,16003598,823,309)
+{
+ @Color=5592575
+ Color=65535
+ link(Out,15025016:doValue,[])
+ Primary=[11838066,-410,90]
+}
+Add(HubEx,13736055,252,294)
+{
+ link(onEvent,10408186:doEvent1,[])
+}
+Add(Hub,16762462,454,426)
+{
+ OutCount=3
+ link(onEvent1,1184901:doData,[(501,432)(501,414)])
+ link(onEvent2,13736055:doWork3,[(479,439)(479,376)(256,376)])
+ link(onEvent3,12265756:doValue,[(482,446)(482,461)])
+}
+Add(DoData,1184901,511,408)
+{
+ Data=Integer(0)
+ link(onEventData,13201794:doEnabled,[])
+}
+Add(Message,1292377,922,328)
+{
+ Message="There is not new updates!"
+ Caption="PLS: Update checker"
+ Icon=4
+ Point(onOK)
+ MakeTrans(Message)
+ link(onOK,9066788:doWork3,[(977,341)])
+}
+Add(Timer,13075698,177,384)
+{
+ Enable=1
+ AutoStop=1
+ link(onTimer,3711990:doOpen,[])
+}
+Add(Hub,3574678,607,408)
+{
+ link(onEvent1,3602494:GetURLSize,[])
+ link(onEvent2,11858094:doData,[(637,421)(637,452)(547,452)(547,468)])
+}
+Add(DoData,11858094,560,462)
+{
+ Data=String(Cheking for updates...)
+ link(onEventData,5220019:doWork2,[])
+}
+Add(StatusBar,15598512,623,462)
+{
+ TextAlign=1
+ Panels=#23:Press check updates=250|
+}
+Add(HubEx,5220019,601,462)
+{
+ link(onEvent,15598512:doText,[])
+}
+Add(DoData,3439363,560,504)
+{
+ Data=String(Downloading...)
+ link(onEventData,7356612:doWork2,[])
+}
+Add(Hub,10408186,266,294)
+{
+ link(onEvent1,2667373:GetURLSize,[])
+ link(onEvent2,13609910:In,[(292,307)(292,324)])
+}
+Add(LineBreak,1835412,518,504)
+{
+ Caption="2"
+ Color=65535
+ link(Out,3439363:doData,[])
+ Primary=[13609910,-201,-186]
+}
+Add(GlobalVar,12265756,495,455)
+{
+ @Color=5635925
+ Name="3"
+}
+Add(Hub,14571360,518,241)
+{
+ OutCount=4
+ link(onEvent1,16526877:doSegColor,[(542,247)(542,219)])
+ link(onEvent2,13376442:doString,[(570,254)(570,242)])
+ link(onEvent3,13540006:doWork1,[(583,261)(583,281)])
+ link(onEvent4,15228335:In,[(539,268)(539,279)])
+}
+Add(MultiElement,13540006,602,275)
+{
+ @Color=16776960
+ link(onEvent1,1405158:doTimer,[])
+}
+BEGIN_SDK
+  Add(EditMulti,15615267,28,21)
+  {
+   EventCount=1
+   WorkCount=1
+   Width=272
+   Height=186
+   link(doWork1,7521498:doSwitch,[(41,27)(41,94)])
+  }
+  Add(FileTools,1031799,113,148)
+  {
+   link(onEnd,9424349:doTimer,[])
+   link(FileName,7218345:Var,[])
+   link(NewFileName,5897322:Var2,[(126,136)(100,136)])
+  }
+  Add(Memory,9392319,94,26)
+  {
+   Default=String(PLS_3.exe)
+  }
+  Add(Memory,16598600,134,26)
+  {
+   Default=String(new.exe)
+  }
+  Add(GetIndexData,7218345,113,88)
+  {
+   link(onIndex,10051236:doEvent1,[])
+   link(Data1,5897322:Var3,[(119,73)])
+   link(Data2,16598600:Value,[(126,68)(140,68)])
+  }
+  Add(IndexToChanel,209542,60,162)
+  {
+   link(onEvent1,1031799:doDelete,[])
+   link(onEvent2,1031799:doMove,[(102,175)(102,154)])
+  }
+  Add(Switch,7521498,57,88)
+  {
+   DataOn=Integer(0)
+   DataOff=Integer(1)
+   link(onSwitch,7218345:doIndex,[])
+  }
+  Add(GetDataEx,5897322,94,68)
+  {
+   link(Data,9392319:Value,[])
+  }
+  Add(Timer,9424349,161,148)
+  {
+   Interval=1
+   Enable=1
+   AutoStop=1
+   link(onTimer,4486139:doEvent1,[])
+  }
+  Add(Hub,10051236,156,88)
+  {
+   link(onEvent1,13912981:doValue,[])
+   link(onEvent2,209542:doEvent,[(178,101)(178,128)(48,128)(48,168)])
+  }
+  Add(If_else,14597373,235,148)
+  {
+   Op2=Integer(0)
+   link(onTrue,15615267:onEvent1,[(283,154)(283,27)])
+   link(Op1,13912981:Value,[(241,137)(198,137)])
+   link(Op2,14438114:Value,[(248,134)(248,134)])
+  }
+  Add(Hub,4486139,204,148)
+  {
+   link(onEvent1,14597373:doCompare,[])
+   link(onEvent2,7521498:doReset,[(226,161)(226,200)(40,200)(40,101)])
+  }
+  Add(Memory,13912981,192,88)
+  {
+  }
+  Add(Memory,14438114,242,87)
+  {
+   Default=Integer(0)
+  }
+END_SDK
+Add(DSC_Exec,11234170,642,236)
+{
+ DSManager="data"
+ link(onError,11260080:doWork1,[(688,249)(688,228)])
+}
+Add(MultiElement,11260080,702,222)
+{
+ @Hint=#10:MESS ERROR|
+ @Color=11141120
+}
+BEGIN_SDK
+  Add(EditMulti,8893549,21,21)
+  {
+   WorkCount=1
+   Width=118
+   Height=74
+   link(doWork1,7807514:doValue,[(31,27)(31,48)])
+  }
+  Add(Message,6332176,91,42)
+  {
+   Message="EMPTY"
+   Caption="PLS: ERROR (for developer)"
+   Icon=3
+   link(Message,7807514:Value,[(97,32)(83,32)(83,86)(48,86)])
+  }
+  Add(Memory,7807514,42,42)
+  {
+   link(onData,6332176:doMessage,[])
+  }
+END_SDK
+Add(FormatStr,13376442,597,236)
+{
+ DataCount=1
+ Mask="UPDATE Data set UP=1.%1"
+ link(onFString,11234170:doExec,[])
+ link(Str1,13025979:Var,[])
+}
+Add(GlobalVar,13025979,597,207)
+{
+ @Color=5635925
+ Name="3"
+}
+Add(WinExec,9610219,762,257)
+{
+ FileName="PLS_3.exe"
+}
+Add(Timer,1405158,651,275)
+{
+ Interval=200
+ Enable=1
+ AutoStop=1
+ link(onTimer,11232796:doEvent1,[])
+}
+Add(GlobalVar,2357353,817,354)
+{
+ @Color=5635925
+ Name="3"
+ link(onValue,9854672:doCompare,[])
+}
+Add(Hub,11232796,695,275)
+{
+ link(onEvent1,9610219:doExec,[(721,281)(721,263)])
+ link(onEvent2,9066788:doWork2,[(722,288)(722,299)])
+}
+Add(DoData,14484300,560,545)
+{
+ Data=String(Completed !)
+ link(onEventData,7356612:doWork3,[(605,551)])
+}
+Add(HubEx,7356612,601,504)
+{
+ Angle=3
+ link(onEvent,5220019:doWork3,[])
+}
+Add(LineBreak,6279695,518,545)
+{
+ Caption="4"
+ Color=65535
+ link(Out,14484300:doData,[])
+ Primary=[15228335,28,-272]
+}
+Add(LineBreak,1964872,84,391)
+{
+ Caption="5"
+ Color=16776960
+ link(Out,2953706:doClose,[])
+ Primary=[14938112,910,-98]
+}
+Add(HubEx,9066788,973,293)
+{
+ link(onEvent,14938112:In,[])
+}
+Add(Translator,3162807,379,489)
+{
+ @Color=16776960
+ Lang="ru"
+ LangWords=['CHECK UPDATE'="Проверить обновления",'There is not new updates!'="Новых обновлений нет",'A new update is available! Update now?'="Новое обновление доступно!\nОбновить сейчас?"]
+}

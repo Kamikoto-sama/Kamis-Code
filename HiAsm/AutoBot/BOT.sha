@@ -1,0 +1,1350 @@
+Make(delphi)
+ver(4.04 build 184)
+Add(Image,11729842,560,14)
+{
+ Width=442
+ Height=214
+ Align=5
+ Ctl3D=0
+ WinStyle=4
+}
+Add(MainForm,2953706,979,9)
+{
+ Width=448
+ Height=243
+ Caption="AutoBOT"
+ BorderStyle=1
+ Position=1
+ Point(onClose)
+ Point(Handle)
+ link(onCreate,14381365:doLoad,[(1047,29)(1047,96)])
+}
+Add(MouseEvent,6387644,175,-36)
+{
+ Point(doPosition)
+}
+Add(Button,7747163,-85,95)
+{
+ Left=5
+ Top=5
+ Width=93
+ Height=25
+ Caption="REC"
+ Point(onMouseDown)
+ Point(doEnabled)
+ Point(doCaption)
+ link(onClick,13352347:doSwitch,[])
+ AddHint(-12,35,37,13,Caption)
+}
+Add(FormatStr,12711055,175,84)
+{
+ DataCount=4
+ Mask="%1 %2 %3 %4"
+ link(onFString,14531171:doAdd,[(234,90)(234,104)])
+ link(Str1,6387644:MouseX,[])
+ link(Str2,6387644:MouseY,[])
+ link(Str3,7073822:Var1,[(195,59)(221,59)])
+ link(Str4,1016801:Var1,[(202,65)(277,65)])
+}
+Add(DoData,1735129,273,551)
+{
+ link(onEventData,1812626:doText,[])
+ link(Data,15784654:Var2,[(279,292)(328,292)])
+}
+Add(ListBox,14531171,315,98)
+{
+ Left=5
+ Top=30
+ Width=144
+ Height=155
+ Font=[Consolas,12,1,0,204]
+ WinStyle=4
+ AddType=1
+ link(onChange,1735129:doData,[(433,104)(433,252)(261,252)(261,557)])
+ link(FileName,13327660:Value,[(328,85)(761,85)(761,219)(1184,219)])
+}
+Add(Button,13224658,-36,204)
+{
+ Left=227
+ Top=5
+ Width=50
+ Height=25
+ Enabled=1
+ Caption="REPLAY"
+ Point(doEnabled)
+ link(onClick,13792002:doEvent1,[])
+ AddHint(-29,35,57,13,Caption)
+}
+Add(LED,1049596,189,259)
+{
+ Left=151
+ Top=32
+ Width=74
+ Height=20
+ Shape=1
+}
+Add(ArrayRW,5438500,606,294)
+{
+ link(onRead,12726366:doEvent1,[(650,300)(650,279)])
+ link(Array,14531171:Array,[(612,211)(335,211)])
+ link(Index,11484371:Count,[(619,283)(591,283)(591,337)(557,337)])
+}
+Add(MouseEvent,1288351,1014,308)
+{
+ Point(doPosition)
+ Point(doWheel)
+ Point(WheelDelta)
+ link(Button,6320936:Var1,[(1020,291)(990,291)(990,362)(945,362)])
+ link(X,4280283:Var1,[])
+ link(Y,4280283:Var2,[])
+ link(WheelDelta,6320936:Var3,[(1041,297)(979,297)(979,348)(959,348)])
+}
+Add(LedNumber,1812626,317,551)
+{
+ Left=5
+ Top=187
+ Width=123
+ Alignment=2
+ Text="0"
+ ColorHover=0
+ FonColor=-16777201
+ SegColor=255
+ FonHover=-16777201
+ SegHover=0
+ Point(doText)
+}
+Add(Hub,16681303,175,204)
+{
+ OutCount=5
+ link(onEvent1,6793700:doData,[(246,210)(246,266)])
+ link(onEvent2,5311973:doWork1,[(290,217)(290,371)(86,371)])
+ link(onEvent3,4690698:doWork3,[(201,224)(201,188)])
+ link(onEvent4,10697191:doWork3,[(360,231)])
+ link(onEvent5,6633046:doWork3,[(221,238)])
+}
+Add(MultiStrData,9673437,748,273)
+{
+ Char=" "
+ Count=4
+ link(onPart1,4280283:doWork1,[(900,279)(900,244)])
+ link(onPart2,4280283:doWork2,[(900,286)(900,251)])
+ link(onPart3,6320936:doWork1,[(860,293)(860,314)])
+ link(onPart4,6320936:doWork2,[(860,300)(860,321)])
+}
+Add(Button,1727249,101,539)
+{
+ Left=100
+ Top=5
+ Width=48
+ Height=25
+ Caption="CLEAR"
+ Point(doEnabled)
+ link(onClick,15733292:doEvent1,[])
+ AddHint(-16,31,50,13,Caption)
+}
+Add(InlineCode,6696361,107,415)
+{
+ @Color=22015
+ WorkPoints=#7:SetHook|6:UnHook|
+ EventPoints=#7:onKeyUp|9:onKeyDown|10:onSysKeyUp|12:onSysKeyDown|
+ Code=#15:unit HiAsmUnit;|0:|9:interface|0:|38:uses kol,Share,Debug,Windows,Messages;|0:|4:type|28: THiAsmClass = class(TDebug)|10:   private|40:    procedure onKey(param,code:integer);|9:   public|56:    onKeyUp,onKeyDown,onSysKeyUp,onSysKeyDown:THI_Event;|4:    |46:    procedure SetHook(var dt:TData; Idx:WORD);|45:    procedure UnHook(var dt:TData; Idx:WORD);|5: end;|0:|14:implementation|0:|5:const|21: WH_KEYBOARD_LL = $D;|0:|4:var |12: Hook:HHOOK;|45: ret:procedure(param,code:integer) of object;|0:|82:function HookProc(Code: integer; wParam:integer;lParam: LongInt): HRESULT;stdcall;|5:begin|35: ret(wParam,PInteger(lParam)^);    |55: result := CallNextHookEx(Hook, Code, wParam , lParam);|4:end;|0:|30:procedure THiAsmClass.SetHook;|5:begin|12: ret:=onKey;|64: Hook := SetWindowsHookEx(WH_KEYBOARD_LL,@HookProc,HInstance,0);|4:end;|0:|28:procedure THiAsmClass.onKey;|5:begin|16:  Case  Param of|45:   WM_KEYDOWN   :_hi_OnEvent(onKeyDown,code);|43:   WM_KEYUP     :_hi_OnEvent(onKeyUp,code);|48:   WM_SYSKEYDOWN:_hi_OnEvent(onSysKeyDown,code);|46:   WM_SYSKEYUP  :_hi_OnEvent(onSysKeyUp,code);|9:  end;   |4:end;|0:|29:procedure THiAsmClass.UnHook;|5:begin|27: UnhookWindowsHookEx(Hook);|4:end;|0:|4:end.|
+ link(onKeyDown,1856968:doCase,[])
+}
+Add(Hub,10319340,198,429)
+{
+ OutCount=6
+ link(onEvent1,10579283:doWork1,[(251,435)])
+ link(onEvent2,6739827:doStop,[(292,442)(292,415)])
+ link(onEvent3,8382157:doWork2,[(220,449)(220,487)])
+ link(onEvent4,15976910:doEvent2,[(242,456)(242,346)(7,346)(7,153)])
+ link(onEvent5,10579283:doWork3,[(251,463)])
+ link(onEvent6,14917698:doData,[(298,470)(298,485)])
+}
+Add(ListBox,9674507,724,196)
+{
+ Left=225
+ Top=30
+ Width=115
+ Height=155
+ Font=[Consolas,10,1,0,204]
+ WinStyle=4
+ AddType=1
+ link(onChange,16231998:doData,[(768,202)(768,255)(718,255)(718,321)])
+}
+Add(Hub,12726366,662,273)
+{
+ link(onEvent1,9673437:doSplit,[])
+ link(onEvent2,9674507:doAdd,[(700,286)(700,202)])
+}
+Add(DoData,16231998,731,315)
+{
+ link(onEventData,11953105:doText,[(829,321)(829,342)])
+ link(Data,9674507:Count,[])
+}
+Add(Counter,11484371,551,294)
+{
+ Type=1
+ Point(doMax)
+ link(onNext,5438500:doRead,[])
+}
+Add(DoData,6793700,409,260)
+{
+ link(onEventData,15887686:doEvent1,[])
+ link(Data,15784654:Var3,[(415,177)])
+}
+Add(GetDataEx,15784654,322,172)
+{
+ link(Data,14531171:Count,[])
+}
+Add(Hub,15887686,451,260)
+{
+ OutCount=4
+ link(onEvent1,6739827:doAutoStop,[(477,266)(477,321)(351,321)(351,422)])
+ link(onEvent2,11484371:doMax,[(497,273)(497,321)])
+ link(onEvent3,11484371:doReset,[(530,280)(530,314)])
+ link(onEvent4,15691062:doEvent1,[(483,287)(483,230)])
+}
+Add(HubEx,2486033,163,84)
+{
+ link(onEvent,12711055:doString,[])
+}
+Add(Hub,15302944,22,39)
+{
+ OutCount=6
+ link(onEvent1,7073822:doWork1,[(154,45)(154,5)])
+ link(onEvent2,11430949:doTimer,[(96,52)(96,90)])
+ link(onEvent3,4690698:doWork1,[(105,59)])
+ link(onEvent4,5311973:doWork2,[(75,66)(75,421)])
+ link(onEvent5,6633046:doWork2,[])
+ link(onEvent6,15755442:doData,[(43,80)(43,89)(-197,89)(-197,108)])
+}
+Add(Hub,15976910,36,140)
+{
+ InCount=2
+ OutCount=4
+ link(onEvent1,7073822:doWork2,[(115,146)(115,12)])
+ link(onEvent2,5505170:doWork2,[])
+ link(onEvent3,11430949:doStop,[(85,160)(85,97)])
+ link(onEvent4,4247975:doData,[(68,167)(68,181)(-197,181)(-197,147)])
+}
+Add(HubEx,5505170,91,147)
+{
+ link(onEvent,115917:doEvent1,[(116,153)(116,302)])
+}
+Add(MultiElement,4280283,1021,238)
+{
+ link(onEvent1,1288351:doPosition,[(1066,244)(1066,281)(997,281)(997,328)])
+ link(Data1,10483650:Checked,[(1027,228)(1114,228)])
+}
+BEGIN_SDK
+  Add(EditMulti,9835379,21,21)
+  {
+   EventCount=1
+   WorkCount=2
+   DataCount=1
+   VarCount=2
+   Width=167
+   Height=109
+   link(doWork1,7842586:doValue,[(46,27)(46,41)])
+   link(doWork2,14470146:doValue,[(39,34)(39,83)])
+   link(Var1,7842586:Value,[(27,90)(61,90)])
+   link(Var2,14470146:Value,[(34,120)(82,120)])
+  }
+  Add(Memory,7842586,55,35)
+  {
+  }
+  Add(Memory,14470146,76,77)
+  {
+   link(onData,4481020:doEvent,[])
+  }
+  Add(IndexToChanel,4481020,122,77)
+  {
+   Point(Index)
+   link(onEvent2,9835379:onEvent1,[(167,90)(167,27)])
+   link(Index,9835379:Data1,[(128,31)(27,31)])
+  }
+END_SDK
+Add(MultiElement,6320936,939,308)
+{
+ link(onEvent1,1288351:doClick,[])
+ link(onEvent2,1607695:doPress,[(1006,321)(1006,396)])
+ link(onEvent3,1288351:doWheel,[(984,328)(984,335)])
+ link(Data1,8797375:Checked,[])
+ link(Data2,10366691:Checked,[(952,296)(965,296)])
+}
+BEGIN_SDK
+  Add(EditMulti,15536236,126,105)
+  {
+   EventCount=3
+   WorkCount=2
+   DataCount=2
+   VarCount=3
+   Width=433
+   Height=151
+   link(doWork1,10452532:doEvent,[(143,111)(143,127)])
+   link(doWork2,9020065:doValue,[(149,118)(149,190)])
+   link(Var1,2612779:Value,[(132,223)(469,223)])
+   link(Var2,9020065:Value,[(139,219)(223,219)])
+   link(Var3,9894430:Value,[(146,249)(517,249)])
+  }
+  Add(Case,2720022,249,128)
+  {
+   Value=Integer(2)
+   DataOnTrue=Integer(2)
+   link(onNextCase,8397771:doCase,[])
+   link(onTrue,12824773:doWork3,[(294,141)])
+  }
+  Add(Case,15827786,200,128)
+  {
+   Value=Integer(1)
+   DataOnTrue=Integer(1)
+   link(onNextCase,2720022:doCase,[])
+   link(onTrue,12824773:doWork2,[(241,141)(241,118)])
+  }
+  Add(HubEx,12824773,290,112)
+  {
+   link(onEvent,3472173:doWork2,[])
+  }
+  Add(Case,8397771,305,128)
+  {
+   Value=Integer(3)
+   DataOnTrue=Integer(3)
+   link(onNextCase,1396738:doCase,[])
+   link(onTrue,3472173:doWork3,[(354,141)])
+  }
+  Add(HubEx,3472173,350,112)
+  {
+   link(onEvent,2612779:doValue,[])
+  }
+  Add(Memory,2612779,463,112)
+  {
+   link(onData,15536236:onEvent1,[(527,118)(527,111)])
+  }
+  Add(Memory,9020065,217,184)
+  {
+   link(onData,16367816:doData,[])
+  }
+  Add(DoData,16367816,267,184)
+  {
+   link(onEventData,16664942:doEvent,[])
+  }
+  Add(Case,1396738,363,128)
+  {
+   Value=Integer(4)
+   DataOnTrue=Integer(120)
+   link(onNextCase,8089381:doCase,[])
+   link(onTrue,14291032:doWork2,[(407,141)(407,215)])
+  }
+  Add(Case,8089381,417,128)
+  {
+   Value=Integer(5)
+   DataOnTrue=Integer(-120)
+   link(onTrue,14291032:doWork1,[(456,141)])
+  }
+  Add(Memory,9894430,511,209)
+  {
+   link(onData,15536236:onEvent3,[(551,215)(551,125)])
+  }
+  Add(HubEx,14291032,452,209)
+  {
+   link(onEvent,9894430:doValue,[])
+  }
+  Add(IndexToChanel,16664942,313,184)
+  {
+   Point(Index)
+   link(onEvent2,15536236:onEvent2,[(534,197)(534,118)])
+   link(Index,15536236:Data1,[(319,166)(132,166)])
+  }
+  Add(IndexToChanel,10452532,160,121)
+  {
+   Point(Index)
+   link(onEvent2,15827786:doCase,[])
+   link(Index,15536236:Data2,[(166,114)(139,114)])
+  }
+END_SDK
+Add(LedNumber,11953105,896,336)
+{
+ Left=225
+ Top=187
+ Width=115
+ Alignment=2
+ Text="0"
+ ColorHover=0
+ FonColor=-16777201
+ SegColor=255
+ FonHover=-16777201
+ SegHover=0
+ Point(doText)
+}
+Add(LedNumber,202129,707,133)
+{
+ Left=150
+ Top=8
+ Width=32
+ Text="00"
+ FonHover=-16777201
+ SegHover=0
+ Point(doText)
+}
+Add(Hub,1999326,584,102)
+{
+ link(onEvent1,9788664:doCompare,[(606,108)(606,139)])
+ link(onEvent2,9832257:doText,[(619,115)(619,101)])
+}
+Add(Counter,1251042,536,102)
+{
+ Max=59
+ link(onNext,1999326:doEvent1,[])
+}
+Add(Counter,12635927,664,133)
+{
+ Max=60
+ link(onNext,202129:doText,[])
+}
+Add(LedNumber,7659725,616,14)
+{
+ Left=182
+ Top=8
+ Width=13
+ Alignment=2
+ Text=":"
+ FonHover=-16777201
+ SegHover=0
+ Point(doText)
+}
+Add(LedNumber,9832257,630,95)
+{
+ Left=194
+ Top=8
+ Width=32
+ Text="00"
+ FonHover=-16777201
+ SegHover=0
+ Point(doText)
+}
+Add(If_else,9788664,615,133)
+{
+ Op2=Integer(59)
+ link(onTrue,12635927:doNext,[])
+}
+Add(Hub,115917,129,296)
+{
+ OutCount=3
+ link(onEvent1,1049596:doOff,[(175,302)(175,272)])
+ link(onEvent2,15668301:doStop,[(382,309)(382,115)])
+ link(onEvent3,16203038:doOn,[(157,316)(157,249)(-89,249)(-89,224)])
+}
+Add(Button,16559762,915,103)
+{
+ Left=342
+ Top=100
+ Width=95
+ Caption="SAVE"
+ link(onClick,4117167:doData,[])
+ AddHint(-29,-21,43,13,Caption)
+}
+Add(Edit,14933325,960,59)
+{
+ Left=342
+ Top=75
+ Width=95
+ Height=25
+ Font=[Consolas,12,1,0,204]
+ Text="Name"
+ Point(Handle)
+}
+Add(ComboBox,14381365,1071,62)
+{
+ Left=343
+ Top=50
+ Width=95
+ Height=21
+ Font=[Consolas,10,1,0,204]
+ FileName="list.txt"
+ AddType=1
+ Text="Select"
+ DataType=1
+ ReadOnly=0
+ Point(Index)
+ link(onChange,14381365:doSave,[(1117,68)(1117,51)(1059,51)(1059,103)])
+ link(onClick,6875304:doEvent1,[])
+}
+Add(Button,8254619,985,148)
+{
+ Left=342
+ Top=120
+ Width=95
+ Caption="DELETE"
+ link(onClick,1522042:doData,[])
+ AddHint(-19,38,57,13,Caption)
+}
+Add(DoData,4117167,960,103)
+{
+ link(onEventData,15702144:doEvent1,[])
+ link(Data,14933325:Text,[])
+}
+Add(Hub,15702144,1006,103)
+{
+ OutCount=3
+ link(onEvent1,14381365:doAdd,[(1035,109)(1035,68)])
+ link(onEvent2,3238050:doWork2,[(1044,116)(1044,127)])
+ link(onEvent3,14531171:doSave,[(1025,123)(1025,195)(301,195)(301,139)])
+}
+Add(StrCat,3712822,1127,121)
+{
+ Str2=".txt"
+ link(onStrCat,13327660:doValue,[])
+}
+Add(Memory,13327660,1178,121)
+{
+}
+Add(Hub,6875304,1120,69)
+{
+ link(onEvent1,3238050:doWork1,[(1149,75)(1149,99)(1110,99)])
+ link(onEvent2,3059007:In,[(1141,82)(1141,82)])
+}
+Add(HubEx,3238050,1106,121)
+{
+ link(onEvent,3712822:doStrCat,[])
+}
+Add(DoData,1522042,1048,148)
+{
+ link(onEventData,14381365:doDelete,[(1100,154)(1100,113)(1053,113)(1053,82)])
+ link(Data,14381365:Index,[(1054,138)(1091,138)])
+}
+Add(Edit,886335,387,605)
+{
+ Left=150
+ Top=70
+ Width=74
+ Font=[Consolas,11,1,0,204]
+ Text="1"
+ Alignment=2
+ DataType=1
+ Point(doEnabled)
+ link(onChange,1414438:doOperation,[])
+}
+Add(CheckBox,1025099,485,535)
+{
+ Left=150
+ Top=90
+ Width=75
+ Font=[Consolas,9,1,0,204]
+ Caption="Non-stop"
+ Point(doEnabled)
+ link(onCheck,16604663:doEvent,[(565,541)(565,694)(239,694)(239,660)])
+ AddHint(-23,31,58,13,Caption)
+}
+Add(Counter,6068025,597,451)
+{
+ @Hint=#10:LOOP COUNT|
+ Min=1
+ Max=0
+ Point(doMax)
+ Point(doValue)
+ link(onNext,16217067:doEvent1,[(633,457)(633,457)(655,457)(655,380)])
+ AddHint(-1,-20,85,13,@Hint)
+}
+Add(Hub,9827681,439,409)
+{
+ OutCount=4
+ link(onEvent1,5505170:doWork3,[(469,415)(469,353)(95,353)])
+ link(onEvent2,6068025:doNext,[(545,422)(545,457)(588,457)(588,457)])
+ link(onEvent3,8382157:doWork3,[(468,429)(468,496)(158,496)])
+ link(onEvent4,11169028:In,[])
+}
+Add(If_else,3818373,846,416)
+{
+ Type=1
+ link(onTrue,7079804:doWork2,[(892,422)(892,365)])
+ link(Op2,886335:Text,[(859,405)(906,405)(906,661)(393,661)])
+}
+Add(Label,16271305,-427,-84)
+{
+ Left=165
+ Top=51
+ Width=44
+ Height=14
+ Font=[Consolas,11,1,0,204]
+ Caption="LOOPS"
+}
+Add(Hub,15691062,494,224)
+{
+ link(onEvent1,9674507:doClear,[(657,230)(657,209)])
+ link(onEvent2,6739827:doTimer,[(519,237)(519,339)(360,339)(360,408)])
+}
+Add(HubEx,8382157,154,481)
+{
+ Angle=2
+ link(onEvent,6696361:UnHook,[(94,487)(94,428)])
+}
+Add(If_else,12242643,804,416)
+{
+ Type=5
+ Op2=Integer(0)
+ link(onTrue,3818373:doCompare,[])
+}
+Add(Hub,16217067,703,374)
+{
+ link(onEvent1,16664942:doEvent,[])
+ link(onEvent2,7445784:doText,[(725,387)(725,421)])
+}
+Add(LedNumber,7445784,741,415)
+{
+ Left=150
+ Top=112
+ Width=75
+ Alignment=2
+ Text="1"
+ ColorHover=0
+ FonColor=-16777201
+ SegColor=0
+ FonHover=-16777201
+ SegHover=0
+ Point(doText)
+}
+Add(Case,1856968,151,422)
+{
+ Value=Integer(27)
+ link(onTrue,10319340:doEvent1,[])
+}
+Add(HubEx,5311973,82,415)
+{
+ link(onEvent,6696361:SetHook,[])
+}
+Add(MultiElement,4052145,336,448)
+{
+ link(onEvent1,11360805:doWork3,[(421,454)(421,387)(60,387)])
+}
+BEGIN_SDK
+  Add(EditMulti,6445733,21,21)
+  {
+   EventCount=1
+   WorkCount=2
+   Width=118
+   Height=102
+   link(doWork1,2037824:doEvent,[(44,27)(44,86)])
+   link(doWork2,7408684:doSwitch,[(33,34)(33,43)])
+  }
+  Add(Switch,7408684,59,37)
+  {
+   DataOn=Integer(0)
+   DataOff=Integer(1)
+   Point(State)
+  }
+  Add(IndexToChanel,2037824,59,80)
+  {
+   Point(Index)
+   link(onEvent2,6445733:onEvent1,[(114,93)(114,27)])
+   link(Index,7408684:State,[])
+  }
+END_SDK
+Add(HubEx,10579283,247,448)
+{
+ link(onEvent,4052145:doWork2,[(300,454)(300,461)])
+}
+Add(Hub,13792002,23,204)
+{
+ link(onEvent1,11360805:doWork2,[])
+ link(onEvent2,12323642:doReset,[(48,217)(48,371)(-68,371)(-68,513)])
+}
+Add(Switch,12323642,-55,500)
+{
+ DataOn=Integer(1)
+ DataOff=Integer(0)
+ Default=0
+ Point(State)
+ Point(doOn)
+ link(onSwitch,9587090:doEvent1,[])
+}
+Add(HubEx,11360805,56,204)
+{
+ link(onEvent,16681303:doEvent1,[])
+}
+Add(Hub,9587090,-13,500)
+{
+ OutCount=5
+ link(onEvent1,7747163:doEnabled,[(69,506)(69,413)(-115,413)(-115,101)])
+ link(onEvent2,5539758:doEvent,[(158,513)(158,625)])
+ link(onEvent3,1727249:doEnabled,[(79,520)(79,545)])
+ link(onEvent5,1025099:doEnabled,[(435,534)(435,548)])
+}
+Add(IndexToChanel,16664942,740,374)
+{
+ Point(Index)
+ link(onEvent1,12242643:doCompare,[(792,380)(792,422)])
+ link(onEvent2,7079804:doWork3,[(781,387)])
+ link(Index,17698:Var3,[(746,354)(665,354)(665,596)])
+}
+Add(HubEx,7079804,777,359)
+{
+ Angle=2
+ link(onEvent,4052145:doWork1,[(310,365)(310,454)])
+}
+Add(UpDown,15005929,1081,252)
+{
+ Left=150
+ Top=140
+ Height=45
+ Max=7
+ Min=1
+ Position=3
+ link(onPosition,7859388:doEvent1,[])
+}
+Add(LedNumber,13062310,1159,223)
+{
+ Left=170
+ Top=142
+ Width=50
+ Height=40
+ Alignment=2
+ Text="3"
+ ColorHover=0
+ FonColor=-16777201
+ SegColor=16711680
+ FonHover=-16777201
+ SegHover=0
+ Point(doText)
+}
+Add(Hub,7859388,1124,252)
+{
+ link(onEvent1,13062310:doText,[(1148,258)(1148,229)])
+ link(onEvent2,4035132:doWork1,[])
+}
+Add(Label,14024922,674,13)
+{
+ Left=134
+ Top=185
+ Width=103
+ Height=23
+ Font=[Consolas,12,1,0,204]
+ Caption="RECORD TEMP"
+}
+Add(Hub,2282978,242,151)
+{
+ link(onEvent1,14531171:doClear,[(295,157)(295,111)])
+ link(onEvent2,10697191:doWork2,[])
+}
+Add(Label,11793666,1642,951)
+{
+ Left=344
+ Top=145
+ Width=88
+ Height=19
+ Font=[Consolas,10,1,0,204]
+ Caption="REAPLAY TEMP"
+}
+Add(UpDown,6498185,1081,301)
+{
+ Left=355
+ Top=164
+ Height=45
+ Max=7
+ Min=1
+ Position=3
+ link(onPosition,4709634:doEvent1,[])
+}
+Add(LedNumber,16557728,1160,336)
+{
+ Left=375
+ Top=167
+ Width=50
+ Height=40
+ Alignment=2
+ Text="3"
+ ColorHover=0
+ FonColor=-16777201
+ SegColor=33023
+ FonHover=-16777201
+ SegHover=0
+ Point(doText)
+}
+Add(MultiElement,4035132,1160,259)
+{
+ link(onEvent1,13768522:In,[])
+}
+BEGIN_SDK
+  Add(EditMulti,12811863,21,21)
+  {
+   EventCount=1
+   WorkCount=1
+   Width=174
+   Height=284
+   link(doWork1,2183227:doEvent,[(33,27)(33,58)])
+  }
+  Add(HubEx,13123022,157,224)
+  {
+   Angle=1
+   link(onEvent,5675100:doWork1,[(161,249)(161,249)])
+  }
+  Add(IndexToChanel,2183227,45,52)
+  {
+   Count=8
+   link(onEvent2,16452879:doData,[(95,65)(95,34)])
+   link(onEvent3,4850673:doData,[])
+   link(onEvent4,12227773:doData,[(95,79)(95,115)])
+   link(onEvent5,9344819:doData,[(95,86)(95,155)])
+   link(onEvent6,7578911:doData,[(95,93)(95,193)])
+   link(onEvent7,5819605:doData,[(95,100)(95,230)])
+   link(onEvent8,1532207:doData,[(95,107)(95,269)])
+  }
+  Add(DoData,16452879,113,28)
+  {
+   Data=Integer(200)
+   link(onEventData,4098837:doWork1,[(161,34)])
+  }
+  Add(DoData,4850673,113,66)
+  {
+   Data=Integer(100)
+   link(onEventData,4098837:doWork2,[])
+  }
+  Add(HubEx,4098837,157,66)
+  {
+   Angle=1
+   link(onEvent,14914245:doWork1,[])
+  }
+  Add(DoData,12227773,113,109)
+  {
+   Data=Integer(50)
+   link(onEventData,14914245:doWork2,[])
+  }
+  Add(HubEx,14914245,157,109)
+  {
+   Angle=1
+   link(onEvent,12822135:doWork1,[])
+  }
+  Add(DoData,1532207,113,263)
+  {
+   Data=Integer(1)
+   link(onEventData,5675100:doWork2,[])
+  }
+  Add(DoData,9344819,113,149)
+  {
+   Data=Integer(40)
+   link(onEventData,12822135:doWork2,[])
+  }
+  Add(HubEx,12822135,157,149)
+  {
+   Angle=1
+   link(onEvent,12085770:doWork1,[])
+  }
+  Add(DoData,7578911,113,187)
+  {
+   Data=Integer(30)
+   link(onEventData,12085770:doWork2,[])
+  }
+  Add(HubEx,12085770,157,187)
+  {
+   Angle=1
+   link(onEvent,13123022:doWork1,[])
+  }
+  Add(DoData,5819605,113,224)
+  {
+   Data=Integer(20)
+   link(onEventData,13123022:doWork2,[])
+  }
+  Add(HubEx,5675100,157,263)
+  {
+   link(onEvent,12811863:onEvent1,[(181,269)(181,27)])
+  }
+END_SDK
+Add(MultiElement,6386734,1160,301)
+{
+ link(onEvent1,12634801:In,[])
+}
+BEGIN_SDK
+  Add(EditMulti,12811863,21,21)
+  {
+   EventCount=1
+   WorkCount=1
+   Width=174
+   Height=284
+   link(doWork1,2183227:doEvent,[(33,27)(33,58)])
+  }
+  Add(HubEx,13123022,157,224)
+  {
+   Angle=1
+   link(onEvent,5675100:doWork1,[(161,249)(161,249)])
+  }
+  Add(IndexToChanel,2183227,45,52)
+  {
+   Count=8
+   link(onEvent2,16452879:doData,[(95,65)(95,34)])
+   link(onEvent3,4850673:doData,[])
+   link(onEvent4,12227773:doData,[(95,79)(95,115)])
+   link(onEvent5,9344819:doData,[(95,86)(95,155)])
+   link(onEvent6,7578911:doData,[(95,93)(95,193)])
+   link(onEvent7,5819605:doData,[(95,100)(95,230)])
+   link(onEvent8,1532207:doData,[(95,107)(95,269)])
+  }
+  Add(DoData,16452879,113,28)
+  {
+   Data=Integer(200)
+   link(onEventData,4098837:doWork1,[(161,34)])
+  }
+  Add(DoData,4850673,113,66)
+  {
+   Data=Integer(100)
+   link(onEventData,4098837:doWork2,[])
+  }
+  Add(HubEx,4098837,157,66)
+  {
+   Angle=1
+   link(onEvent,14914245:doWork1,[])
+  }
+  Add(DoData,12227773,113,109)
+  {
+   Data=Integer(50)
+   link(onEventData,14914245:doWork2,[])
+  }
+  Add(HubEx,14914245,157,109)
+  {
+   Angle=1
+   link(onEvent,12822135:doWork1,[])
+  }
+  Add(DoData,1532207,113,263)
+  {
+   Data=Integer(1)
+   link(onEventData,5675100:doWork2,[])
+  }
+  Add(DoData,9344819,113,149)
+  {
+   Data=Integer(40)
+   link(onEventData,12822135:doWork2,[])
+  }
+  Add(HubEx,12822135,157,149)
+  {
+   Angle=1
+   link(onEvent,12085770:doWork1,[])
+  }
+  Add(DoData,7578911,113,187)
+  {
+   Data=Integer(30)
+   link(onEventData,12085770:doWork2,[])
+  }
+  Add(HubEx,12085770,157,187)
+  {
+   Angle=1
+   link(onEvent,13123022:doWork1,[])
+  }
+  Add(DoData,5819605,113,224)
+  {
+   Data=Integer(20)
+   link(onEventData,13123022:doWork2,[])
+  }
+  Add(HubEx,5675100,157,263)
+  {
+   link(onEvent,12811863:onEvent1,[(181,269)(181,27)])
+  }
+END_SDK
+Add(Hub,4709634,1124,301)
+{
+ link(onEvent1,6386734:doWork1,[])
+ link(onEvent2,16557728:doText,[(1149,314)(1149,342)])
+}
+Add(HubEx,10697191,356,158)
+{
+ link(onEvent,4830940:doEvent1,[(468,164)(468,146)])
+}
+Add(HubEx,6633046,217,67)
+{
+ link(onEvent,15668301:doTimer,[(447,73)(447,108)])
+}
+Add(CheckBox,8797375,939,147)
+{
+ Left=280
+ Top=7
+ Width=75
+ Font=[Consolas,10,1,0,204]
+ Checked=0
+ Caption="Kayboard"
+ AddHint(-76,1,60,13,Caption)
+}
+Add(MultiElement,7073822,215,-1)
+{
+ link(onEvent1,1787190:doWork1,[(256,5)])
+ link(onEvent2,1016801:doWork1,[])
+ link(onEvent3,1016801:doWork2,[])
+}
+BEGIN_SDK
+  Add(EditMulti,10762996,21,21)
+  {
+   EventCount=3
+   WorkCount=2
+   VarCount=1
+   Width=258
+   Height=130
+   link(doWork1,115917:doEvent1,[(33,27)(33,30)])
+   link(doWork2,10537144:doEvent1,[(33,34)(33,51)])
+   link(Var1,11589218:Value,[(27,139)(227,139)])
+  }
+  Add(InlineCode,12360657,58,96)
+  {
+   @Hint=#24:Глобальный перехват мыши|
+   EventPoints=#2:ev|
+   Code=#15:unit HiAsmUnit;|0:|9:interface|0:|38:uses kol,Share,Debug,windows,messages;|0:|4:type|27: tagMSLLHOOKSTRUCT = record|12:  pt:TPoint;|18:  mouseData:dword;|14:  flags:dword;|13:  time:dword;|23:  dwExtraInfo:^Cardinal|5: end;|0:|4:type|28: THiAsmClass = class(TDebug)|10:   private|0:|9:   public|17:    ev:THI_Event;|0:|23:    constructor Create;|33:    destructor Destroy; override;|0:|5: end;|0:|14:var H:THandle;|20:    hac:THiAsmClass;|0:|14:implementation|0:|49:function hook(code,w,l:integer):Lresult; stdcall;|15:var str:string;|25:    ll:tagMSLLHOOKSTRUCT;|15:    d:LongWord;|5:begin|38: ll := tagMSLLHOOKSTRUCT(pointer(l)^);|0:|26: d := ll.mouseData shr 16;|46: if d and $8000 <> 0 then d := d or $FFFF0000;|0:|30: str := Int2Str(w)+Int2Str(d);|25: _hi_OnEvent(hac.ev,str);|38: result := CallNextHookEx(H,code,w,l);|4:end;|0:|31:constructor THiAsmClass.Create;|5:begin|18: inherited Create;|13: hac := self;|48: H := SetWindowsHookEx(14, @hook, hInstance, 0);|82: if H = 0 then messagebox(ReadHandle,'Ошибка перехвата мыши','ERROR',mb_iconhand);|4:end;|0:|31:destructor THiAsmClass.Destroy;|5:begin|24: UnhookWindowsHookEx(H);|19: inherited Destroy;|4:end;|0:|4:end.|
+   link(ev,4481020:doEvent,[])
+  }
+  Add(Switch,14514243,101,51)
+  {
+   DataOn=Integer(0)
+   DataOff=Integer(1)
+   Point(State)
+  }
+  Add(IndexToChanel,4481020,101,96)
+  {
+   Point(Index)
+   link(onEvent1,9560554:doWork1,[])
+   link(Index,14514243:State,[])
+  }
+  Add(Memory,11589218,221,96)
+  {
+   link(onData,10762996:onEvent1,[(266,102)(266,27)])
+  }
+  Add(Hub,3647680,192,96)
+  {
+   link(onEvent1,11589218:doValue,[])
+   link(onEvent2,11589218:doClear,[])
+  }
+  Add(MultiElement,9560554,145,96)
+  {
+   link(onEvent1,3647680:doEvent1,[])
+  }
+  BEGIN_SDK
+    Add(EditMulti,15536236,21,21)
+    {
+     EventCount=1
+     WorkCount=1
+     Width=293
+     Height=60
+     link(doWork1,15827786:doCase,[(30,27)(30,43)])
+    }
+    Add(Case,2720022,95,37)
+    {
+     Value=Integer(5160)
+     DataOnTrue=Integer(2)
+     link(onNextCase,8397771:doCase,[])
+     link(onTrue,12824773:doWork3,[(140,50)])
+    }
+    Add(Case,15827786,39,37)
+    {
+     Value=Integer(5130)
+     DataOnTrue=Integer(1)
+     link(onNextCase,2720022:doCase,[])
+     link(onTrue,12824773:doWork2,[(85,50)(85,27)])
+    }
+    Add(HubEx,12824773,136,21)
+    {
+     link(onEvent,3472173:doWork2,[])
+    }
+    Add(Case,8397771,151,37)
+    {
+     Value=Integer(5190)
+     DataOnTrue=Integer(3)
+     link(onNextCase,1396738:doCase,[])
+     link(onTrue,3472173:doWork3,[(200,50)])
+    }
+    Add(HubEx,3472173,196,21)
+    {
+     link(onEvent,12785503:doWork2,[])
+    }
+    Add(Case,1396738,214,37)
+    {
+     Value=Integer(522120)
+     DataOnTrue=Integer(4)
+     link(onNextCase,14950128:doCase,[])
+     link(onTrue,12785503:doWork3,[(256,50)])
+    }
+    Add(Case,14950128,263,37)
+    {
+     Value=String(522-120)
+     DataOnTrue=Integer(5)
+     link(onTrue,1617087:doWork3,[(305,50)])
+    }
+    Add(HubEx,12785503,252,21)
+    {
+     link(onEvent,1617087:doWork2,[])
+    }
+    Add(HubEx,1617087,301,21)
+    {
+     link(onEvent,15536236:onEvent1,[])
+    }
+  END_SDK
+  Add(Hub,115917,45,24)
+  {
+   link(onEvent1,10762996:onEvent2,[(168,30)(168,34)])
+   link(onEvent2,14514243:doSwitch,[(80,37)(80,57)])
+  }
+  Add(Hub,10537144,45,45)
+  {
+   link(onEvent1,10762996:onEvent3,[(88,51)(88,41)])
+   link(onEvent2,14514243:doReset,[(76,58)(76,64)])
+  }
+END_SDK
+Add(MultiElement,1016801,271,6)
+{
+ link(onEvent1,1787190:doWork2,[(314,12)(314,48)])
+}
+BEGIN_SDK
+  Add(EditMulti,10762996,21,21)
+  {
+   EventCount=1
+   WorkCount=2
+   VarCount=1
+   Width=321
+   Height=116
+   link(doWork1,6696361:SetHook,[(33,27)(33,41)])
+   link(doWork2,6696361:UnHook,[(29,34)(29,48)])
+   link(Var1,11589218:Value,[(27,117)(285,117)])
+  }
+  Add(Memory,11589218,279,42)
+  {
+   link(onData,10762996:onEvent1,[(327,48)(327,27)])
+  }
+  Add(Hub,3647680,246,42)
+  {
+   link(onEvent1,11589218:doValue,[])
+   link(onEvent2,11589218:doClear,[])
+  }
+  Add(InlineCode,6696361,44,35)
+  {
+   @Color=22015
+   WorkPoints=#7:SetHook|6:UnHook|
+   EventPoints=#7:onKeyUp|9:onKeyDown|10:onSysKeyUp|12:onSysKeyDown|
+   Code=#15:unit HiAsmUnit;|0:|9:interface|0:|38:uses kol,Share,Debug,Windows,Messages;|0:|4:type|28: THiAsmClass = class(TDebug)|10:   private|40:    procedure onKey(param,code:integer);|9:   public|56:    onKeyUp,onKeyDown,onSysKeyUp,onSysKeyDown:THI_Event;|4:    |46:    procedure SetHook(var dt:TData; Idx:WORD);|45:    procedure UnHook(var dt:TData; Idx:WORD);|5: end;|0:|14:implementation|0:|5:const|21: WH_KEYBOARD_LL = $D;|0:|4:var |12: Hook:HHOOK;|45: ret:procedure(param,code:integer) of object;|0:|82:function HookProc(Code: integer; wParam:integer;lParam: LongInt): HRESULT;stdcall;|5:begin|35: ret(wParam,PInteger(lParam)^);    |55: result := CallNextHookEx(Hook, Code, wParam , lParam);|4:end;|0:|30:procedure THiAsmClass.SetHook;|5:begin|12: ret:=onKey;|64: Hook := SetWindowsHookEx(WH_KEYBOARD_LL,@HookProc,HInstance,0);|4:end;|0:|28:procedure THiAsmClass.onKey;|5:begin|16:  Case  Param of|45:   WM_KEYDOWN   :_hi_OnEvent(onKeyDown,code);|43:   WM_KEYUP     :_hi_OnEvent(onKeyUp,code);|48:   WM_SYSKEYDOWN:_hi_OnEvent(onSysKeyDown,code);|46:   WM_SYSKEYUP  :_hi_OnEvent(onSysKeyUp,code);|9:  end;   |4:end;|0:|29:procedure THiAsmClass.UnHook;|5:begin|27: UnhookWindowsHookEx(Hook);|4:end;|0:|4:end.|
+   link(onKeyDown,1856968:doCase,[])
+  }
+  Add(Case,1856968,95,42)
+  {
+   Value=Integer(27)
+   link(onNextCase,603054:doWork2,[])
+  }
+  Add(Case,3131039,95,77)
+  {
+   Value=Integer(16)
+   link(onNextCase,8965753:doCase,[])
+   link(onTrue,603054:doWork3,[(137,90)])
+  }
+  Add(Case,8965753,148,77)
+  {
+   Value=Integer(17)
+   link(onNextCase,15545213:doCase,[])
+   link(onTrue,8743630:doWork3,[(186,90)])
+  }
+  Add(HubEx,603054,133,42)
+  {
+   link(onEvent,8743630:doWork2,[])
+  }
+  Add(Case,15545213,195,77)
+  {
+   Value=Integer(18)
+   link(onTrue,6578010:doWork3,[(235,90)])
+  }
+  Add(HubEx,6578010,231,42)
+  {
+   link(onEvent,3647680:doEvent1,[])
+  }
+  Add(HubEx,8743630,182,42)
+  {
+   link(onEvent,6578010:doWork2,[])
+  }
+END_SDK
+Add(HubEx,1787190,252,42)
+{
+ Angle=2
+ link(onEvent,2486033:doWork1,[(167,48)])
+}
+Add(hcVisualText,7714923,616,-28)
+{
+ Lines=#2:83|
+}
+Add(hcKeyHandler,10058230,560,-28)
+{
+ link(onKeyDown,7714923:doText,[])
+}
+Add(KeyEvent,1607695,1032,390)
+{
+ link(Code,6320936:Var2,[(1045,354)(952,354)])
+}
+Add(Hub,4830940,501,140)
+{
+ link(onEvent1,1251042:doReset,[(525,146)(525,122)])
+ link(onEvent2,12635927:doReset,[])
+}
+Add(CheckBox,10483650,1108,161)
+{
+ Left=360
+ Top=7
+ Width=75
+ Font=[Consolas,10,1,0,204]
+ Checked=0
+ Caption="MousePos"
+ AddHint(39,15,65,13,Caption)
+}
+Add(CheckBox,10366691,959,255)
+{
+ Left=360
+ Top=27
+ Width=80
+ Font=[Consolas,10,1,0,204]
+ Checked=0
+ Caption="MButtons"
+ AddHint(-11,-31,60,13,Caption)
+}
+Add(MMTimer,6739827,373,402)
+{
+ @Hint=#6:REPLAY|
+ Interval=50
+ Enable=1
+ Point(doAutoStop)
+ Point(doInterval)
+ Point(onStop)
+ link(onTimer,11484371:doNext,[(507,408)(507,300)])
+ link(onStop,9827681:doEvent1,[])
+ AddHint(-16,34,57,13,@Hint)
+}
+Add(Timer,15668301,476,102)
+{
+ @Hint=#4:Time|
+ Enable=1
+ link(onTimer,1251042:doNext,[])
+ AddHint(6,-32,38,13,@Hint)
+}
+Add(MMTimer,11430949,127,84)
+{
+ @Hint=#3:REC|
+ Resolution=5
+ Interval=50
+ Enable=1
+ Point(doInterval)
+ link(onTimer,2486033:doWork2,[])
+ AddHint(-4,33,37,13,@Hint)
+}
+Add(IndexToChanel,5539758,301,619)
+{
+ Point(Index)
+ link(onEvent1,10453078:doWork2,[])
+ link(onEvent2,2028779:doData,[(367,632)(367,555)])
+ link(Index,17698:Var1,[(307,596)])
+}
+Add(GetDataEx,17698,485,591)
+{
+ link(Data,1025099:Checked,[])
+}
+Add(IndexToChanel,16604663,247,654)
+{
+ Data=Integer(0)
+ link(onEvent1,13628181:doData,[])
+ link(onEvent2,8693734:doWork3,[(344,667)])
+}
+Add(HubEx,10453078,340,619)
+{
+ link(onEvent,886335:doEnabled,[])
+}
+Add(DoData,13628181,290,654)
+{
+ Data=Integer(1)
+ link(onEventData,8693734:doWork2,[])
+}
+Add(HubEx,8693734,340,654)
+{
+ Angle=3
+ link(onEvent,10453078:doWork3,[])
+}
+Add(Switch,13352347,-40,95)
+{
+ DataOn=Integer(1)
+ DataOff=Integer(0)
+ Point(doOn)
+ Point(onOn)
+ Point(onOff)
+ link(onOn,15302944:doEvent1,[(11,108)(11,45)])
+ link(onOff,15976910:doEvent1,[(11,115)(11,146)])
+}
+Add(DoData,4247975,-185,141)
+{
+ Data=String(REC)
+ link(onEventData,16737821:doWork3,[(-140,147)])
+}
+Add(DoData,15755442,-185,102)
+{
+ Data=String(STOP)
+ link(onEventData,16737821:doWork2,[])
+}
+Add(HubEx,16737821,-144,102)
+{
+ link(onEvent,7747163:doCaption,[])
+}
+Add(LineBreak,1694730,28,98)
+{
+ Caption="REC"
+ Color=255
+ link(Out,11430949:doInterval,[])
+ Primary=[13768522,1183,161]
+}
+Add(LineBreak,3241576,326,423)
+{
+ Caption="REP"
+ Color=16776960
+ link(Out,6739827:doInterval,[])
+ Primary=[12634801,878,-122]
+}
+Add(LineBreak,12917956,238,126)
+{
+ Caption="LOAD"
+ Color=65535
+ link(Out,14531171:doLoad,[])
+ Primary=[3059007,938,-50]
+}
+Add(LineBreak,15416182,-133,514)
+{
+ link(Out,12323642:doOn,[])
+ Primary=[11169028,637,-84]
+}
+Add(HubEx,4690698,101,182)
+{
+ Angle=1
+ link(onEvent,12592711:doEvent1,[(105,279)])
+}
+Add(Switch,16203038,-77,204)
+{
+ DataOn=Integer(1)
+ DataOff=Integer(0)
+ Point(doOn)
+ link(onSwitch,13224658:doEnabled,[])
+}
+Add(Hub,15733292,182,539)
+{
+ link(onEvent1,2282978:doEvent1,[(229,545)(229,157)])
+ link(onEvent2,4813039:doWork3,[(208,552)(208,565)(-89,565)])
+}
+Add(Hub,12592711,128,273)
+{
+ link(onEvent1,1049596:doOn,[])
+ link(onEvent2,4813039:doWork1,[(157,286)(157,249)])
+}
+Add(HubEx,4813039,-93,243)
+{
+ Angle=3
+ link(onEvent,16203038:doReset,[(-89,217)])
+}
+Add(DoData,2028779,381,549)
+{
+ Data=Integer(9999)
+ link(onEventData,4366940:doWork2,[(424,555)(424,520)])
+}
+Add(HubEx,4366940,525,514)
+{
+ link(onEvent,6068025:doMax,[(564,520)(564,478)])
+}
+Add(Math,1414438,441,605)
+{
+ OpType=1
+ Op2=1
+ link(onResult,4366940:doWork3,[(529,611)])
+}
+Add(DoData,14917698,500,479)
+{
+ Data=Integer(1)
+ link(onEventData,6068025:doValue,[])
+}

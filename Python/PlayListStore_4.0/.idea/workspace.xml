@@ -58,6 +58,7 @@
     <session id="2048732052">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
+          <entry key="project.closed" value="1" />
           <entry key="project.open.time.11" value="1" />
           <entry key="project.opened" value="1" />
         </counts>
@@ -494,21 +495,6 @@
           <folding>
             <element signature="e#35#58#0" expanded="true" />
             <element signature="e#2520#2837#0" />
-            <element signature="e#3667#3946#0" expanded="true" />
-            <element signature="e#3983#5310#0" expanded="true" />
-            <element signature="e#5357#7715#0" />
-            <element signature="e#7755#7923#0" />
-            <element signature="e#7964#12113#0" />
-            <element signature="e#12216#13997#0" expanded="true" />
-            <element signature="e#14034#14349#0" expanded="true" />
-            <element signature="e#15024#15607#0" expanded="true" />
-            <element signature="e#16206#16981#0" expanded="true" />
-            <element signature="e#17050#17467#0" expanded="true" />
-            <element signature="e#17530#17917#0" expanded="true" />
-            <element signature="e#17981#18387#0" expanded="true" />
-            <element signature="e#19334#20120#0" expanded="true" />
-            <element signature="e#19943#23632#0" />
-            <element signature="e#23678#27651#0" />
             <marker date="1534834101599" expanded="true" signature="26034:26085" ph="..." />
           </folding>
         </state>

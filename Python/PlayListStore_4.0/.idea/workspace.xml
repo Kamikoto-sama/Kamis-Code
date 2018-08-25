@@ -74,6 +74,11 @@
           <provider selected="true" editor-type-id="text-editor">
             <state>
               <caret column="23" selection-start-column="23" selection-end-column="23" />
+              <folding>
+                <element signature="e#35#58#0" expanded="true" />
+                <element signature="e#2520#2837#0" />
+                <element signature="e#2909#4757#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -81,7 +86,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/TEST.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1944">
+            <state relative-caret-position="2592">
               <caret line="72" column="54" selection-start-line="72" selection-start-column="8" selection-end-line="72" selection-end-column="54" />
             </state>
           </provider>
@@ -359,7 +364,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="754" extended-state="6" />
+    <frame x="-8" y="-8" width="1456" height="886" extended-state="6" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.12872024" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.24973656" />
@@ -486,7 +491,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/TEST.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1944">
+        <state relative-caret-position="2592">
           <caret line="72" column="54" selection-start-line="72" selection-start-column="8" selection-end-line="72" selection-end-column="54" />
         </state>
       </provider>

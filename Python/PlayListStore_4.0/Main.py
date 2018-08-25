@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-#import gc
 import sys, os, sqlite3
 from time import strftime
 from PyQt5 import QtWidgets, QtCore, QtGui

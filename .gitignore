@@ -2,5 +2,6 @@ Ignor
 Users
 trainer
 venv
+.idea
 *.jpg
 *.png

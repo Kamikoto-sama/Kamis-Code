@@ -55,6 +55,14 @@
         </counts>
       </usages-collector>
     </session>
+    <session id="2048732052">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.open.time.11" value="1" />
+          <entry key="project.opened" value="1" />
+        </counts>
+      </usages-collector>
+    </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
@@ -66,21 +74,6 @@
               <folding>
                 <element signature="e#35#58#0" expanded="true" />
                 <element signature="e#2520#2837#0" />
-                <element signature="e#3667#3946#0" expanded="true" />
-                <element signature="e#3983#5310#0" expanded="true" />
-                <element signature="e#5357#7715#0" />
-                <element signature="e#7755#7923#0" />
-                <element signature="e#7964#12113#0" />
-                <element signature="e#12216#13997#0" expanded="true" />
-                <element signature="e#14034#14349#0" expanded="true" />
-                <element signature="e#15024#15607#0" expanded="true" />
-                <element signature="e#16206#16981#0" expanded="true" />
-                <element signature="e#17050#17467#0" expanded="true" />
-                <element signature="e#17530#17917#0" expanded="true" />
-                <element signature="e#17981#18387#0" expanded="true" />
-                <element signature="e#19334#20120#0" expanded="true" />
-                <element signature="e#19943#23632#0" />
-                <element signature="e#23678#27651#0" />
                 <marker date="1534834101599" expanded="true" signature="26034:26085" ph="..." />
               </folding>
             </state>
@@ -90,7 +83,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/TEST.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="244">
+            <state relative-caret-position="1944">
               <caret line="72" column="54" selection-start-line="72" selection-start-column="8" selection-end-line="72" selection-end-column="54" />
             </state>
           </provider>
@@ -269,7 +262,7 @@
   <component name="PropertiesComponent">
     <property name="full.screen.before.presentation.mode" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -491,19 +484,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1115">
           <caret line="403" column="8" selection-start-line="403" selection-start-column="8" selection-end-line="403" selection-end-column="8" />
-          <folding>
-            <element signature="e#7360#7413#0" expanded="true" />
-            <element signature="e#15299#15350#0" expanded="true" />
-            <element signature="e#18448#18509#0" expanded="true" />
-            <element signature="e#18908#18963#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TEST.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="244">
-          <caret line="72" column="54" selection-start-line="72" selection-start-column="8" selection-end-line="72" selection-end-column="54" />
         </state>
       </provider>
     </entry>
@@ -531,6 +511,13 @@
             <element signature="e#23678#27651#0" />
             <marker date="1534834101599" expanded="true" signature="26034:26085" ph="..." />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TEST.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1944">
+          <caret line="72" column="54" selection-start-line="72" selection-start-column="8" selection-end-line="72" selection-end-column="54" />
         </state>
       </provider>
     </entry>

@@ -52,14 +52,15 @@ Color = {
     'viewed':'#AEDD17',
     'viewing':'#6ebcd2',
     'pause':'#DC143C',
-    'is_con':'#CFB100'
+    'is_con':'#FEE02F'
 }
 #Skin = 'Skins/dark_orange.css'
 Skin = 'style.css'
 SideWidth = 300
 SideAnimDur = 500
 AddFormDur = 500    # Add title form anim
-RowAnimDur = (6,6) # (AnimDown,Animup)
+RowAnimDur = (6,6) # (AnimDown,AnimUp)
+ConListName = '*Список продолжений*'
 main = None
 
 def save_data(save, value=1):
@@ -86,49 +87,50 @@ class Self_Styled_Icon(QtWidgets.QProxyStyle):
                                                         option, widget)
 
 class Row_Buttons(QtWidgets.QWidget):
-    def __init__(self):
+    def __init__(self, con=False):
         super(Row_Buttons,self).__init__()
         try:
-            #loadUi('GUI/Row_Buttons.ui',self)
-            self.hor_box = QtWidgets.QHBoxLayout(self)
-            self.row_left = QtWidgets.QHBoxLayout()
-            self.row_left.setAlignment(QtCore.Qt.AlignLeft)
-            self.row_right = QtWidgets.QHBoxLayout()
-            self.row_right.setAlignment(QtCore.Qt.AlignRight)
-
-            self.viewing = QtWidgets.QPushButton('СМОТРЮ')
-            self.viewing.setFixedSize(115,30)
-            self.viewing.setFocusPolicy(QtCore.Qt.NoFocus)
-            self.viewing.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-
-            self.viewed = QtWidgets.QPushButton('ПРОСМОТРЕНО')
-            self.viewed.setFixedSize(170, 30)
-            self.viewed.setFocusPolicy(QtCore.Qt.NoFocus)
-            self.viewed.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-            self.viewed.clicked.connect(self.select_mark)
+            self.p = None
+            self.btns = QtWidgets.QHBoxLayout(self)
+            self.btns.setContentsMargins(3, 0, 3, 0)
 
             self.delT = QtWidgets.QPushButton('УДАЛИТЬ')
-            self.delT.setFixedSize(90, 30)
             self.delT.setFocusPolicy(QtCore.Qt.NoFocus)
             self.delT.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-            self.delT.clicked.connect(self.select_mark)
+            if con:
+                self.btns.addWidget(self.delT)
+            else:
+                self.row_left = QtWidgets.QHBoxLayout()
+                self.row_left.setAlignment(QtCore.Qt.AlignLeft)
+                self.row_right = QtWidgets.QHBoxLayout()
+                self.row_right.setAlignment(QtCore.Qt.AlignRight)
 
-            self.row_left.addWidget(self.viewing)
-            self.row_left.addWidget(self.viewed)
-            self.row_right.addWidget(self.delT)
-            self.hor_box.addItem(self.row_left)
-            self.hor_box.addItem(self.row_right)
+                self.viewing = QtWidgets.QPushButton('СМОТРЮ')
+                self.viewing.setFixedSize(115,30)
+                self.viewing.setFocusPolicy(QtCore.Qt.NoFocus)
+                self.viewing.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
-            self.date = QtWidgets.QLineEdit(strftime('%Y'), self)
-            self.date.setAlignment(QtCore.Qt.AlignCenter)
-            self.date.setGeometry(123, 0, 170, 30)
-            self.date.hide()
-            self.date.focusOutEvent = lambda x: self.date.hide()
-            self.date.returnPressed.connect(self.set_con_date)
+                self.viewed = QtWidgets.QPushButton('ПРОСМОТРЕНО')
+                self.viewed.setFixedSize(170, 30)
+                self.viewed.setFocusPolicy(QtCore.Qt.NoFocus)
+                self.viewed.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+                self.viewed.clicked.connect(self.select_mark)
+
+                self.delT.setFixedSize(90, 30)
+
+                self.row_left.addWidget(self.viewing)
+                self.row_left.addWidget(self.viewed)
+                self.row_right.addWidget(self.delT)
+                self.btns.addLayout(self.row_left)
+                self.btns.addLayout(self.row_right)
+
+                self.date = QtWidgets.QLineEdit(strftime('%Y'), self)
+                self.date.setAlignment(QtCore.Qt.AlignCenter)
+                self.date.setGeometry(123, 0, 170, 30)
+                self.date.hide()
+                self.date.focusOutEvent = lambda x: self.date.hide()
+                self.date.returnPressed.connect(self.set_con_date)
         except Exception as e:print('Row_Buttons:',e)
-
-    def set_parent(self, parent):
-        self.p = parent
 
     def set_con_date(self):
         if self.p.color not in ['is_con', 'viewed']:
@@ -136,8 +138,18 @@ class Row_Buttons(QtWidgets.QWidget):
         self.p.set_icon('con')
         self.p.set_color('viewed')
         self.date.hide()
-        sql.execute('update titles set date="%s" where id=%s'%(self.date.text(),self.p.id))
+        sql.execute(
+            'update titles set date="%s" where id=%s'%(self.date.text(),self.p.id))
         db.commit()
+        try:
+            if ConListName in main.tabMap:
+                tab = main.tabWidget.widget(main.tabMap.index(ConListName))
+                name = self.p.title_name.text()
+                count = self.p.count.text()
+                id_ = self.p.id
+                date = self.date.text()
+                tab.add_row(name, count, id_, date)
+        except Exception as e:print('con refresh:',e)
 
     def select_mark(self):
         try:
@@ -161,8 +173,11 @@ class Row_Buttons(QtWidgets.QWidget):
             if act == on_viewed:
                 if self.p.color not in ['is_con','viewed']:
                     save_data('viewed')
-                self.p.set_icon('viewed')
+                if self.p.icon == 'con':
+                    sql.execute('''update Titles set date="n",icon="viewed" 
+                                WHERE id=%s''' % self.p.id)
                 self.p.set_color('viewed')
+                self.p.set_icon('viewed')
             if act == on_con:
                 self.date.show()
                 self.date.setFocus()
@@ -231,7 +246,7 @@ class Add_Title_Form(QtWidgets.QWidget):
             else:
                 if self.is_con.checkState() == 2: color = 'is_con'
                 else: color = 'n'
-                if self.is_finish.checkState() == 2: icon = 'not_finished'
+                if self.is_finished.checkState() == 2: icon = 'not_finished'
                 else: icon = 'n'
 
                 self.parent.add_title(name,count,genre,link,description,icon,color)
@@ -266,6 +281,9 @@ class Side_Bar(QtWidgets.QWidget):
 
             self.save.clicked.connect(self.save_desc)
 
+            self.is_con.stateChanged.connect(self.on_is_con)
+            self.is_finished.stateChanged.connect(self.on_is_finished)
+
             self.animSide = QtCore.QPropertyAnimation(self,b"geometry")
             self.animSide.setEasingCurve(QtCore.QEasingCurve.OutExpo)
             self.animSide.setDuration(SideAnimDur)
@@ -288,6 +306,18 @@ class Side_Bar(QtWidgets.QWidget):
                                         %(genre,link,desc,self.p.curRow.id))
             db.commit()
         except Exception as e:print('save_desc:',e)
+
+    def on_is_finished(self, state):
+        if state == 2:
+            self.p.curRow.set_icon('not_finished')
+        else:
+            self.p.curRow.set_icon('n')
+
+    def on_is_con(self, state):
+        if state == 2:
+            self.p.curRow.set_color('is_con')
+        else:
+            self.p.curRow.set_color('n')
 
     # On doubleclick
     def on_edit(self, event):
@@ -325,9 +355,9 @@ class Side_Bar(QtWidgets.QWidget):
             icon_state = 2 if data[3] == 'not_finished' else 0
             color_state = 2 if data[4] == 'is_con' else 0
             self.is_con.setCheckState(color_state)
-            self.is_con.setEnabled(data[3] == 'n')
-            self.is_finish.setCheckState(icon_state)
-            self.is_finish.setEnabled(data[3] == 'n')
+            self.is_con.setEnabled(data[3] in ['n','not_finished'])
+            self.is_finished.setCheckState(icon_state)
+            self.is_finished.setEnabled(data[3] in ['n','not_finished'])
         except Exception as e : print("load_side_data:",e)
 
     # Switch hide/show side bar
@@ -347,15 +377,16 @@ class Side_Bar(QtWidgets.QWidget):
         except Exception as e: print('SideBar/reHideSide:',e)
 
 class New_Title(QtWidgets.QWidget):
-    def __init__(self,parent,name,count,id_,icon,color):
+    def __init__(self, parent, name, count, id_, icon, color):
         super(New_Title,self).__init__(parent)
         loadUi('GUI/New_Title.ui',self)
         try:
             self.color = color
+            self.name = name
             self.icon = icon
+            self.p = parent
             self.id = id_
             self.h = 34
-            self.p = parent
 
             self.row_layout.setAlignment(QtCore.Qt.AlignTop)
 
@@ -377,13 +408,13 @@ class New_Title(QtWidgets.QWidget):
             self.con_date.returnPressed.connect(self.on_line_edited)
             self.con_date.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
-            if not parent.con:
-                self.con_date.hide()
-                self.set_icon(icon)
-                self.set_color(self.color,True)
-            else:
+            if parent.con:
                 self.status.hide()
                 self.con_date.setText(icon)
+            else:
+                self.con_date.hide()
+                self.set_icon(icon)
+                self.set_color(self.color, True)
 
             self.animOn = QtCore.QTimer(self)
             self.animOn.timeout.connect(self.row_on)
@@ -404,7 +435,11 @@ class New_Title(QtWidgets.QWidget):
 
     def delete_title(self):
         try:
-            sql.execute('DELETE FROM Titles WHERE id=%s'%self.id)
+            # Delete title from con list
+            if self.p.con:
+                sql.execute(
+                    'update Titles set date="n",icon="viewed" WHERE id=%s'%self.id)
+            else: sql.execute('DELETE FROM Titles WHERE id=%s'%self.id)
             db.commit()
             self.h = 0
             self.animOff.start(2)
@@ -440,13 +475,15 @@ class New_Title(QtWidgets.QWidget):
     def set_buttons(self,show):
         if show:
             self.p.rowButns.delT.clicked.connect(self.delete_title)
-            self.p.rowButns.viewing.pressed.connect(self.viewing_now)
+            if not self.p.con:
+                self.p.rowButns.viewing.pressed.connect(self.viewing_now)
             self.row_layout.addWidget(self.p.rowButns)
         else:
             self.p.rowButns.delT.clicked.disconnect(self.delete_title)
-            self.p.rowButns.viewing.pressed.disconnect(self.viewing_now)
-            self.p.rowButns.viewing.setText('СМОТРЮ')
-            self.p.rowButns.viewing.setEnabled(True)
+            if not self.p.con:
+                self.p.rowButns.viewing.pressed.disconnect(self.viewing_now)
+                self.p.rowButns.viewing.setText('СМОТРЮ')
+                self.p.rowButns.viewing.setEnabled(True)
 
     # ON click row
     def on_t_select(self,event=None):
@@ -462,7 +499,7 @@ class New_Title(QtWidgets.QWidget):
             self.animOn.start(RowAnimDur[0])
 
             self.p.rowButns.setParent(self)
-            self.p.rowButns.set_parent(self)
+            self.p.rowButns.p = self
 
             if self.icon == 'viewing':
                 self.p.rowButns.viewing.setText('НЕ СМОТРЮ')
@@ -492,11 +529,12 @@ class New_Title(QtWidgets.QWidget):
             self.count.clearFocus()
             name = self.title_name.text()
             count = self.count.text()
-            sql.execute('''UPDATE Titles SET title_name="%s",count=%s 
-                        WHERE id=%s'''% (name,count,self.id))
+            date = self.con_date.text()
+            sql.execute('''UPDATE Titles SET title_name="%s",count=%s,date="%s"
+                        WHERE id=%s'''% (name,count,date,self.id))
             db.commit()
             self.leave(False)
-        except Exception as e:print(e)
+        except Exception as e:print('on_line_edited:',e)
 
     # ON edit ecs
     def keyPressEvent(self, event):
@@ -509,7 +547,8 @@ class New_Title(QtWidgets.QWidget):
                 self.con_date.undo()
                 self.leave(False)
                 # On esc set date of con
-                self.p.rowButns.date.hide()
+                if not self.p.con:
+                    self.p.rowButns.date.hide()
         except Exception as e:print('on row edit esc:',e)
 
     # Anim row down
@@ -559,15 +598,15 @@ class New_Title(QtWidgets.QWidget):
         self.con_date.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
 class New_Playlist(QtWidgets.QWidget):
-    def __init__(self,parent=None):
+    def __init__(self,parent=None, name=''):
         super(New_Playlist,self).__init__(parent)
         try:
             loadUi('GUI/New_Playlist.ui',self)
             self.p = parent
-            self.con = False
+            self.con = True if name == ConListName else False
             self.curRow = None
             self.rowMap = []
-            self.rowButns = Row_Buttons()
+            self.rowButns = Row_Buttons(self.con)
 
             self.rowList.setAlignment(QtCore.Qt.AlignTop)
             self.bar_left.setAlignment(QtCore.Qt.AlignLeft)
@@ -585,6 +624,7 @@ class New_Playlist(QtWidgets.QWidget):
             self.sideBar = Side_Bar(self)
             self.side_hiden = True
 
+            self.load_titles(name)
         except Exception as e: print("New_Playlist:",e)
 
     def resizeEvent(self,event=None):
@@ -629,7 +669,7 @@ class New_Playlist(QtWidgets.QWidget):
 
     def load_titles(self,name):
         try:
-            self.con = True if name == '*Список продолжений*' else False
+            #self.rowList.clear()
             if self.con:
                 titles = list(sql.execute(
                     'select title_name,count,id,date from titles where date!="n"'))
@@ -702,10 +742,10 @@ class MainForm(QtWidgets.QMainWindow):
                 self.tabWidget.setCurrentIndex(self.tabMap.index(tab_name))
             else:
                 self.tabMap.insert(0,tab_name)
-                self.tabWidget.insertTab(0,New_Playlist(self),tab_name)
+                self.tabWidget.insertTab(0,New_Playlist(self, tab_name),tab_name)
                 self.tabWidget.setCurrentIndex(0)
-                tab = self.tabWidget.currentWidget()
-                tab.load_titles(tab_name)
+                # tab = self.tabWidget.currentWidget()
+                # tab.load_titles(tab_name)
         except Exception as e: print('add_tab:',e)
 
     def close_tab(self,index):

@@ -1,0 +1,105 @@
+Make(delphi)
+ver(4.04 build 184)
+Add(MainForm,2953706,21,63)
+{
+ Caption="DB edit"
+ Position=1
+ link(onCreate,3711990:doOpen,[])
+}
+Add(Edit,6822795,133,56)
+{
+ Width=384
+ Height=30
+ Align=2
+ Font=[Consolas,14,1,0,204]
+ Text=""
+ link(onEnter,5561542:doEvent1,[])
+}
+Add(ComboBox,2776569,133,119)
+{
+ Top=81
+ Width=384
+ Height=21
+ Align=2
+ Font=[Consolas,14,1,0,204]
+ Text=""
+ DataType=1
+ ReadOnly=0
+ link(onChange,951248:doWork3,[(177,125)(177,105)(123,105)])
+}
+Add(Edit,14941833,133,182)
+{
+ Top=51
+ Width=384
+ Height=30
+ Align=2
+ Font=[Consolas,14,1,0,204]
+ Text=""
+ link(onEnter,10081180:doEvent1,[])
+}
+Add(ComboBox,1277051,140,238)
+{
+ Top=30
+ Width=384
+ Height=21
+ Align=2
+ Font=[Consolas,14,1,0,204]
+ Text=""
+ DataType=1
+ ReadOnly=0
+ link(onClick,11613352:doWork2,[])
+}
+Add(DS_SQLite,3711990,68,77)
+{
+ @Hint=#9:DATA BASE|
+ Name="data"
+ FileName="Data.db"
+}
+Add(DSC_Query,9622574,232,209)
+{
+ DSManager="data"
+ link(onQuery,13098246:doMT_Add,[(272,215)(272,215)])
+ link(onColumns,13098246:doMT_AddCols,[])
+ link(onError,11613352:doWork1,[(279,229)(279,251)])
+}
+Add(DSC_Exec,16672201,213,63)
+{
+ DSManager="data"
+ link(onError,951248:doWork1,[(256,76)(256,46)(123,46)])
+}
+Add(Hub,10081180,182,189)
+{
+ OutCount=3
+ link(onEvent1,13098246:doClear,[(252,195)(252,187)])
+ link(onEvent2,9622574:doQuery,[(216,202)(216,215)])
+ link(onEvent3,1277051:doAdd,[(208,209)(208,227)(128,227)(128,244)])
+}
+Add(HubEx,11613352,180,245)
+{
+ Angle=3
+ link(onEvent,14941833:doText2,[(184,220)(121,220)(121,195)])
+}
+Add(Hub,5561542,178,63)
+{
+ link(onEvent1,16672201:doExec,[])
+ link(onEvent2,2776569:doAdd,[(204,76)(204,94)(113,94)(113,125)])
+}
+Add(HubEx,951248,119,63)
+{
+ link(onEvent,6822795:doText2,[])
+}
+Add(StringTableMT,13098246,308,174)
+{
+ Left=410
+ Top=215
+ Align=5
+ TabOrder=-1
+ Redaction=0
+ Grid=0
+ Grid3D=0
+ IconsCheck=[]
+ MiscIcons=[]
+ Icons=[]
+ Point(doMT_Add)
+ Point(doMT_AddCols)
+}

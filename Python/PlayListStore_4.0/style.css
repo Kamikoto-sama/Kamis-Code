@@ -63,14 +63,14 @@ QToolTip{
 		border-top-left-radius: 5px;
 		border-bottom-left-radius: 5px;
 	}
-	#t_row #con_date{border-radius: 5px;margin-right: 5px;}
+	#t_row #con_date{border-radius: 5px;margin-right: 3px;}
 
 	QMenu{
 		border: 1px solid red;
 		font-size: 18px;
 		width: 225px;
 	}
-	QMenu::icon{width: 30px;height: 30px;}
+	/*QMenu::icon{width: 30px;height: 30px;}*/
 	QMenu::item:selected{color: white;width: 220px;}
 	QWidget:disabled{
 	    color: #404040;

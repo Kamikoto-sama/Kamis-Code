@@ -21,7 +21,7 @@ try:
             color varchar(15),
             genre varchar(255),
             link text,
-            description text,
+            desc text,
             date varchar(10)
             )""")
         sql.execute('INSERT INTO Data VALUES("id","0")')
@@ -168,9 +168,9 @@ class Row_Buttons(QtWidgets.QWidget):
             on_pause.setEnabled(self.p.icon not in ['viewed','con'])
 
             cursor = QtCore.QPoint(self.viewed.x(), -35)
-            act = menu.exec_(self.mapToGlobal(cursor))
+            selected = menu.exec_(self.mapToGlobal(cursor))
 
-            if act == on_viewed:
+            if selected == on_viewed:
                 if self.p.color not in ['is_con','viewed']:
                     save_data('viewed')
                 if self.p.icon == 'con':
@@ -178,16 +178,17 @@ class Row_Buttons(QtWidgets.QWidget):
                                 WHERE id=%s''' % self.p.id)
                 self.p.set_color('viewed')
                 self.p.set_icon('viewed')
-            if act == on_con:
+            if selected == on_con:
                 self.date.show()
                 self.date.setFocus()
                 self.date.selectAll()
                 self.date.setStyleSheet(
                     'QLineEdit{font-size:16px;font-weight:bold;background:#D9D9D9}')
-            if act == on_pause:
+            if selected == on_pause:
                 self.p.set_icon('pause')
                 self.p.set_color('pause')
 
+            self.p.p.sideBar.load_side_data(self.p.id)
         except Exception as e:print('select_mark:',e)
 
 class Add_Title_Form(QtWidgets.QWidget):
@@ -233,7 +234,7 @@ class Add_Title_Form(QtWidgets.QWidget):
             count = self.count.text()
             genre = self.genre.text()
             link = self.link.text()
-            description = self.desc.toPlainText()
+            desc = self.desc.toPlainText()
 
             if name =='':
                 QtWidgets.QMessageBox.warning(
@@ -249,7 +250,7 @@ class Add_Title_Form(QtWidgets.QWidget):
                 if self.is_finished.checkState() == 2: icon = 'not_finished'
                 else: icon = 'n'
 
-                self.parent.add_title(name,count,genre,link,description,icon,color)
+                self.parent.add_title(name,count,genre,link,desc,icon,color)
                 self.show_add_form()
         except Exception as e:print('on_ok:',e)
 
@@ -266,6 +267,7 @@ class Side_Bar(QtWidgets.QWidget):
         try:
             loadUi('GUI/Side_Bar.ui',self)
             self.p = parent
+            self.change_check = True
 
             self.closeSide.clicked.connect(self.hide_show_side)
 
@@ -308,16 +310,18 @@ class Side_Bar(QtWidgets.QWidget):
         except Exception as e:print('save_desc:',e)
 
     def on_is_finished(self, state):
-        if state == 2:
-            self.p.curRow.set_icon('not_finished')
-        else:
-            self.p.curRow.set_icon('n')
+        if self.change_check:
+            if state == 2:
+                self.p.curRow.set_icon('not_finished')
+            else:
+                self.p.curRow.set_icon('n')
 
     def on_is_con(self, state):
-        if state == 2:
-            self.p.curRow.set_color('is_con')
-        else:
-            self.p.curRow.set_color('n')
+        if self.change_check:
+            if state == 2:
+                self.p.curRow.set_color('is_con')
+            else:
+                self.p.curRow.set_color('n')
 
     # On doubleclick
     def on_edit(self, event):
@@ -347,17 +351,19 @@ class Side_Bar(QtWidgets.QWidget):
     def load_side_data(self, t_id):
         try:
             data = list(sql.execute(
-                'SELECT genre,link,description,icon,color FROM Titles WHERE id=%s' %t_id))[0]
+                'SELECT genre,link,desc,icon,color FROM Titles WHERE id=%s' %t_id))[0]
             self.genre.setText(data[0])
             self.link.setText(data[1])
             self.desc.setText(data[2])
 
             icon_state = 2 if data[3] == 'not_finished' else 0
             color_state = 2 if data[4] == 'is_con' else 0
+            self.change_check = False
             self.is_con.setCheckState(color_state)
             self.is_con.setEnabled(data[3] in ['n','not_finished'])
             self.is_finished.setCheckState(icon_state)
             self.is_finished.setEnabled(data[3] in ['n','not_finished'])
+            self.change_check = True
         except Exception as e : print("load_side_data:",e)
 
     # Switch hide/show side bar
@@ -391,8 +397,8 @@ class New_Title(QtWidgets.QWidget):
             self.row_layout.setAlignment(QtCore.Qt.AlignTop)
 
             self.title_name.setText(name)
-            self.title_name.mouseDoubleClickEvent = self.on_line_edit
-            self.title_name.mousePressEvent = self.on_t_select
+            # self.title_name.mouseDoubleClickEvent = self.on_line_edit
+            # self.title_name.mousePressEvent = self.on_t_select
             self.title_name.returnPressed.connect(self.on_line_edited)
             self.title_name.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
@@ -400,11 +406,11 @@ class New_Title(QtWidgets.QWidget):
             self.count.setValidator(QtGui.QIntValidator(0,9999))
             self.count.setText(str(count))
             self.count.returnPressed.connect(self.on_line_edited)
-            self.count.mouseDoubleClickEvent = self.on_line_edit
-            self.count.mousePressEvent = self.on_t_select
+            # self.count.mouseDoubleClickEvent = self.on_line_edit
+            # self.count.mousePressEvent = self.on_t_select
 
-            self.con_date.mouseDoubleClickEvent = self.on_line_edit
-            self.con_date.mousePressEvent = self.on_t_select
+            # self.con_date.mouseDoubleClickEvent = self.on_line_edit
+            # self.con_date.mousePressEvent = self.on_t_select
             self.con_date.returnPressed.connect(self.on_line_edited)
             self.con_date.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
@@ -425,13 +431,15 @@ class New_Title(QtWidgets.QWidget):
     def viewing_now(self):
         self.leave(False)
         if self.icon == 'viewing':
-            self.set_icon('n')
             self.set_color('n')
+            self.set_icon('n')
             self.p.rowButns.viewing.setText('СМОТРЮ')
+            self.p.sideBar.load_side_data(self.id)
         else:
-            self.set_icon('viewing')
             self.set_color('viewing')
+            self.set_icon('viewing')
             self.p.rowButns.viewing.setText('НЕ СМОТРЮ')
+            self.p.sideBar.load_side_data(self.id)
 
     def delete_title(self):
         try:
@@ -456,16 +464,19 @@ class New_Title(QtWidgets.QWidget):
             db.commit()
 
     def set_color(self, color, load=False):
-        if self.color != 'is_con' or color in ('is_con','edit'):
+        if self.color != 'is_con' or color in ('is_con','edit')\
+        or (self.color == 'is_con' and color == 'n' and self.icon in ['n','not_finished']):
+
             if load:
-                self.setStyleSheet('#title_name,#count,#con_date{background: %s}'%Color[color])
+                self.setStyleSheet(
+                    '#title_name,#count,#con_date{background: %s}'%Color[color])
             else:
                 self.setStyleSheet('''
                     #title_name,#count,#con_date{background: %s}
                     #t_row{border-color: blue}
                     '''%Color[color])
 
-            if color not in ['edit',self.color] :
+            if color not in ['edit',self.color]:
                 self.color = color
                 sql.execute(
                     'UPDATE Titles SET color="%s" WHERE id=%s'%(color,self.id))
@@ -490,21 +501,22 @@ class New_Title(QtWidgets.QWidget):
         try:
             if self.p.curRow not in [self, None]:
                 self.p.curRow.leave()
-            self.setStyleSheet('''
-                #t_row{border-color: blue}
-                #title_name,#count,#con_date{background: %s}'''%Color[self.color])
-            self.p.curRow = self
-            self.p.sideBar.closeSide.setEnabled(True)
-            self.p.sideBar.load_side_data(self.id)
-            self.animOn.start(RowAnimDur[0])
+            if self.p.curRow is not self:
+                self.setStyleSheet('''
+                    #t_row{border-color: blue}
+                    #title_name,#count,#con_date{background: %s}'''%Color[self.color])
+                self.p.curRow = self
+                self.p.sideBar.closeSide.setEnabled(True)
+                self.p.sideBar.load_side_data(self.id)
+                self.animOn.start(RowAnimDur[0])
 
-            self.p.rowButns.setParent(self)
-            self.p.rowButns.p = self
+                self.p.rowButns.setParent(self)
+                self.p.rowButns.p = self
 
-            if self.icon == 'viewing':
-                self.p.rowButns.viewing.setText('НЕ СМОТРЮ')
-            if self.icon in ['viewed','con']:
-                self.p.rowButns.viewing.setEnabled(False)
+                if self.icon == 'viewing':
+                    self.p.rowButns.viewing.setText('НЕ СМОТРЮ')
+                if self.icon in ['viewed','con']:
+                    self.p.rowButns.viewing.setEnabled(False)
         except Exception as e:print('on_t_select:',e)
 
     # ON doubleclick row
@@ -647,12 +659,12 @@ class New_Playlist(QtWidgets.QWidget):
             self.p.pList.removeItem(self.p.pList.currentIndex())
         except Exception as e: print('delete_playlist:', e)
 
-    def add_title(self,t_name,count,genre,link,description,icon,color):
+    def add_title(self,t_name,count,genre,link,desc,icon,color):
         try:
             tab_index = self.p.tabWidget.currentIndex()
             p_name = self.p.tabWidget.tabText(tab_index)
             sql.execute("INSERT INTO Titles VALUES ('%s',%s,%s,'%s','%s','%s','%s','%s','%s','n')"%
-                        (t_name,count,ID,p_name,icon,color,genre,link,description))
+                        (t_name,count,ID,p_name,icon,color,genre,link,desc))
             db.commit()
             self.add_row(t_name,count,ID,icon,color).on_t_select()
             self.row_count.setText('Тайтлов в плейлисте:' + str(self.rowList.count()))
@@ -664,6 +676,7 @@ class New_Playlist(QtWidgets.QWidget):
         try:
             row = New_Title(self, name, count, t_id, icon, color)
             self.rowList.addWidget(row)
+            self.rowMap.append(name)
             return row
         except Exception as e:print("add_row:",e)
 
@@ -683,7 +696,6 @@ class New_Playlist(QtWidgets.QWidget):
                     FROM Titles WHERE playlist="%s"''' %name))
                 for t in titles:
                     self.add_row(t[0], t[1], t[2], t[3], t[4])
-                    self.rowMap.append(t[0])
             self.row_count.setText('Тайтлов в плейлисте:' + str(self.rowList.count()))
         except Exception as e: print("load_titles:",e)
 

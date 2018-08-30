@@ -93,7 +93,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="is_finish">
+         <widget class="QCheckBox" name="is_finished">
           <property name="cursor">
            <cursorShape>PointingHandCursor</cursorShape>
           </property>

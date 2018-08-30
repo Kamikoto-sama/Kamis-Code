@@ -80,7 +80,7 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="QLineEdit" name="con_date">
+         <widget class="reLineEdit" name="con_date">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -101,6 +101,9 @@
           </property>
           <property name="readOnly">
            <bool>true</bool>
+          </property>
+          <property name="placeholderText">
+           <string>Дата</string>
           </property>
          </widget>
         </item>
@@ -140,10 +143,13 @@
           <property name="readOnly">
            <bool>true</bool>
           </property>
+          <property name="placeholderText">
+           <string>Серии</string>
+          </property>
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="title_name">
+         <widget class="reLineEdit" name="title_name">
           <property name="enabled">
            <bool>true</bool>
           </property>
@@ -165,6 +171,9 @@
           <property name="readOnly">
            <bool>true</bool>
           </property>
+          <property name="placeholderText">
+           <string>Название тайтла</string>
+          </property>
          </widget>
         </item>
        </layout>
@@ -174,6 +183,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>reLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>Row_LineEdit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

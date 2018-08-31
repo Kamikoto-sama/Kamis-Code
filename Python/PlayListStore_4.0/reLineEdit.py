@@ -7,4 +7,6 @@ class reLineEdit(QLineEdit):
 
     def mousePressEvent(self, event):
         super(reLineEdit, self).mousePressEvent(event)
-        self.parent.on_t_select()
+        try:
+            self.parent.on_t_select()
+        except Exception as e:print('reLineEdit:',e)

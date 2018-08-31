@@ -61,7 +61,7 @@ SideAnimDur = 500
 AddFormDur = 500    # Add title form anim
 RowAnimDur = (6,6) # (AnimDown,AnimUp)
 ConListName = '*Список продолжений*'
-main = None
+main = [None,None]
 
 def save_data(save, value=1):
     try:
@@ -71,7 +71,7 @@ def save_data(save, value=1):
             sql.execute('UPDATE Data set value=%s where name="id"' % ID)
         if save == 'viewed':
             TotalViewed += value
-            main.viewed_count.setText('Всего просмотрено:' + str(TotalViewed))
+            main[0].viewed_count.setText('Всего просмотрено:' + str(TotalViewed))
             sql.execute('UPDATE Data set value=%s where name="viewed"' % TotalViewed)
         if save == 'added':
             TotalAdded += value
@@ -142,8 +142,8 @@ class Row_Buttons(QtWidgets.QWidget):
             'update titles set date="%s" where id=%s'%(self.date.text(),self.p.id))
         db.commit()
         try:
-            if ConListName in main.tabMap:
-                tab = main.tabWidget.widget(main.tabMap.index(ConListName))
+            if ConListName in main[0].tabMap:
+                tab = main[0].tabWidget.widget(main[0].tabMap.index(ConListName))
                 name = self.p.title_name.text()
                 count = self.p.count.text()
                 id_ = self.p.id
@@ -399,6 +399,7 @@ class New_Title(QtWidgets.QWidget):
             self.title_name.setText(name)
             # self.title_name.mouseDoubleClickEvent = self.on_line_edit
             # self.title_name.mousePressEvent = self.on_t_select
+            self.title_name.setParent(self)
             self.title_name.returnPressed.connect(self.on_line_edited)
             self.title_name.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
@@ -774,11 +775,12 @@ class MainForm(QtWidgets.QMainWindow):
         try:
             if index >= 0:
                 text = self.tabWidget.tabText(index)
-                Index = self.pList.findText(text)
-                self.pList.setCurrentIndex(Index)
+                index = self.pList.findText(text)
+                self.pList.setCurrentIndex(index)
+                main[1] = self.tabWidget.currentWidget()
                 self.SelectedTab = text
             else: self.SelectedTab = ""
-        except Exception as e: print("select_tab:".e)
+        except Exception as e: print("select_tab:",e)
 
     def on_move_tab(self,index):
         Tab = self.tabWidget.tabText(index)
@@ -807,8 +809,7 @@ class MainForm(QtWidgets.QMainWindow):
         except Exception as e:print('on esc:',e)
 
     def launch(self):
-        global main
-        main = self
+        main[0] = self
         self.pName.hide()
         self.closePName.hide()
         load = list(sql.execute(

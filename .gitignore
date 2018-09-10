@@ -5,4 +5,4 @@ venv
 .idea
 *.jpg
 *.png
-!Python\PlayListStore_4.0\Icons
+*.exe

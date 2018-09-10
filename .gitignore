@@ -6,3 +6,4 @@ venv
 *.jpg
 *.png
 *.exe
+!PLS/PLS_3.exe

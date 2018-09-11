@@ -398,8 +398,7 @@ class New_Title(QtWidgets.QWidget):
 
             self.title_name.setText(name)
             # self.title_name.mouseDoubleClickEvent = self.on_line_edit
-            # self.title_name.mousePressEvent = self.on_t_select
-            self.title_name.setParent(self)
+            self.title_name.mousePressEvent = self.on_t_select
             self.title_name.returnPressed.connect(self.on_line_edited)
             self.title_name.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
@@ -500,9 +499,16 @@ class New_Title(QtWidgets.QWidget):
     # ON click row
     def on_t_select(self,event=None):
         try:
+            # Move scroll bar
+            if self.p.rowList.count() >= 12:
+                place = self.p.scrollArea
+                value = place.verticalScrollBar().value()
+                print(value)
             if self.p.curRow not in [self, None]:
                 self.p.curRow.leave()
             if self.p.curRow is not self:
+
+
                 self.setStyleSheet('''
                     #t_row{border-color: blue}
                     #title_name,#count,#con_date{background: %s}'''%Color[self.color])

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace Test
 {
@@ -6,11 +7,9 @@ namespace Test
     {
         public static void Main(string[] args)
         {
-            double v = double.Parse(Console.ReadLine());
-            double d = double.Parse(Console.ReadLine());
-            double a = Math.Asin(d * 9.8 / (v * v))/2;
-            //a *= 180 / Math.PI;
-            Console.WriteLine(Math.Round(a, 2));
+            var a = "10.0";
+                double b = double.Parse(a, CultureInfo.InvariantCulture);
+            Console.WriteLine(b);
         }
     }
 }

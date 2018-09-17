@@ -97,6 +97,7 @@ class Row_Buttons(QtWidgets.QWidget):
             self.delT = QtWidgets.QPushButton('УДАЛИТЬ')
             self.delT.setFocusPolicy(QtCore.Qt.NoFocus)
             self.delT.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+            self.delT.clicked.connect(self.delete_title)
             if con:
                 self.btns.addWidget(self.delT)
             else:
@@ -109,6 +110,7 @@ class Row_Buttons(QtWidgets.QWidget):
                 self.viewing.setFixedSize(115,30)
                 self.viewing.setFocusPolicy(QtCore.Qt.NoFocus)
                 self.viewing.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+                self.viewing.clicked.connect(self.viewing_now)
 
                 self.viewed = QtWidgets.QPushButton('ПРОСМОТРЕНО')
                 self.viewed.setFixedSize(170, 30)
@@ -131,6 +133,23 @@ class Row_Buttons(QtWidgets.QWidget):
                 self.date.focusOutEvent = lambda x: self.date.hide()
                 self.date.returnPressed.connect(self.set_con_date)
         except Exception as e:print('Row_Buttons:',e)
+
+    def viewing_now(self):
+        try:
+            self.p.leave(False)
+            if self.p.icon == 'viewing':
+                self.p.set_color('n')
+                self.p.set_icon('n')
+                self.viewing.setText('СМОТРЮ')
+                main[1].sideBar.load_side_data(self.p.id)
+            else:
+                self.p.set_color('viewing')
+                self.p.set_icon('viewing')
+                self.viewing.setText('НЕ СМОТРЮ')
+                main[1].sideBar.load_side_data(self.p.id)
+        except Exception as e:print('viewing_now:',e)
+
+    def delete_title(self):self.p.delete_title()
 
     def set_con_date(self):
         if self.p.color not in ['is_con', 'viewed']:
@@ -428,19 +447,6 @@ class New_Title(QtWidgets.QWidget):
             self.animOff.timeout.connect(self.row_off)
         except Exception as e:print('new_title:',e)
 
-    def viewing_now(self):
-        self.leave(False)
-        if self.icon == 'viewing':
-            self.set_color('n')
-            self.set_icon('n')
-            self.p.rowButns.viewing.setText('СМОТРЮ')
-            self.p.sideBar.load_side_data(self.id)
-        else:
-            self.set_color('viewing')
-            self.set_icon('viewing')
-            self.p.rowButns.viewing.setText('НЕ СМОТРЮ')
-            self.p.sideBar.load_side_data(self.id)
-
     def delete_title(self):
         try:
             # Delete title from con list
@@ -485,16 +491,10 @@ class New_Title(QtWidgets.QWidget):
     # Hide/show buttons
     def set_buttons(self,show):
         if show:
-            self.p.rowButns.delT.clicked.connect(self.delete_title)
-            if not self.p.con:
-                self.p.rowButns.viewing.pressed.connect(self.viewing_now)
             self.row_layout.addWidget(self.p.rowButns)
-        else:
-            self.p.rowButns.delT.clicked.disconnect(self.delete_title)
-            if not self.p.con:
-                self.p.rowButns.viewing.pressed.disconnect(self.viewing_now)
-                self.p.rowButns.viewing.setText('СМОТРЮ')
-                self.p.rowButns.viewing.setEnabled(True)
+        elif not self.p.con:
+            self.p.rowButns.viewing.setText('СМОТРЮ')
+            self.p.rowButns.viewing.setEnabled(True)
 
     # ON click row
     def on_t_select(self,event=None):
@@ -503,7 +503,7 @@ class New_Title(QtWidgets.QWidget):
             if self.p.rowList.count() >= 12:
                 place = self.p.scrollArea
                 value = place.verticalScrollBar().value()
-                print(value)
+                print(self.mapToParent(QtCore.QPoint(5,-5)))
             if self.p.curRow not in [self, None]:
                 self.p.curRow.leave()
             if self.p.curRow is not self:

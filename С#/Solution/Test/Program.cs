@@ -7,9 +7,11 @@ namespace Test
     {
         public static void Main(string[] args)
         {
-            var a = "10.0";
-                double b = double.Parse(a, CultureInfo.InvariantCulture);
-            Console.WriteLine(b);
+            Console.WriteLine(ShouldFire2(true, "Zombie", 10));
+        }
+        static bool ShouldFire2(bool enemyInFront, string enemyName, int robotHealth)
+        {
+            return enemyInFront && (enemyName == "boss") && (robotHealth >= 50);
         }
     }
 }

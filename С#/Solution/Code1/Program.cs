@@ -35,11 +35,11 @@ namespace SpaceName
 			y = y0;
 		}
 
-		public static void DrawPath(double L, double angle)
+		public static void DrawPath(double length, double angle)
 		{
 			//Делает шаг длиной L в направлении angle и рисует пройденную траекторию
-			var x1 = (float)(x + L * Math.Cos(angle));
-			var y1 = (float)(y + L * Math.Sin(angle));
+			var x1 = (float)(x + length * Math.Cos(angle));
+			var y1 = (float)(y + length * Math.Sin(angle));
 			graphics.DrawLine(Pens.Yellow, x, y, x1, y1);
 			x = x1;
 			y = y1;

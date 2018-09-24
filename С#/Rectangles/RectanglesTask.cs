@@ -32,6 +32,12 @@ namespace Rectangles
 		// Если прямоугольники совпадают, можно вернуть номер любого из них.
 		public static int IndexOfInnerRectangle(Rectangle r1, Rectangle r2)
 		{
+			if (r1.Top > r2.Top && r1.Left > r2.Left && r1.Right > r2.Right && r1.Bottom > r2.Bottom)
+				return 0;
+			if (r1.Top < r2.Top && r1.Left < r2.Left && r1.Right < r2.Right && r1.Bottom < r2.Bottom)
+				return 1;
+			if (r1.Top == r2.Top && r1.Left == r2.Left && r1.Right == r2.Right && r1.Bottom == r2.Bottom)
+				return 0;
 			return -1;
 		}
 	}

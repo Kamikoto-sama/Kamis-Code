@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Procents", "Procents\Procen
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Code1", "Code1\Code1.csproj", "{80ECD721-17F8-4ED5-AA07-F2CE34541663}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rectangles", "..\Rectangles\Rectangles.csproj", "{E8B0D136-D22F-4550-A136-BB577FCBEC8F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{80ECD721-17F8-4ED5-AA07-F2CE34541663}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80ECD721-17F8-4ED5-AA07-F2CE34541663}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80ECD721-17F8-4ED5-AA07-F2CE34541663}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8B0D136-D22F-4550-A136-BB577FCBEC8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8B0D136-D22F-4550-A136-BB577FCBEC8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8B0D136-D22F-4550-A136-BB577FCBEC8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8B0D136-D22F-4550-A136-BB577FCBEC8F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

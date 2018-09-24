@@ -1,1 +1,7 @@
 D:\My_Programms\С#\Rectangles\obj\Debug\Rectangles.csprojResolveAssemblyReference.cache
+D:\My_Programms\С#\Rectangles\bin\Debug\Rectangles.exe.config
+D:\My_Programms\С#\Rectangles\bin\Debug\Rectangles.exe
+D:\My_Programms\С#\Rectangles\bin\Debug\Rectangles.pdb
+D:\My_Programms\С#\Rectangles\bin\Debug\TestingRoom.dll
+D:\My_Programms\С#\Rectangles\obj\Debug\Rectangles.exe
+D:\My_Programms\С#\Rectangles\obj\Debug\Rectangles.pdb

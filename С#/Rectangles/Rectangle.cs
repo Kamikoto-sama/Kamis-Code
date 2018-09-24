@@ -12,8 +12,8 @@
             Height = height;
         }
 
-        public int Bottom => Top + Height;
-        public int Right => Left + Width;
+        public int Bottom {get{return Top + Height;}}
+        public int Right {get{return Left + Width;}}
 
         public override string ToString()
         {

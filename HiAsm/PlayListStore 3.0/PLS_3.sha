@@ -768,7 +768,6 @@ BEGIN_SDK
   Add(Hub,16772484,605,156)
   {
    OutCount=3
-   link(onEvent1,8593029:doWork1,[(635,162)(635,132)])
    link(onEvent2,7448119:doWork1,[(641,169)])
    link(onEvent3,7951372:doString,[])
   }
@@ -864,7 +863,7 @@ BEGIN_SDK
    DSManager="parent.data"
    link(onError,12486807:doWork3,[(742,183)(742,266)(365,266)])
   }
-  Add(MultiElement,8593029,679,126)
+  Add(MultiElement,8593029,679,49)
   {
    @Hint=#9:Color chg|
    @Color=22015
@@ -1745,14 +1744,14 @@ Add(Hub,12937000,462,604)
  link(onEvent1,5693718:doData,[])
  link(onEvent2,11026930:doData,[(486,617)(486,674)])
 }
-Add(LineBreak,4166128,560,320)
+Add(LineBreak,12372988,560,320)
 {
  Caption="Vis"
  Color=16776960
  link(Out,3859674:doVisible,[])
  Primary=[3445455,617,-124]
 }
-Add(LineBreak,12706388,-49,420)
+Add(LineBreak,9655832,-49,420)
 {
  Caption="Vis"
  Color=16776960
@@ -1963,7 +1962,7 @@ Add(Hub,10325791,613,507)
  link(onEvent1,10788532:doWork3,[(865,513)])
  link(onEvent2,8550673:doWork2,[])
 }
-Add(LineBreak,3116860,588,585)
+Add(LineBreak,5482111,588,585)
 {
  @Color=5635840
  Caption="Add"
@@ -3556,7 +3555,7 @@ Add(GetDataEx,16314538,1218,418)
 {
  link(Data,15047573:Var2,[])
 }
-Add(LineBreak,10963190,802,342)
+Add(LineBreak,7073271,802,342)
 {
  Caption="Update"
  Color=65535
@@ -3568,7 +3567,7 @@ Add(Hub,7321965,1860,513)
  link(onEvent1,11871916:doWork1,[])
  link(onEvent2,14906478:doWork1,[(1969,526)])
 }
-Add(LineBreak,15632830,1993,440)
+Add(LineBreak,7179656,1993,440)
 {
  Caption="Vied"
  Color=65280
@@ -3802,7 +3801,7 @@ Add(GetDataEx,11336753,1774,481)
  Angle=3
  link(Data,11204165:Var3,[(1584,486)(1584,502)(1479,502)])
 }
-Add(LineBreak,7338997,1906,532)
+Add(LineBreak,10199211,1906,532)
 {
  Caption="DelT"
  Color=16776960
@@ -5403,7 +5402,7 @@ Add(GetDataEx,6916240,1459,425)
  Angle=3
  link(Data,4238524:Var3,[])
 }
-Add(LineBreak,5412805,756,346)
+Add(LineBreak,7024830,756,346)
 {
  Caption="FindT"
  Type=1
@@ -5411,21 +5410,21 @@ Add(LineBreak,5412805,756,346)
  link(Data,6317184:Var2,[])
  Primary=[15343789,1320,242]
 }
-Add(LineBreak,7253839,1989,616)
+Add(LineBreak,10764853,1989,616)
 {
  Caption="ON"
  Color=16776960
  link(Out,2670315:doEvent1,[])
  Primary=[8846522,-1263,-687]
 }
-Add(LineBreak,1437525,599,293)
+Add(LineBreak,6478844,599,293)
 {
  Caption="FindT"
  Color=65535
  link(Out,6138279:doWork1,[(674,299)])
  Primary=[2529076,1599,369]
 }
-Add(LineBreak,13857558,926,391)
+Add(LineBreak,2488611,926,391)
 {
  Caption="FindT"
  Color=65535
@@ -5497,7 +5496,7 @@ Add(GetDataEx,4458253,1173,436)
  Angle=3
  link(Data,2150447:Var3,[])
 }
-Add(LineBreak,6253549,1217,552)
+Add(LineBreak,10516040,1217,552)
 {
  Caption="FindT"
  Type=1
@@ -6132,7 +6131,7 @@ Add(HubEx,4942821,2059,520)
 {
  link(onEvent,11641710:doWork2,[])
 }
-Add(LineBreak,9326320,1993,458)
+Add(LineBreak,14524607,1993,458)
 {
  Caption="DelP"
  Color=16776960
@@ -7285,7 +7284,7 @@ Add(GetDataEx,13214870,535,165)
  Angle=3
  link(Data,16536674:Var3,[(492,170)(492,170)])
 }
-Add(LineBreak,12068610,288,234)
+Add(LineBreak,4818630,288,234)
 {
  Caption="OpenP"
  Color=65535
@@ -7374,7 +7373,7 @@ BEGIN_SDK
    link(onEvent2,807475:doClear,[(187,90)(187,28)(109,28)(109,47)])
   }
 END_SDK
-Add(LineBreak,5936812,1669,344)
+Add(LineBreak,2235159,1669,344)
 {
  Caption="OpP"
  Color=16776960
@@ -7390,7 +7389,7 @@ Add(GetDataEx,4390914,493,392)
 {
  link(Data,16177219:Var1,[])
 }
-Add(LineBreak,13455002,518,413)
+Add(LineBreak,14575607,518,413)
 {
  Caption="OpP"
  Type=1
@@ -7398,7 +7397,7 @@ Add(LineBreak,13455002,518,413)
  link(Data,10100023:Var2,[])
  Primary=[7397204,1214,-122]
 }
-Add(LineBreak,3630002,386,351)
+Add(LineBreak,5739243,386,351)
 {
  Caption="OpP"
  Color=16776960
@@ -7548,7 +7547,7 @@ BEGIN_SDK
    Format="Y.M.D"
   }
 END_SDK
-Add(LineBreak,2998910,598,413)
+Add(LineBreak,3733838,598,413)
 {
  Caption="ID"
  Type=1
@@ -7569,7 +7568,7 @@ Add(InfoTip,7123853,1615,200)
  Width=242
  Height=171
 }
-Add(LineBreak,14288022,931,370)
+Add(LineBreak,10962063,931,370)
 {
  Caption="FL"
  Color=65535
@@ -7804,7 +7803,7 @@ Add(HubEx,11375153,714,26)
  Angle=1
  link(onEvent,4661319:doWork1,[])
 }
-Add(LineBreak,2994314,1997,698)
+Add(LineBreak,16509959,1997,698)
 {
  Caption="CList"
  Color=16776960
@@ -7961,7 +7960,7 @@ Add(GetDataEx,4238524,1274,425)
  Angle=3
  link(Data,14936585:Var3,[])
 }
-Add(LineBreak,3930017,1899,224)
+Add(LineBreak,12658933,1899,224)
 {
  Caption="Lang"
  Color=65280
@@ -7969,7 +7968,7 @@ Add(LineBreak,3930017,1899,224)
  link(Out,10686572:doWork1,[])
  Primary=[6484029,-1222,-120]
 }
-Add(LineBreak,11758927,-53,441)
+Add(LineBreak,11340059,-53,441)
 {
  Caption="AdT"
  Color=33023
@@ -8285,7 +8284,7 @@ Add(HubEx,8404904,105,485)
  Angle=1
  link(onEvent,8083924:doNext,[(109,512)])
 }
-Add(LineBreak,4552651,2083,700)
+Add(LineBreak,7537105,2083,700)
 {
  Caption="SetV"
  Color=16776960
@@ -8314,7 +8313,7 @@ Add(HubEx,7173464,168,657)
 {
  link(onEvent,10641799:doEvent1,[])
 }
-Add(LineBreak,13954407,266,-18)
+Add(LineBreak,15119855,266,-18)
 {
  Caption="Update"
  Color=16776960
@@ -8342,7 +8341,7 @@ Add(DSC_Query,9004277,426,-43)
  link(onQuery,14773068:doVisible,[])
  link(onError,8919347:doWork1,[(466,-23)(466,-95)])
 }
-Add(LineBreak,11692985,497,106)
+Add(LineBreak,12543592,497,106)
 {
  Caption="INFO"
  Color=65535
@@ -8991,7 +8990,7 @@ BEGIN_SDK
   {
   }
 END_SDK
-Add(LineBreak,11734784,1275,343)
+Add(LineBreak,259074,1275,343)
 {
  Caption="TabVi"
  Color=65535
@@ -9007,7 +9006,7 @@ Add(Hub,6553047,1449,595)
  link(onEvent1,11464812:doWork2,[])
  link(onEvent2,1936124:In,[(1471,608)(1471,613)])
 }
-Add(LineBreak,3549632,1750,777)
+Add(LineBreak,8126991,1750,777)
 {
  @Color=5636095
  Caption="Move"
@@ -9030,7 +9029,7 @@ Add(Hub,11590624,688,-64)
  link(onEvent1,8846522:In,[(714,-58)(714,-65)])
  link(onEvent2,10765293:doWork1,[(993,-51)])
 }
-Add(LineBreak,7484144,1036,196)
+Add(LineBreak,10971367,1036,196)
 {
  Caption="VIS"
  Color=65535
@@ -9049,7 +9048,7 @@ Add(IndexToChanel,10912741,2660,1050)
  link(onEvent2,3218692:doLoad,[(2706,1063)(2706,1056)])
  link(Index,15486197:Var,[])
 }
-Add(LineBreak,6603301,2604,1050)
+Add(LineBreak,810497,2604,1050)
 {
  @Color=5636095
  Caption="Img"
@@ -9067,7 +9066,7 @@ Add(PopupMenu,998819,1652,112)
  Menu=#15:Add to favorite|1:-|18:Show favorite list|
  link(onClick,5385078:doWork1,[])
 }
-Add(LineBreak,4752513,1546,105)
+Add(LineBreak,1996279,1546,105)
 {
  Caption="AdFav"
  Color=65535
@@ -10061,7 +10060,7 @@ Add(GetDataEx,403441,1734,211)
 }
 Add(hcVisualText,12706445,2044,21)
 {
- Lines=#2:46|
+ Lines=#2:49|
 }
 Add(hcKeyHandler,10580050,1988,21)
 {
@@ -10278,7 +10277,7 @@ BEGIN_SDK
    DataCount=1
    Width=363
    Height=228
-   link(doWork1,4367901:doEvent1,[(115,55)(115,224)])
+   link(doWork1,4367901:doEvent1,[(115,55)(115,231)])
    link(doWork2,6605795:doEvent1,[])
   }
   Add(MainForm,8757538,97,-19)
@@ -10513,12 +10512,12 @@ BEGIN_SDK
    FileName="PLS_Apdater.exe"
    link(onExec,6508098:onEvent3,[(534,241)(534,69)])
   }
-  Add(Hub,4367901,127,218)
+  Add(Hub,4367901,127,225)
   {
    OutCount=3
-   link(onEvent1,9215623:doRead,[(382,224)(382,174)])
-   link(onEvent2,5971066:doWork1,[(229,231)(229,244)])
-   link(onEvent3,15472165:In,[(175,238)(175,245)])
+   link(onEvent1,9215623:doRead,[(382,231)(382,174)])
+   link(onEvent2,5971066:doWork1,[(229,238)(229,244)])
+   link(onEvent3,15472165:In,[])
   }
   Add(HubEx,14564930,466,235)
   {
@@ -10607,10 +10606,10 @@ BEGIN_SDK
   {
    link(onEvent,7776193:doWrite,[])
   }
-  Add(LineBreak,12842232,455,-63)
+  Add(LineBreak,6204502,455,-63)
   {
    link(Out,7776193:doRead,[(562,-57)(562,-43)])
-   Primary=[15472165,-263,302]
+   Primary=[15472165,-270,302]
   }
   Add(HubEx,12878344,427,-42)
   {
@@ -10740,23 +10739,25 @@ BEGIN_SDK
   {
    FileName="https://vk.com/@playliststore_project-documentation"
   }
-  Add(MultiElement,5971066,238,238)
+  Add(MultiElement,5971066,252,238)
   {
   }
   BEGIN_SDK
     Add(EditMulti,11708105,21,21)
     {
+     EventCount=1
      WorkCount=1
-     Width=587
-     Height=221
+     Width=517
+     Height=116
      link(doWork1,300927:doEvent,[(33,27)(33,83)])
     }
-    Add(DSC_Exec,9924058,474,91)
+    Add(DSC_Exec,9924058,439,91)
     {
      DSManager="parent.parent.data"
+     link(onExec,11708105:onEvent1,[(482,97)(482,27)])
      link(onError,6997673:doWork1,[])
     }
-    Add(MultiElement,6997673,525,98)
+    Add(MultiElement,6997673,490,98)
     {
      @Hint=#10:MESS ERROR|
      @Color=11141120
@@ -10783,15 +10784,15 @@ BEGIN_SDK
     END_SDK
     Add(HTTP_Get,3602494,147,70)
     {
-     URL="http://apiexperts.ru/lib_pls/ver.txt"
-     link(onDownload,825475:doConvert,[])
+     URL="https://raw.githubusercontent.com/Kamikoto-sama/Kamis-Code/master/Release/pls3.txt"
+     link(onDownload,9340222:doValue,[])
      link(onURLSize,3602494:doDownload,[(189,90)(189,108)(136,108)(136,76)])
      link(Position,5600774:Value,[])
     }
-    Add(Convertor,825475,200,77)
+    Add(Convertor,825475,256,77)
     {
      Mode=11
-     link(onResult,12322788:doValue,[])
+     link(onResult,9854672:doCompare,[])
     }
     Add(Memory,5600774,161,26)
     {
@@ -10803,28 +10804,20 @@ BEGIN_SDK
      AutoStop=1
      link(onTimer,3602494:GetURLSize,[])
     }
-    Add(FormatStr,7951372,429,91)
+    Add(FormatStr,7951372,394,91)
     {
-     Mask="UPDATE Data set UP=%2.%1"
+     DataCount=1
+     Mask="UPDATE Data set VER="1/%1""
      link(onFString,9924058:doExec,[])
-     link(Str1,13267341:Var3,[(435,66)])
-     link(Str2,12322788:Value,[(442,79)(418,79)(418,121)(251,121)])
+     link(Str1,13634311:Var3,[(400,66)])
     }
-    Add(If_else,9854672,289,77)
+    Add(If_else,9854672,303,77)
     {
+     Type=5
      link(onFalse,7924872:doMessage,[])
-     link(Op2,13267341:Var2,[])
+     link(Op2,13634311:Var2,[])
     }
-    Add(GlobalVar,12562581,296,43)
-    {
-     @Color=5636095
-     Name="VerIN"
-    }
-    Add(Hub,5496914,381,91)
-    {
-     link(onEvent1,7951372:doString,[])
-    }
-    Add(Message,7924872,335,84)
+    Add(Message,7924872,349,84)
     {
      Message="A new update is available! Update now?"
      Caption="PLS: AutoUpdater"
@@ -10833,21 +10826,25 @@ BEGIN_SDK
      Point(onYES)
      MakeTrans(Message)
      MakeTrans(Caption)
-     link(onYES,5496914:doEvent1,[])
-    }
-    Add(GetDataEx,13267341,296,61)
-    {
-     link(Data,12562581:Var,[])
-    }
-    Add(Memory,12322788,245,77)
-    {
-     link(onData,9854672:doCompare,[])
+     link(onYES,7951372:doString,[])
     }
     Add(IndexToChanel,300927,46,77)
     {
      Data=Integer(1)
      Point(Index)
      link(onEvent2,16032854:doTimer,[])
+    }
+    Add(GlobalVar,8784817,310,41)
+    {
+     Name="CURRENT"
+    }
+    Add(GetDataEx,13634311,310,61)
+    {
+     link(Data,8784817:Var,[])
+    }
+    Add(Memory,9340222,203,77)
+    {
+     link(onData,825475:doConvert,[])
     }
   END_SDK
   Add(HubEx,9266981,555,301)
@@ -10939,7 +10936,7 @@ BEGIN_SDK
    link(onEvent,7784258:doString,[])
   }
 END_SDK
-Add(LineBreak,4466426,791,315)
+Add(LineBreak,13904710,791,315)
 {
  Caption="SaveSel"
  Color=16776960
@@ -10950,7 +10947,7 @@ Add(HubEx,10788532,861,342)
 {
  link(onEvent,11994160:doWork3,[])
 }
-Add(LineBreak,15217785,2083,714)
+Add(LineBreak,4472815,2083,714)
 {
  Caption="SetV"
  Color=16776960

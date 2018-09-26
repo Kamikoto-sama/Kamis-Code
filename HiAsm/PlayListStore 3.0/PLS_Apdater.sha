@@ -1,9 +1,9 @@
 Make(delphi)
 ver(4.04 build 184)
-Add(MainForm,2953706,130,370)
+Add(MainForm,2953706,130,412)
 {
  Width=246
- Height=122
+ Height=95
  Caption="PLS: Updater"
  BorderStyle=3
  Position=1
@@ -23,14 +23,14 @@ Add(Memory,2536380,329,231)
 {
  Default=Integer(0)
 }
-Add(GProgressBar,13330419,448,266)
+Add(GProgressBar,13330419,455,266)
 {
  Width=240
  Height=35
  Align=2
  Ctl3D=0
- LightProgress=65280
- DarkProgress=16776960
+ LightProgress=32768
+ DarkProgress=8421504
  InvKindGrad=0
  Point(doMax)
 }
@@ -69,7 +69,7 @@ Add(Hub,11704670,373,266)
  link(onEvent1,13330419:doPosition,[])
  link(onEvent2,5555506:doValue,[(410,279)(410,212)])
 }
-Add(Label,15408817,175,336)
+Add(Label,15408817,126,371)
 {
  Left=115
  Top=36
@@ -86,24 +86,13 @@ Add(DoData,1889217,448,224)
  Data=Integer(65280)
  link(onEventData,14571360:doEvent1,[(489,230)(489,247)])
 }
-Add(Button,13201794,558,408)
-{
- Top=63
- Width=242
- Height=30
- Font=[Consolas,12,1,0,204]
- Caption="CHECK UPDATE"
- Point(doEnabled)
- MakeTrans(Caption)
- link(onClick,3574678:doEvent1,[])
-}
-Add(HTTP_Get,3602494,665,394)
+Add(HTTP_Get,3602494,881,457)
 {
  URL="http://apiexperts.ru/lib_pls/ver.txt"
  link(onStatus,3055953:doValue,[])
- link(onDownload,825475:doConvert,[(741,407)(741,360)])
+ link(onDownload,825475:doConvert,[(957,470)(957,423)])
  link(onURLSize,2917570:doEvent1,[])
- link(onStop,1368524:doCompare,[(706,421)(706,504)])
+ link(onStop,1368524:doCompare,[(922,484)(922,567)])
  link(Position,5600774:Value,[])
 }
 Add(Case,7466415,434,326)
@@ -138,79 +127,74 @@ Add(Message,2746612,571,364)
  Caption="PLS: Updataer"
  Icon=1
 }
-Add(Convertor,825475,771,354)
+Add(Convertor,825475,987,417)
 {
  Mode=11
  link(onResult,2357353:doValue,[])
 }
-Add(Case,11975342,772,535)
+Add(Case,11975342,988,598)
 {
  Value=Integer(0)
  link(onTrue,16752006:doMessage,[])
 }
-Add(Message,16752006,816,542)
+Add(Message,16752006,1032,605)
 {
  Message="CONNECTION ERROR"
  Caption="PLS: Update checker"
  Icon=1
  Point(onOK)
 }
-Add(Hub,2917570,730,408)
+Add(Hub,2917570,946,471)
 {
  OutCount=3
- link(onEvent1,3602494:doDownload,[(761,414)(761,439)(653,439)(653,400)])
- link(onEvent2,11975342:doCase,[(754,421)(754,541)])
- link(onEvent3,10006871:doValue,[(767,428)(767,440)])
+ link(onEvent1,3602494:doDownload,[(977,477)(977,502)(869,502)(869,463)])
+ link(onEvent2,11975342:doCase,[(970,484)(970,604)])
+ link(onEvent3,10006871:doValue,[(983,491)(983,503)])
 }
-Add(Memory,5600774,679,345)
+Add(Memory,5600774,895,408)
 {
  Default=Integer(0)
 }
-Add(Memory,3055953,772,394)
+Add(Memory,3055953,988,457)
 {
  Default=Integer(0)
 }
-Add(If_else,1368524,772,498)
+Add(If_else,1368524,988,561)
 {
  Type=1
  link(onTrue,11460347:doMessage,[])
  link(Op1,3055953:Value,[])
- link(Op2,10006871:Value,[(785,481)(796,481)])
+ link(Op2,10006871:Value,[(1001,544)(1012,544)])
 }
-Add(Message,11460347,816,498)
+Add(Message,11460347,1032,561)
 {
  Message="SERVER ERROR !!!"
  Caption="PLS: Update checker"
  Icon=1
  Point(onOK)
 }
-Add(Memory,10006871,790,434)
+Add(Memory,10006871,1006,497)
 {
 }
-Add(DS_SQLite,3711990,225,384)
+Add(DS_SQLite,3711990,225,426)
 {
  @Hint=#9:DATA BASE|
  Name="data"
  FileName="Data.db"
  link(onOpen,3970136:doQuery,[])
 }
-Add(DSC_Query,3970136,267,384)
+Add(DSC_Query,3970136,267,426)
 {
- SQL="SELECT * FROM Data"
+ SQL="SELECT VER FROM Data"
  DSManager="data"
- link(onQuery,11390197:doSeparateMT,[])
- link(onError,15940895:doWork1,[(309,404)(309,439)])
+ link(onQuery,3796486:doGet,[])
+ link(onError,15940895:doWork1,[(309,446)(309,481)])
 }
-Add(MT_MultiData,11390197,320,384)
-{
- Count=6
- link(onData6,5817227:doSplit,[])
-}
-Add(MultiElement,15940895,321,433)
+Add(MultiElement,15940895,321,475)
 {
  @Hint=#10:MESS ERROR|
  @Color=5570560
- AddHint(-32,48,87,13,@Hint)
+ AddHint(-98,12,87,13,@Hint)
 }
 BEGIN_SDK
   Add(EditMulti,8893549,21,21)
@@ -232,25 +216,13 @@ BEGIN_SDK
    link(onData,6332176:doMessage,[])
   }
 END_SDK
-Add(StrPart,5817227,364,419)
+Add(If_else,9854672,1077,417)
 {
- Char="."
- link(onSplit,11838066:In,[(405,425)(405,405)])
- link(onPart,3444040:doCompare,[])
-}
-Add(If_else,3444040,410,426)
-{
- Type=5
- Op2=Integer(0)
- link(onTrue,16762462:doEvent1,[])
-}
-Add(If_else,9854672,861,354)
-{
- link(onTrue,1292377:doMessage,[(912,360)(912,334)])
- link(onFalse,7924872:doMessage,[(900,367)(900,381)])
+ link(onTrue,1292377:doMessage,[(1128,423)(1128,397)])
+ link(onFalse,7924872:doMessage,[(1127,430)(1127,444)])
  link(Op2,15025016:Value,[])
 }
-Add(Message,7924872,907,375)
+Add(Message,7924872,1137,438)
 {
  Message="A new update is available! Update now?"
  Caption="PLS: Update checker"
@@ -258,99 +230,50 @@ Add(Message,7924872,907,375)
  Icon=4
  Point(onYES)
  MakeTrans(Message)
- link(onYES,13736055:doWork1,[(962,388)(962,199)(256,199)])
+ link(onYES,3823536:In,[])
 }
-Add(Memory,15025016,868,309)
+Add(Memory,15025016,1084,372)
 {
 }
-Add(LineBreak,16003598,823,309)
+Add(HubEx,13736055,289,294)
 {
- @Color=5592575
- Color=65535
- link(Out,15025016:doValue,[])
- Primary=[11838066,-410,90]
+ link(onEvent,2667373:GetURLSize,[])
 }
-Add(HubEx,13736055,252,294)
+Add(Hub,16762462,475,433)
 {
- link(onEvent,10408186:doEvent1,[])
+ link(onEvent1,13736055:doWork3,[(498,439)(498,396)(293,396)])
 }
-Add(Hub,16762462,454,426)
-{
- OutCount=3
- link(onEvent1,1184901:doData,[(501,432)(501,414)])
- link(onEvent2,13736055:doWork3,[(479,439)(479,376)(256,376)])
- link(onEvent3,12265756:doValue,[(482,446)(482,461)])
-}
-Add(DoData,1184901,511,408)
-{
- Data=Integer(0)
- link(onEventData,13201794:doEnabled,[])
-}
-Add(Message,1292377,922,328)
+Add(Message,1292377,1138,391)
 {
  Message="There is not new updates!"
  Caption="PLS: Update checker"
  Icon=4
  Point(onOK)
  MakeTrans(Message)
- link(onOK,9066788:doWork3,[(977,341)])
 }
-Add(Timer,13075698,177,384)
+Add(Timer,13075698,177,426)
 {
  Enable=1
  AutoStop=1
  link(onTimer,3711990:doOpen,[])
 }
-Add(Hub,3574678,607,408)
+Add(Hub,3574678,823,471)
 {
  link(onEvent1,3602494:GetURLSize,[])
- link(onEvent2,11858094:doData,[(637,421)(637,452)(547,452)(547,468)])
 }
-Add(DoData,11858094,560,462)
-{
- Data=String(Cheking for updates...)
- link(onEventData,5220019:doWork2,[])
-}
-Add(StatusBar,15598512,623,462)
-{
- TextAlign=1
- Panels=#23:Press check updates=250|
-}
-Add(HubEx,5220019,601,462)
-{
- link(onEvent,15598512:doText,[])
-}
-Add(DoData,3439363,560,504)
-{
- Data=String(Downloading...)
- link(onEventData,7356612:doWork2,[])
-}
-Add(Hub,10408186,266,294)
-{
- link(onEvent1,2667373:GetURLSize,[])
- link(onEvent2,13609910:In,[(292,307)(292,324)])
-}
-Add(LineBreak,1835412,518,504)
-{
- Caption="2"
- Color=65535
- link(Out,3439363:doData,[])
- Primary=[13609910,-201,-186]
-}
-Add(GlobalVar,12265756,495,455)
+Add(GlobalVar,12265756,418,468)
 {
  @Color=5635925
- Name="3"
+ Name="Prev"
 }
 Add(Hub,14571360,518,241)
 {
- OutCount=4
+ OutCount=3
  link(onEvent1,16526877:doSegColor,[(542,247)(542,219)])
- link(onEvent2,13376442:doString,[(570,254)(570,242)])
- link(onEvent3,13540006:doWork1,[(583,261)(583,281)])
- link(onEvent4,15228335:In,[(539,268)(539,279)])
+ link(onEvent2,13376442:doString,[(597,254)(597,242)])
+ link(onEvent3,13540006:doWork1,[(598,261)(598,281)])
 }
-Add(MultiElement,13540006,602,275)
+Add(MultiElement,13540006,629,275)
 {
  @Color=16776960
  link(onEvent1,1405158:doTimer,[])
@@ -431,12 +354,12 @@ BEGIN_SDK
    Default=Integer(0)
   }
 END_SDK
-Add(DSC_Exec,11234170,642,236)
+Add(DSC_Exec,11234170,670,236)
 {
  DSManager="data"
- link(onError,11260080:doWork1,[(688,249)(688,228)])
+ link(onError,11260080:doWork1,[(716,249)(716,228)])
 }
-Add(MultiElement,11260080,702,222)
+Add(MultiElement,11260080,730,222)
 {
  @Hint=#10:MESS ERROR|
  @Color=11141120
@@ -461,71 +384,81 @@ BEGIN_SDK
    link(onData,6332176:doMessage,[])
   }
 END_SDK
-Add(FormatStr,13376442,597,236)
+Add(FormatStr,13376442,625,236)
 {
  DataCount=1
- Mask="UPDATE Data set UP=1.%1"
+ Mask="UPDATE Data set VER="%1""
  link(onFString,11234170:doExec,[])
- link(Str1,13025979:Var,[])
+ link(Str1,3561828:Var,[(631,230)(631,230)])
 }
-Add(GlobalVar,13025979,597,207)
-{
- @Color=5635925
- Name="3"
-}
-Add(WinExec,9610219,762,257)
+Add(WinExec,9610219,783,257)
 {
  FileName="PLS_3.exe"
 }
-Add(Timer,1405158,651,275)
+Add(Timer,1405158,678,275)
 {
  Interval=200
  Enable=1
  AutoStop=1
  link(onTimer,11232796:doEvent1,[])
 }
-Add(GlobalVar,2357353,817,354)
+Add(GlobalVar,2357353,1033,417)
 {
  @Color=5635925
  Name="3"
  link(onValue,9854672:doCompare,[])
 }
-Add(Hub,11232796,695,275)
+Add(Hub,11232796,723,275)
 {
- link(onEvent1,9610219:doExec,[(721,281)(721,263)])
- link(onEvent2,9066788:doWork2,[(722,288)(722,299)])
+ link(onEvent1,9610219:doExec,[(749,281)(749,263)])
+ link(onEvent2,14938112:In,[(760,288)(760,299)])
 }
-Add(DoData,14484300,560,545)
-{
- Data=String(Completed !)
- link(onEventData,7356612:doWork3,[(605,551)])
-}
-Add(HubEx,7356612,601,504)
-{
- Angle=3
- link(onEvent,5220019:doWork3,[])
-}
-Add(LineBreak,6279695,518,545)
-{
- Caption="4"
- Color=65535
- link(Out,14484300:doData,[])
- Primary=[15228335,28,-272]
-}
-Add(LineBreak,1964872,84,391)
+Add(LineBreak,7213496,70,433)
 {
  Caption="5"
  Color=16776960
- link(Out,2953706:doClose,[])
- Primary=[14938112,910,-98]
+ link(Out,5624068:doWork2,[])
+ Primary=[14938112,713,-140]
 }
-Add(HubEx,9066788,973,293)
-{
- link(onEvent,14938112:In,[])
-}
-Add(Translator,3162807,379,489)
+Add(Translator,3162807,78,370)
 {
  @Color=16776960
  Lang="ru"
  LangWords=['CHECK UPDATE'="Проверить обновления",'There is not new updates!'="Новых обновлений нет",'A new update is available! Update now?'="Новое обновление доступно!\nОбновить сейчас?"]
+}
+Add(MT_Get,3796486,315,426)
+{
+ link(onGet,7235833:doSplit,[])
+}
+Add(HubEx,5624068,105,433)
+{
+ link(onEvent,2953706:doClose,[])
+}
+Add(LineBreak,12307123,247,294)
+{
+ Caption="6"
+ Color=16776960
+ link(Out,13736055:doWork2,[])
+ Primary=[3823536,936,151]
+}
+Add(HubEx,496656,105,462)
+{
+ Angle=3
+}
+Add(If_else,3444040,417,433)
+{
+ Op2=Integer(1)
+ link(onTrue,16762462:doEvent1,[])
+ link(onFalse,496656:doWork3,[(469,446)(469,512)(109,512)])
+}
+Add(MultiStrData,7235833,364,433)
+{
+ Char="/"
+ link(onPart1,3444040:doCompare,[])
+ link(onPart2,12265756:doValue,[(407,446)(407,474)])
+}
+Add(GlobalVar,3561828,625,209)
+{
+ @Color=5635925
+ Name="Prev"
 }

@@ -25,7 +25,7 @@ Add(ComboBox,2776569,133,119)
  Text=""
  DataType=1
  ReadOnly=0
- link(onChange,951248:doWork3,[(177,125)(177,105)(123,105)])
+ link(onClick,951248:doWork3,[(178,132)(178,107)(123,107)])
 }
 Add(Edit,14941833,133,182)
 {

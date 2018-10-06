@@ -814,7 +814,7 @@ BEGIN_SDK
   }
   Add(Message,11432545,656,212)
   {
-   Message="ver [3.14.27]\r\n\r\n1) Обновлены цвета маркеров тайтлов.\r\n\r\n||Author: Kamikoto;\r\nEmail:update.pls@yandex.ru;\r\nVK: https://vk.com/playliststore_project\r\nDonate(YandexMoney): 410011968947376||"
+   Message="ver [3.15.28]\r\n\r\n1) Авто обновление снова работает.\r\n\r\n||Author: Kamikoto;\r\nEmail:update.pls@yandex.ru;\r\nVK: https://vk.com/playliststore_project\r\nDonate(YandexMoney): 410011968947376||"
    Caption="PLS: INFO"
    Icon=4
   }
@@ -1744,14 +1744,14 @@ Add(Hub,12937000,462,604)
  link(onEvent1,5693718:doData,[])
  link(onEvent2,11026930:doData,[(486,617)(486,674)])
 }
-Add(LineBreak,8322296,560,320)
+Add(LineBreak,15726669,560,320)
 {
  Caption="Vis"
  Color=16776960
  link(Out,3859674:doVisible,[])
  Primary=[3445455,617,-124]
 }
-Add(LineBreak,16300737,-49,420)
+Add(LineBreak,3418957,-49,420)
 {
  Caption="Vis"
  Color=16776960
@@ -1962,7 +1962,7 @@ Add(Hub,10325791,613,507)
  link(onEvent1,10788532:doWork3,[(865,513)])
  link(onEvent2,8550673:doWork2,[])
 }
-Add(LineBreak,9792847,588,585)
+Add(LineBreak,16474687,588,585)
 {
  @Color=5635840
  Caption="Add"
@@ -3555,7 +3555,7 @@ Add(GetDataEx,16314538,1218,418)
 {
  link(Data,15047573:Var2,[])
 }
-Add(LineBreak,7178942,802,342)
+Add(LineBreak,14536952,802,342)
 {
  Caption="Update"
  Color=65535
@@ -3567,7 +3567,7 @@ Add(Hub,7321965,1860,513)
  link(onEvent1,11871916:doWork1,[])
  link(onEvent2,14906478:doWork1,[(1969,526)])
 }
-Add(LineBreak,12280967,1993,440)
+Add(LineBreak,16569646,1993,440)
 {
  Caption="Vied"
  Color=65280
@@ -3801,7 +3801,7 @@ Add(GetDataEx,11336753,1774,481)
  Angle=3
  link(Data,11204165:Var3,[(1584,486)(1584,502)(1479,502)])
 }
-Add(LineBreak,15852789,1906,532)
+Add(LineBreak,15265534,1906,532)
 {
  Caption="DelT"
  Color=16776960
@@ -5402,7 +5402,7 @@ Add(GetDataEx,6916240,1459,425)
  Angle=3
  link(Data,4238524:Var3,[])
 }
-Add(LineBreak,13063446,756,346)
+Add(LineBreak,6922714,756,346)
 {
  Caption="FindT"
  Type=1
@@ -5410,21 +5410,21 @@ Add(LineBreak,13063446,756,346)
  link(Data,6317184:Var2,[])
  Primary=[15343789,1320,242]
 }
-Add(LineBreak,14814567,1989,616)
+Add(LineBreak,645470,1989,616)
 {
  Caption="ON"
  Color=16776960
  link(Out,2670315:doEvent1,[])
  Primary=[8846522,-1263,-687]
 }
-Add(LineBreak,12660576,599,293)
+Add(LineBreak,14170089,599,293)
 {
  Caption="FindT"
  Color=65535
  link(Out,6138279:doWork1,[(674,299)])
  Primary=[2529076,1599,369]
 }
-Add(LineBreak,5247792,926,391)
+Add(LineBreak,8408421,926,391)
 {
  Caption="FindT"
  Color=65535
@@ -5496,7 +5496,7 @@ Add(GetDataEx,4458253,1173,436)
  Angle=3
  link(Data,2150447:Var3,[])
 }
-Add(LineBreak,7158021,1217,552)
+Add(LineBreak,3203061,1217,552)
 {
  Caption="FindT"
  Type=1
@@ -6131,7 +6131,7 @@ Add(HubEx,4942821,2059,520)
 {
  link(onEvent,11641710:doWork2,[])
 }
-Add(LineBreak,11884552,1993,458)
+Add(LineBreak,13805016,1993,458)
 {
  Caption="DelP"
  Color=16776960
@@ -7284,7 +7284,7 @@ Add(GetDataEx,13214870,535,165)
  Angle=3
  link(Data,16536674:Var3,[(492,170)(492,170)])
 }
-Add(LineBreak,14595931,288,234)
+Add(LineBreak,2357580,288,234)
 {
  Caption="OpenP"
  Color=65535
@@ -7373,7 +7373,7 @@ BEGIN_SDK
    link(onEvent2,807475:doClear,[(187,90)(187,28)(109,28)(109,47)])
   }
 END_SDK
-Add(LineBreak,2888394,1669,344)
+Add(LineBreak,10519878,1669,344)
 {
  Caption="OpP"
  Color=16776960
@@ -7389,7 +7389,7 @@ Add(GetDataEx,4390914,493,392)
 {
  link(Data,16177219:Var1,[])
 }
-Add(LineBreak,2077014,518,413)
+Add(LineBreak,13913477,518,413)
 {
  Caption="OpP"
  Type=1
@@ -7397,7 +7397,7 @@ Add(LineBreak,2077014,518,413)
  link(Data,10100023:Var2,[])
  Primary=[7397204,1214,-122]
 }
-Add(LineBreak,307219,386,351)
+Add(LineBreak,3451858,386,351)
 {
  Caption="OpP"
  Color=16776960
@@ -7547,7 +7547,7 @@ BEGIN_SDK
    Format="Y.M.D"
   }
 END_SDK
-Add(LineBreak,3122985,598,413)
+Add(LineBreak,11553836,598,413)
 {
  Caption="ID"
  Type=1
@@ -7568,7 +7568,7 @@ Add(InfoTip,7123853,1615,200)
  Width=242
  Height=171
 }
-Add(LineBreak,1175908,931,370)
+Add(LineBreak,14974468,931,370)
 {
  Caption="FL"
  Color=65535
@@ -7803,7 +7803,7 @@ Add(HubEx,11375153,714,26)
  Angle=1
  link(onEvent,4661319:doWork1,[])
 }
-Add(LineBreak,9322082,1997,698)
+Add(LineBreak,9385469,1997,698)
 {
  Caption="CList"
  Color=16776960
@@ -7960,7 +7960,7 @@ Add(GetDataEx,4238524,1274,425)
  Angle=3
  link(Data,14936585:Var3,[])
 }
-Add(LineBreak,8037324,1899,224)
+Add(LineBreak,1514793,1899,224)
 {
  Caption="Lang"
  Color=65280
@@ -7968,7 +7968,7 @@ Add(LineBreak,8037324,1899,224)
  link(Out,10686572:doWork1,[])
  Primary=[6484029,-1222,-120]
 }
-Add(LineBreak,3141432,-53,441)
+Add(LineBreak,2482752,-53,441)
 {
  Caption="AdT"
  Color=33023
@@ -8284,7 +8284,7 @@ Add(HubEx,8404904,105,485)
  Angle=1
  link(onEvent,8083924:doNext,[(109,512)])
 }
-Add(LineBreak,13176179,2083,700)
+Add(LineBreak,8682829,2083,700)
 {
  Caption="SetV"
  Color=16776960
@@ -8313,7 +8313,7 @@ Add(HubEx,7173464,168,657)
 {
  link(onEvent,10641799:doEvent1,[])
 }
-Add(LineBreak,4213607,266,-18)
+Add(LineBreak,816252,266,-18)
 {
  Caption="Update"
  Color=16776960
@@ -8341,7 +8341,7 @@ Add(DSC_Query,9004277,426,-43)
  link(onQuery,14773068:doVisible,[])
  link(onError,8919347:doWork1,[(466,-23)(466,-95)])
 }
-Add(LineBreak,4934205,497,106)
+Add(LineBreak,6834379,497,106)
 {
  Caption="INFO"
  Color=65535
@@ -8552,7 +8552,7 @@ Add(Translator,3162807,1898,286)
 {
  @Color=16776960
  Lang="ru"
- LangWords=['Create new playlist'="Создать новый плейлист",'Delete selected playlist'="Удалить выбранный плейлист",'Add new title to selected playlist'="Добавить новый тайтл в выбранный плейлист",'ADD TITLE'="ДОБАВИТЬ ТАЙТЛ",' чтобы поделиться с обладателем проги или вывести в формате "txt" файл"",''Mark as "It''''''''s a continuation of another title"'''="Пометить как "Это продолжение другого тайтла"",'This is a continuation*'="Это продолжение*",'Mark as "title is not fifnished"'="Пометить как "Тайтл незакончен"",'NFin!'="НКон!",'DEL TITLE'="УДАЛИТЬ",'Delete selected title'="Удалить выбранный тайтл",'Choose mark'="Выбрать пометку",'VIEWED'="просмотрен",'Mark as "Viewed title"'="Пометить как "ПРОСМОТРЕННО"",'TO BE CONTINUED'="ПРОДОЛЖЕНИЕ",'Mark as "will be contiued" and add to continuation list'="Пометить как "возможно продолжение" и добавить в список продолжений",'Mark as "unfinished view"'="Пометить как "просмотр незакончен"",'PAUSE ON'="ПАУЗА НА",'Continuation list'="Список продолжений",'CONTINUATION'="Продолжения",'Mark title as "watching now" \ Unmark it'="Пометить тайтл как "уже смотрю" \ Снять отметку",'SEARCH TITLE'="ИСКАТЬ ТАЙТЛ",'SETTINGS'="настройки",'Added\Viewed'="Добавленно\Просмотренно",'One or more of titles had a continuation !!'="Один или несколько тайтлов получили продолжение!!",'Find selected title in the main list'="Найти тайтл в его плейлисте",'Set date of selected title'="Установить дату выбранного тайтла",'Search title in here'="Искать тайтл здесь",'FIND TITLE'="НАЙТИ ТАЙТЛ",'SEARCH'="ИСКАТЬ",'Save crafted playlist(.pls)'="Сохранить собранный плейлист(.pls)",'SIMPLE (TXT)'="ПРОСТО (TXT)",'SEARCH TITLE MARKED AS "UNFINISHED VIEW"'="Искать помеченные как "просмотр заброшен"",'Add all titles from choosed playlist'="Добавить все тайтлы из выбранного плейлиста",'ADD ALL PLAYLIST'="ДОБАВИТЬ ВЕСЬ ПЛЕЙЛИСТ",'Save as a simple text document(.txt)'="Сохранить как простой текстовый документ(.txt)",'SAVE'="СОХРАНИТЬ",'CLEAR LIST'="ОТЧИСТИТЬ СПИСОК",'Save playlist'="Сохранить плейлист",'Total viewed:'="Всего просмотрено:",'This is the count of all viewed titles'="Количество всего просмотренных тайтлов",'When it will be continue?(Example:2000.01.21)'="Когда предпологается продолжение?(Пример:2000.01.21)",'You can write here what series you watched'="Можешь написать здесь на какой серии ты остановился",'Save playlist'="Сохранить плейлист",'Add new playlist'="Добавить новый плейлист",'[VIEWED]'="ПРОСМОТРЕНО",'"move"-cut selected title And "insert" to insert'="Врезать выбранный тайтл\Вставить в другой плейлист",'Open the link'="Открыть ссылку",'OPEN'="ОТКРЫТЬ",'Move selected playlist to the top of list'="Переместить выбранный плейлист вверх списка",'MOVE UP'="ВВЕРХ",'Move selected playlist to the end of list'="Переместить выбранный плейлист в низ списка",'MOVE DOWN'="ВНИЗ",'Rename selected playlist'="Переименовать выбранный плейлист",'RENAME'="переименовать",'This is the count of titles in this playlist'="Количество тайтлов в данном плейлисте",'Titles in playlist:'="Тайтлов в плейлисте:",'All added titles:'="Всего добавленно:",'Mark as "It''s a continuation of another title"'="Пометить как "это продолжение другого тайтла"",'Are you sure want to delete filled play list ?'="Уверен что хочешь удалить заполненный плейлист?",'Title with this name already exists !\r\nAre you sure want to creat a copy?'="Тайтл с таким же названием уже существует!\r\nУвере что хочешь создать копию?"",'Empty title name !!!'="Пустое имя тайтла!!!",'This title is added to continuation list !\r\nDo you want to delete it ?'="Этот тайтл был добавлен в "список продолжений"!\r\nХочешь убрать его от туда?",'Title with this name already added !\r\nAre you sure want to make a copy ?'="Тайтл с этим названием уже добавлен!\r\nУвере что хочешь сделать копию?"",'titles had a continuation !! Do you want to open it ?'="тайтлов получили продолжение!!\r\nОткрыть их ?",'Such title already added !\r\nAre you sure want to creat a copy ?'="Такой тайтл уже добавлен!\r\nУвере что хочешь сделать копию?"",'Playlist with same name already exists !Or you have used unrecognized char!'="Плейлист с таким названием уже создан!\r\nИли ты использовал недопустимый символ!",'Необходимо перезагрузить программу'="You need restart the program",'Title name'="Название тайтла",'The count of episodes (x20min)'="Количество серий (х20мин)",'Episode'="Сейчас на серии",'Auto-clipboard'="Автодобавление в буфер обмена",'Check updates'="Проверить обновления",'A new update is available! Update now?'="Доступно новое обновление! \nОбновить сейчас ?",'Open Dir'="Открыть папку программы",'Insert'="ВСТАВИТЬ",'MOVE'="ПЕРЕМЕСТИТЬ",'VIEWING NOW'="СМОТРЮ",'UNVIEW'="ОТМЕНИТЬ",'Export'="Экспорт",'Import playlist'="Импортировать плейлист",'Export titles'="Экспортировать тайтлы в плейлист",'All files|*.*'="Все файлы|*.*",'DbClick to edit'="Двойной щелчок для редактирования",'Set background of right bar'="Установить фон правой панели",'Images|*.bmp;*.jpg'="Картинки|*.bmp;*.jpg",'Choose playlist which you need'="Список плейлистов",'Search by genre'="Искать по жанру",'COPY TO CLIPBOARD'="В БУФЕР ОБМЕНА",'Title added already!'="Тайтл уже добавлен!"]
+ LangWords=['Create new playlist'="Создать новый плейлист",'Delete selected playlist'="Удалить выбранный плейлист",'Add new title to selected playlist'="Добавить новый тайтл в выбранный плейлист",'ADD TITLE'="ДОБАВИТЬ ТАЙТЛ",' чтобы поделиться с обладателем проги или вывести в формате "txt" файл"",''Mark as "It''''''''s a continuation of another title"'''="Пометить как "Это продолжение другого тайтла"",'This is a continuation*'="Это продолжение*",'Mark as "title is not fifnished"'="Пометить как "Тайтл незакончен"",'NFin!'="НКон!",'DEL TITLE'="УДАЛИТЬ",'Delete selected title'="Удалить выбранный тайтл",'Choose mark'="Выбрать пометку",'VIEWED'="просмотрен",'Mark as "Viewed title"'="Пометить как "ПРОСМОТРЕННО"",'TO BE CONTINUED'="ПРОДОЛЖЕНИЕ",'Mark as "will be contiued" and add to continuation list'="Пометить как "возможно продолжение" и добавить в список продолжений",'Mark as "unfinished view"'="Пометить как "просмотр незакончен"",'PAUSE ON'="ПАУЗА НА",'Continuation list'="Список продолжений",'CONTINUATION'="Продолжения",'Mark title as "watching now" \ Unmark it'="Пометить тайтл как "уже смотрю" \ Снять отметку",'SEARCH TITLE'="ИСКАТЬ ТАЙТЛ",'SETTINGS'="настройки",'Added\Viewed'="Добавленно\Просмотренно",'One or more of titles had a continuation !!'="Один или несколько тайтлов получили продолжение!!",'Find selected title in the main list'="Найти тайтл в его плейлисте",'Set date of selected title'="Установить дату выбранного тайтла",'Search title in here'="Искать тайтл здесь",'FIND TITLE'="НАЙТИ ТАЙТЛ",'SEARCH'="ИСКАТЬ",'Save crafted playlist(.pls)'="Сохранить собранный плейлист(.pls)",'SIMPLE (TXT)'="ПРОСТО (TXT)",'SEARCH TITLE MARKED AS "UNFINISHED VIEW"'="Искать помеченные как "просмотр заброшен"",'Add all titles from choosed playlist'="Добавить все тайтлы из выбранного плейлиста",'ADD ALL PLAYLIST'="ДОБАВИТЬ ВЕСЬ ПЛЕЙЛИСТ",'Save as a simple text document(.txt)'="Сохранить как простой текстовый документ(.txt)",'SAVE'="СОХРАНИТЬ",'CLEAR LIST'="ОТЧИСТИТЬ СПИСОК",'Save playlist'="Сохранить плейлист",'Total viewed:'="Всего просмотрено:",'This is the count of all viewed titles'="Количество всего просмотренных тайтлов",'When it will be continue?(Example:2000.01.21)'="Когда предпологается продолжение?(Пример:2000.01.21)",'You can write here what series you watched'="Можешь написать здесь на какой серии ты остановился",'Save playlist'="Сохранить плейлист",'Add new playlist'="Добавить новый плейлист",'[VIEWED]'="ПРОСМОТРЕНО",'"move"-cut selected title And "insert" to insert'="Врезать выбранный тайтл\Вставить в другой плейлист",'Open the link'="Открыть ссылку",'OPEN'="ОТКРЫТЬ",'Move selected playlist to the top of list'="Переместить выбранный плейлист вверх списка",'MOVE UP'="ВВЕРХ",'Move selected playlist to the end of list'="Переместить выбранный плейлист в низ списка",'MOVE DOWN'="ВНИЗ",'Rename selected playlist'="Переименовать выбранный плейлист",'RENAME'="переименовать",'This is the count of titles in this playlist'="Количество тайтлов в данном плейлисте",'Titles in playlist:'="Тайтлов в плейлисте:",'All added titles:'="Всего добавленно:",'Mark as "It''s a continuation of another title"'="Пометить как "это продолжение другого тайтла"",'Are you sure want to delete filled play list ?'="Уверен что хочешь удалить заполненный плейлист?",'Title with this name already exists !\r\nAre you sure want to creat a copy?'="Тайтл с таким же названием уже существует!\r\nУвере что хочешь создать копию?"",'Empty title name !!!'="Пустое имя тайтла!!!",'This title is added to continuation list !\r\nDo you want to delete it ?'="Этот тайтл был добавлен в "список продолжений"!\r\nХочешь убрать его от туда?",'Title with this name already added !\r\nAre you sure want to make a copy ?'="Тайтл с этим названием уже добавлен!\r\nУвере что хочешь сделать копию?"",'titles had a continuation !! Do you want to open it ?'="тайтлов получили продолжение!!\r\nОткрыть их ?",'Such title already added !\r\nAre you sure want to creat a copy ?'="Такой тайтл уже добавлен!\r\nУвере что хочешь сделать копию?"",'Playlist with same name already exists !Or you have used unrecognized char!'="Плейлист с таким названием уже создан!\r\nИли ты использовал недопустимый символ!",'Необходимо перезагрузить программу'="You need restart the program",'Title name'="Название тайтла",'The count of episodes (x20min)'="Количество серий (х20мин)",'Episode'="Сейчас на серии",'Auto-clipboard'="Автодобавление в буфер обмена",'Check updates'="Проверить обновления",'A new update is available! Update now?'="Доступно новое обновление! \nОбновить сейчас ?",'Open Dir'="Открыть папку программы",'Insert'="ВСТАВИТЬ",'MOVE'="ПЕРЕМЕСТИТЬ",'VIEWING NOW'="СМОТРЮ",'UNVIEW'="ОТМЕНИТЬ",'Export'="Экспорт",'Import playlist'="Импортировать плейлист",'Export titles'="Экспортировать тайтлы в плейлист",'All files|*.*'="Все файлы|*.*",'DbClick to edit'="Двойной щелчок для редактирования",'Set background of right bar'="Установить фон правой панели",'Images|*.bmp;*.jpg'="Картинки|*.bmp;*.jpg",'Choose playlist which you need'="Список плейлистов",'Search by genre'="Искать по жанру",'COPY TO CLIPBOARD'="В БУФЕР ОБМЕНА",'Title added already!'="Тайтл уже добавлен!",'Auto check update'="Авто обновление"]
  Section="Software\PLS"
  Value="Language"
 }
@@ -8990,7 +8990,7 @@ BEGIN_SDK
   {
   }
 END_SDK
-Add(LineBreak,5350618,1275,343)
+Add(LineBreak,8525790,1275,343)
 {
  Caption="TabVi"
  Color=65535
@@ -9006,7 +9006,7 @@ Add(Hub,6553047,1449,595)
  link(onEvent1,11464812:doWork2,[])
  link(onEvent2,1936124:In,[(1471,608)(1471,613)])
 }
-Add(LineBreak,11189029,1750,777)
+Add(LineBreak,9254906,1750,777)
 {
  @Color=5636095
  Caption="Move"
@@ -9029,7 +9029,7 @@ Add(Hub,11590624,688,-64)
  link(onEvent1,8846522:In,[(714,-58)(714,-65)])
  link(onEvent2,10765293:doWork1,[(993,-51)])
 }
-Add(LineBreak,4574879,1036,196)
+Add(LineBreak,6063002,1036,196)
 {
  Caption="VIS"
  Color=65535
@@ -9048,7 +9048,7 @@ Add(IndexToChanel,10912741,2660,1050)
  link(onEvent2,3218692:doLoad,[(2706,1063)(2706,1056)])
  link(Index,15486197:Var,[])
 }
-Add(LineBreak,5469207,2604,1050)
+Add(LineBreak,3515682,2604,1050)
 {
  @Color=5636095
  Caption="Img"
@@ -9066,7 +9066,7 @@ Add(PopupMenu,998819,1652,112)
  Menu=#15:Add to favorite|1:-|18:Show favorite list|
  link(onClick,5385078:doWork1,[])
 }
-Add(LineBreak,7427027,1546,105)
+Add(LineBreak,14819772,1546,105)
 {
  Caption="AdFav"
  Color=65535
@@ -10060,7 +10060,7 @@ Add(GetDataEx,403441,1734,211)
 }
 Add(hcVisualText,12706445,2044,21)
 {
- Lines=#2:39|
+ Lines=#2:40|
 }
 Add(hcKeyHandler,10580050,1988,21)
 {
@@ -10275,9 +10275,9 @@ BEGIN_SDK
    EventCount=4
    WorkCount=2
    DataCount=1
-   Width=363
-   Height=228
-   link(doWork1,4367901:doEvent1,[(115,55)(115,231)])
+   Width=426
+   Height=319
+   link(doWork1,4367901:doEvent1,[(115,55)(115,224)])
    link(doWork2,6605795:doEvent1,[])
   }
   Add(MainForm,8757538,97,-19)
@@ -10311,7 +10311,7 @@ BEGIN_SDK
    Font=[Consolas,11,1,0,204]
    Caption="Choose language:"
   }
-  Add(RadioButton,14836191,296,97)
+  Add(RadioButton,14836191,254,97)
   {
    Left=140
    Top=7
@@ -10319,48 +10319,22 @@ BEGIN_SDK
    Font=[Consolas,11,1,0,204]
    Selected=0
    Caption="English"
-   Point(onMouseUp)
-   link(onSelect,7851174:doData,[])
+   Point(onMouseDown)
+   link(onMouseDown,1808830:doTimer,[(296,110)(296,103)])
   }
-  Add(RadioButton,4253904,296,139)
-  {
-   Left=140
-   Top=27
-   Width=80
-   Font=[Consolas,11,1,0,204]
-   Caption="Русский"
-   Point(onMouseUp)
-   link(onSelect,14811498:doData,[])
-  }
-  Add(Button,14512600,210,175)
-  {
-   Left=165
-   Top=97
-   Width=51
-   Height=25
-   Font=[Consolas,12,1,0,204]
-   Cursor=14
-   Hint="SAVE"
-   HintManager="parent.Hints"
-   Layout="Hor"
-   WidthScale=25
-   HeightScale=25
-   Caption="SAVE"
-   MakeTrans(Hint)
-   link(onClick,10150741:doMessage,[])
-  }
-  Add(DoData,7851174,343,97)
+  Add(DoData,7851174,350,97)
   {
    Data=String(en)
    link(onEventData,14596555:doWork2,[])
   }
-  Add(DoData,14811498,343,139)
+  Add(DoData,14811498,343,146)
   {
    Data=String(ru)
-   link(onEventData,14596555:doWork3,[(384,145)])
+   link(onEventData,14596555:doWork3,[(391,152)])
   }
-  Add(Memory,12049014,394,97)
+  Add(Memory,12049014,415,97)
   {
+   link(onData,521645:doWork2,[])
   }
   Add(Label,13139232,368,3)
   {
@@ -10381,48 +10355,22 @@ BEGIN_SDK
    link(onStrCat,15769711:doEvent1,[])
    link(Str2,9682628:Var2,[])
   }
-  Add(MultiElement,4540622,695,59)
-  {
-   @Hint=#10:MESS ERROR|
-   @Color=255
-  }
-  BEGIN_SDK
-    Add(EditMulti,8893549,21,21)
-    {
-     WorkCount=1
-     Width=118
-     Height=74
-     link(doWork1,7807514:doValue,[(31,27)(31,48)])
-    }
-    Add(Message,6332176,91,42)
-    {
-     Message="EMPTY"
-     Caption="PLS: ERROR (for developer)"
-     Icon=3
-     link(Message,7807514:Value,[(97,32)(83,32)(83,86)(48,86)])
-    }
-    Add(Memory,7807514,42,42)
-    {
-     link(onData,6332176:doMessage,[])
-    }
-  END_SDK
-  Add(Button,15199336,610,151)
+  Add(Button,15199336,611,151)
   {
    Left=90
    Top=97
-   Width=75
+   Width=125
    Height=25
    Font=[Consolas,11,1,0,204]
    Cursor=14
-   Hint="Open Dir"
    HintManager="parent.Hints"
    Layout="Hor"
    WidthScale=25
    HeightScale=25
-   Caption="Open Dir"
+   Caption="Open folder"
    MakeTrans(Hint)
    link(onClick,7438328:doShellExec,[])
-   AddHint(-21,-21,57,13,Caption)
+   AddHint(-39,-19,70,13,Caption)
   }
   Add(WinExec,7438328,654,144)
   {
@@ -10431,7 +10379,7 @@ BEGIN_SDK
   Add(Dir,2154905,654,99)
   {
   }
-  Add(Button,8495898,287,284)
+  Add(Button,8495898,287,319)
   {
    Top=72
    Width=62
@@ -10446,9 +10394,11 @@ BEGIN_SDK
    HeightScale=25
    Caption="UPDATE"
    Data=Integer(31014)
+   Point(doEnabled)
    MakeTrans(Hint)
+   link(onClick,5971066:doWork2,[(328,325)(328,309)])
   }
-  Add(Button,7617661,477,70)
+  Add(Button,7617661,407,56)
   {
    Left=62
    Top=72
@@ -10459,7 +10409,7 @@ BEGIN_SDK
    WidthScale=25
    HeightScale=25
    Caption="ABOUT"
-   link(onClick,6508098:onEvent4,[])
+   link(onClick,6508098:onEvent4,[(475,62)(475,76)])
   }
   Add(Button,14286637,609,245)
   {
@@ -10506,25 +10456,18 @@ BEGIN_SDK
   {
    Default=String(410011968947376)
   }
-  Add(WinExec,9610219,483,232)
+  Add(WinExec,9610219,399,296)
   {
    FileName="PLS_Apdater.exe"
-   link(onExec,6508098:onEvent3,[(534,238)(534,69)])
+   link(onExec,6508098:onEvent3,[(558,302)(558,69)])
   }
-  Add(Hub,4367901,197,225)
+  Add(Hub,4367901,127,218)
   {
-   OutCount=3
-   link(onEvent1,9215623:doRead,[(296,231)(296,174)])
-   link(onEvent2,5971066:doWork1,[])
-   link(onEvent3,15472165:In,[(223,245)(223,252)])
-  }
-  Add(Message,10150741,252,175)
-  {
-   Message="Необходимо перезагрузить программу"
-   Caption="PLS:Settings"
-   Icon=4
-   MakeTrans(Message)
-   link(onMessage,9215623:doWrite,[])
+   OutCount=4
+   link(onEvent1,9215623:doRead,[(271,224)(271,188)])
+   link(onEvent2,11987612:doRead,[(221,231)(221,210)])
+   link(onEvent3,518356:doWork2,[(242,238)(242,302)(242,302)])
+   link(onEvent4,15472165:In,[(152,245)(152,252)])
   }
   Add(Message,1793666,798,-112)
   {
@@ -10601,10 +10544,10 @@ BEGIN_SDK
   {
    link(onEvent,7776193:doWrite,[])
   }
-  Add(LineBreak,1097665,455,-63)
+  Add(LineBreak,4116509,455,-63)
   {
    link(Out,7776193:doRead,[(562,-57)(562,-43)])
-   Primary=[15472165,-221,309]
+   Primary=[15472165,-284,309]
   }
   Add(HubEx,12878344,427,-42)
   {
@@ -10645,7 +10588,7 @@ BEGIN_SDK
   Add(Math,5108347,315,10)
   {
    OpType=1
-   link(onResult,13139232:doHint,[(357,16)(357,16)])
+   link(onResult,13139232:doHint,[])
    link(Op1,9682628:Var1,[(321,-2)(257,-2)])
    link(Op2,16632882:Var,[])
   }
@@ -10703,59 +10646,64 @@ BEGIN_SDK
    link(onEvent1,2643397:doWork2,[(203,62)(203,85)(20,85)(20,29)])
    link(onEvent2,8757538:doVisible,[(197,69)(197,78)(85,78)(85,15)])
   }
-  Add(Registry,9215623,394,168)
+  Add(Registry,9215623,415,182)
   {
    HKey=1
    Key="Software\PLS"
    Value="Language"
-   link(onRead,12523058:doCompare,[])
+   link(onRead,12523058:doCompare,[(456,188)(456,216)])
    link(Data,12049014:Value,[])
   }
-  Add(HubEx,14596555,380,97)
+  Add(HubEx,14596555,387,97)
   {
    link(onEvent,12049014:doValue,[])
   }
-  Add(Font,16458570,483,146)
+  Add(Font,16458570,511,167)
   {
    Font=[Consolas,10,1,0,204]
-   link(onFont,6508098:onEvent1,[(544,152)(544,55)])
+   link(onFont,6508098:onEvent1,[(571,173)(571,55)])
   }
-  Add(Hub,10323962,449,139)
+  Add(Hub,10323962,477,160)
   {
-   link(onEvent1,4253904:doSelect,[(475,145)(475,135)(283,135)(283,145)])
+   link(onEvent1,7506641:doSelect,[(503,166)(503,136)(244,136)(244,145)])
    link(onEvent2,16458570:doFont,[])
   }
-  Add(If_else,12523058,437,168)
+  Add(If_else,12523058,465,210)
   {
    Op2=String(ru)
-   link(onTrue,10323962:doEvent1,[(478,174)(478,160)(437,160)(437,145)])
+   link(onTrue,10323962:doEvent1,[(503,216)(503,201)(467,201)(467,166)])
+   link(onFalse,521645:doWork3,[(550,223)(550,144)(473,144)])
   }
   Add(WinExec,7123903,658,238)
   {
    FileName="https://vk.com/@playliststore_project-documentation"
   }
-  Add(MultiElement,5971066,343,232)
+  Add(MultiElement,5971066,343,296)
   {
+   @Hint=#6:Update|
    link(onEvent1,9610219:doExec,[])
-   link(Data1,16633957:Checked,[])
+   link(onEvent2,8495898:doEnabled,[(387,309)(387,358)(278,358)(278,325)])
+   link(Data1,6791534:Var2,[])
+   AddHint(-15,35,50,13,@Hint)
   }
   BEGIN_SDK
     Add(EditMulti,11708105,21,21)
     {
-     EventCount=1
-     WorkCount=1
+     EventCount=2
+     WorkCount=2
      DataCount=1
-     Width=475
-     Height=116
+     Width=510
+     Height=109
      link(doWork1,300927:doEvent,[(33,27)(33,83)])
+     link(doWork2,7158952:doWork1,[(325,34)])
     }
-    Add(DSC_Exec,9924058,390,84)
+    Add(DSC_Exec,9924058,439,84)
     {
      DSManager="parent.parent.data"
-     link(onExec,11708105:onEvent1,[(433,90)(433,27)])
+     link(onExec,11708105:onEvent1,[(481,90)(481,27)])
      link(onError,6997673:doWork1,[])
     }
-    Add(MultiElement,6997673,441,91)
+    Add(MultiElement,6997673,490,91)
     {
      @Hint=#10:MESS ERROR|
      @Color=11141120
@@ -10792,7 +10740,7 @@ BEGIN_SDK
      Mode=11
      link(onResult,9854672:doCompare,[])
     }
-    Add(Memory,5600774,161,26)
+    Add(Memory,5600774,161,25)
     {
      Default=Integer(0)
     }
@@ -10802,20 +10750,20 @@ BEGIN_SDK
      AutoStop=1
      link(onTimer,3602494:GetURLSize,[])
     }
-    Add(FormatStr,7951372,345,84)
+    Add(FormatStr,7951372,394,84)
     {
      DataCount=1
      Mask="UPDATE Data set VER="1/%1""
      link(onFString,9924058:doExec,[])
-     link(Str1,13634311:Var3,[(351,66)])
+     link(Str1,13634311:Var3,[(400,66)])
     }
     Add(If_else,9854672,254,77)
     {
      Type=5
-     link(onTrue,7924872:doMessage,[])
+     link(onTrue,4986058:doEvent1,[])
      link(Op2,13634311:Var2,[])
     }
-    Add(Message,7924872,300,77)
+    Add(Message,7924872,349,77)
     {
      Message="A new update is available! Update now?"
      Caption="PLS: AutoUpdater"
@@ -10841,15 +10789,150 @@ BEGIN_SDK
     {
      link(Data,8784817:Var,[])
     }
+    Add(Hub,4986058,301,77)
+    {
+     link(onEvent1,7158952:doWork2,[])
+     link(onEvent2,11708105:onEvent2,[(340,90)(340,34)])
+    }
+    Add(HubEx,7158952,321,77)
+    {
+     link(onEvent,7924872:doMessage,[])
+    }
   END_SDK
-  Add(CheckBox,16633957,343,189)
+  Add(CheckBox,16633957,343,204)
   {
    Left=5
    Top=55
-   Width=125
+   Width=165
    Height=15
+   Font=[Consolas,11,1,0,204]
    Checked=0
    Caption="Auto check update"
+   Point(onMouseUp)
+   MakeTrans(Caption)
+   link(onMouseUp,8930059:doWork1,[(393,217)(393,244)])
+  }
+  Add(Registry,11987612,293,204)
+  {
+   HKey=1
+   Key="Software\PLS"
+   Value="Update"
+   DataType=0
+   link(onRead,16633957:doCheck,[])
+  }
+  Add(Timer,3296779,299,146)
+  {
+   Interval=200
+   Enable=1
+   AutoStop=1
+   link(onTimer,14811498:doData,[])
+  }
+  Add(Timer,1808830,306,97)
+  {
+   Interval=150
+   Enable=1
+   AutoStop=1
+   link(onTimer,7851174:doData,[])
+  }
+  Add(RadioButton,7506641,254,139)
+  {
+   Left=140
+   Top=32
+   Width=80
+   Font=[Consolas,11,1,0,204]
+   Caption="Русский"
+   Point(onMouseDown)
+   link(onMouseDown,3296779:doTimer,[])
+  }
+  Add(MultiElement,3753178,490,97)
+  {
+   link(onEvent1,9215623:doWrite,[(530,103)(530,155)(400,155)(400,195)])
+  }
+  BEGIN_SDK
+    Add(EditMulti,13885717,21,21)
+    {
+     EventCount=1
+     WorkCount=1
+     Width=181
+     Height=95
+     link(doWork1,6887959:doEvent1,[(35,27)(35,55)])
+    }
+    Add(Message,10150741,144,77)
+    {
+     Message="Необходимо перезагрузить программу"
+     Caption="PLS:Settings"
+     Icon=4
+     MakeTrans(Message)
+     link(onMessage,13885717:onEvent1,[(187,83)(187,27)])
+    }
+    Add(IndexToChanel,5290730,98,70)
+    {
+     Point(Index)
+     link(onEvent2,10150741:doMessage,[])
+     link(Index,5869050:State,[])
+    }
+    Add(Hub,6887959,49,49)
+    {
+     link(onEvent1,5290730:doEvent,[(81,55)(81,76)])
+     link(onEvent2,5869050:doReset,[(75,62)(75,41)])
+    }
+    Add(Switch,5869050,98,28)
+    {
+     DataOn=Integer(0)
+     DataOff=Integer(1)
+     Default=0
+     Point(State)
+    }
+  END_SDK
+  Add(HubEx,521645,469,97)
+  {
+   link(onEvent,3753178:doWork1,[])
+  }
+  Add(MultiElement,8930059,406,238)
+  {
+   link(onEvent1,11987612:doWrite,[(450,244)(450,276)(281,276)(281,217)])
+   link(Data1,6791534:Var3,[(412,226)(382,226)(382,264)])
+   link(onEvent2,518356:doWork1,[(458,251)(458,286)(326,286)])
+  }
+  BEGIN_SDK
+    Add(EditMulti,7643104,21,21)
+    {
+     EventCount=2
+     WorkCount=1
+     DataCount=1
+     Width=216
+     Height=74
+     link(doWork1,11123204:doTimer,[(45,27)(45,58)])
+    }
+    Add(Timer,11123204,56,52)
+    {
+     Interval=1
+     Enable=1
+     AutoStop=1
+     link(onTimer,14418071:doData,[])
+    }
+    Add(DoData,14418071,105,52)
+    {
+     link(onEventData,2683811:doEvent1,[])
+     link(Data,7643104:Data1,[(111,42)(27,42)])
+    }
+    Add(Hub,2683811,147,52)
+    {
+     link(onEvent1,7643104:onEvent1,[(173,58)(173,27)])
+     link(onEvent2,14862624:doEvent,[])
+    }
+    Add(IndexToChanel,14862624,182,59)
+    {
+     link(onEvent2,7643104:onEvent2,[(226,72)(226,34)])
+    }
+  END_SDK
+  Add(GetDataEx,6791534,343,259)
+  {
+   link(Data,16633957:Checked,[])
+  }
+  Add(HubEx,518356,322,296)
+  {
+   link(onEvent,5971066:doWork1,[])
   }
 END_SDK
 Add(GlobalVar,3442104,322,-98)
@@ -10857,7 +10940,7 @@ Add(GlobalVar,3442104,322,-98)
  @Hint=#7:VERSION|
  @Color=255
  Name="CURRENT"
- Data=String(3.14.27)
+ Data=String(3.15.28)
  AddHint(39,-18,63,13,@Hint)
 }
 Add(Hub,12454236,396,-43)
@@ -10935,7 +11018,7 @@ BEGIN_SDK
    link(onEvent,7784258:doString,[])
   }
 END_SDK
-Add(LineBreak,5761768,791,315)
+Add(LineBreak,14246516,791,315)
 {
  Caption="SaveSel"
  Color=16776960
@@ -10946,7 +11029,7 @@ Add(HubEx,10788532,861,342)
 {
  link(onEvent,11994160:doWork3,[])
 }
-Add(LineBreak,9538823,2083,714)
+Add(LineBreak,8540150,2083,714)
 {
  Caption="SetV"
  Color=16776960

@@ -2,8 +2,9 @@ Make(delphi)
 ver(4.04 build 184)
 Add(MainForm,2953706,130,370)
 {
- Width=372
+ Width=451
  Height=83
+ Color=16777215
  Caption="PLS: Updater"
  BorderStyle=3
  Position=1
@@ -13,10 +14,11 @@ Add(HTTP_Get,2667373,315,280)
 {
  URL="https://github.com/Kamikoto-sama/Kamis-Code/raw/master/PLS/PLS_3.exe"
  FileName="new.exe"
- link(onStatus,11704670:doEvent1,[(360,286)(360,272)])
+ link(onStatus,11704670:doEvent1,[(360,286)(361,276)(360,272)])
  link(onDownload,1889217:doData,[(434,293)(434,230)])
  link(onURLSize,10970548:doEvent1,[])
  link(onStop,2262780:doCompare,[(363,307)(363,370)])
+ link(URL,13996345:Var,[(321,270)(293,270)])
  link(Position,2536380:Value,[])
 }
 Add(Memory,2536380,329,231)
@@ -25,53 +27,58 @@ Add(Memory,2536380,329,231)
 }
 Add(GProgressBar,13330419,455,266)
 {
- Width=366
+ Width=445
  Height=25
  Align=2
  Ctl3D=0
+ WinStyle=3
  Layout="Ver"
- LightProgress=32768
- DarkProgress=8421504
+ LightProgress=4255296
+ DarkProgress=16777215
  InvKindGrad=0
  Point(doMax)
 }
 Add(Hub,10970548,375,294)
 {
  OutCount=4
- link(onEvent1,7564372:doValue,[(440,300)(440,318)])
+ link(onEvent1,7564372:doValue,[(440,300)(440,307)])
  link(onEvent2,2667373:doDownload,[(402,307)(402,338)(305,338)(305,286)])
  link(onEvent3,13330419:doMax,[(424,314)(424,279)])
  link(onEvent4,7466415:doCase,[(422,321)(422,332)])
 }
-Add(LedNumber,1682762,602,312)
+Add(LedNumber,1682762,734,280)
 {
- Left=240
+ Left=325
  Top=31
  Width=116
  Height=19
+ Color=16777215
  Font=[MS Sans Serif,10,0,0,1]
  Layout="Hor"
  WidthScale=50
  HeightScale=100
  Text=""
- FonColor=-16777201
- SegColor=32768
+ FonColor=16777215
+ SegColor=57088
+ NoSegColor=12632256
  Point(doText)
 }
-Add(LedNumber,16526877,559,206)
+Add(LedNumber,16526877,558,206)
 {
- Left=10
+ Left=5
  Top=31
  Width=116
  Height=19
+ Color=16777215
  WinStyle=3
  Layout="Hor"
  WidthScale=50
  HeightScale=1
  Alignment=0
  Text=""
- FonColor=-16777201
+ FonColor=16777215
  SegColor=255
+ NoSegColor=-1
  Point(doText)
  Point(doSegColor)
 }
@@ -96,17 +103,18 @@ Add(Message,8061771,483,333)
  Caption="PLS: Updataer"
  Icon=1
  MakeTrans(Message)
+ link(onMessage,2984068:doWork1,[(613,339)])
 }
 Add(If_else,2262780,525,364)
 {
  Type=1
  link(onTrue,2746612:doMessage,[])
- link(Op1,5555506:Value,[(531,301)(501,301)])
+ link(Op1,5555506:Value,[(531,288)(501,288)])
  link(Op2,7564372:Value,[(538,354)(552,354)])
 }
-Add(Memory,7564372,546,312)
+Add(Memory,7564372,546,301)
 {
- link(onData,1682762:doText,[(590,318)(590,318)])
+ link(onData,8304837:doEvent1,[])
 }
 Add(Memory,5555506,495,206)
 {
@@ -118,6 +126,7 @@ Add(Message,2746612,571,364)
  Caption="PLS: Updataer"
  Icon=1
  MakeTrans(Message)
+ link(onMessage,2984068:doWork2,[])
 }
 Add(DS_SQLite,3711990,176,384)
 {
@@ -131,13 +140,12 @@ Add(DSC_Query,3970136,218,384)
  SQL="SELECT VER FROM Data"
  DSManager="data"
  link(onQuery,3796486:doGet,[])
- link(onError,15940895:doWork1,[(259,404)(259,439)])
+ link(onError,15940895:doWork1,[(259,404)(259,460)])
 }
-Add(MultiElement,15940895,279,433)
+Add(MultiElement,15940895,279,454)
 {
  @Hint=#10:MESS ERROR|
  @Color=5570560
- AddHint(-98,12,87,13,@Hint)
 }
 BEGIN_SDK
   Add(EditMulti,8893549,21,21)
@@ -159,25 +167,23 @@ BEGIN_SDK
    link(onData,6332176:doMessage,[])
   }
 END_SDK
-Add(Timer,13075698,431,391)
+Add(Timer,13075698,445,391)
 {
  Enable=1
  AutoStop=1
- link(onTimer,2667373:GetURLSize,[(472,397)(472,380)(296,380)(296,300)])
+ link(onTimer,2667373:GetURLSize,[(490,397)(490,380)(296,380)(296,300)])
 }
-Add(GlobalVar,12265756,369,426)
+Add(GlobalVar,12265756,383,426)
 {
  @Color=5635925
  Name="Prev"
 }
 Add(Hub,14571360,518,241)
 {
- OutCount=3
  link(onEvent1,16526877:doSegColor,[(542,247)(542,219)])
- link(onEvent2,13376442:doString,[(665,254)(665,242)])
- link(onEvent3,13540006:doWork1,[(666,261)(666,281)])
+ link(onEvent2,13540006:doWork1,[])
 }
-Add(MultiElement,13540006,678,275)
+Add(MultiElement,13540006,552,248)
 {
  @Color=16776960
  link(onEvent1,1405158:doTimer,[])
@@ -258,12 +264,12 @@ BEGIN_SDK
    Default=Integer(0)
   }
 END_SDK
-Add(DSC_Exec,11234170,719,236)
+Add(DSC_Exec,11234170,712,364)
 {
  DSManager="data"
- link(onError,11260080:doWork1,[(765,249)(765,228)])
+ link(onError,11260080:doWork1,[])
 }
-Add(MultiElement,11260080,779,222)
+Add(MultiElement,11260080,758,371)
 {
  @Hint=#10:MESS ERROR|
  @Color=11141120
@@ -288,37 +294,39 @@ BEGIN_SDK
    link(onData,6332176:doMessage,[])
   }
 END_SDK
-Add(FormatStr,13376442,674,236)
+Add(FormatStr,13376442,667,364)
 {
  DataCount=1
  Mask="UPDATE Data set VER="%1""
  link(onFString,11234170:doExec,[])
  link(Str1,3561828:Var,[])
 }
-Add(WinExec,9610219,776,275)
+Add(WinExec,9610219,650,248)
 {
  FileName="PLS_3.exe"
  link(onExec,14938112:In,[])
 }
-Add(Timer,1405158,727,275)
+Add(Timer,1405158,601,248)
 {
  Interval=200
  Enable=1
  AutoStop=1
  link(onTimer,9610219:doExec,[])
 }
-Add(LineBreak,9486586,70,391)
+Add(LineBreak,12877562,70,391)
 {
  Caption="Close"
  Color=16776960
  link(Out,5624068:doWork2,[])
- Primary=[14938112,755,-116]
+ Primary=[14938112,629,-143]
 }
-Add(Translator,3162807,190,286)
+Add(Translator,3162807,130,332)
 {
  @Color=16776960
  Lang="ru"
- LangWords=['Connection error. Try again leter.'="Ошибка соединения. Попробуйте позже.",'Server error! Try again leter.'="Ошибка сервера! Попробуйте позже."]
+ LangWords=['Connection error. Try again leter.'="Ошибка соединения. Попробуйте позже.",'Server error! Try again leter.'="Ошибка сервера! Попробуйте позже.",'CONNECTING'="ПОДКЛЮЧЕНИЕ"]
+ Section="Software\PLS"
+ Value="Language"
 }
 Add(MT_Get,3796486,266,384)
 {
@@ -328,19 +336,21 @@ Add(HubEx,5624068,115,391)
 {
  link(onEvent,2953706:doClose,[])
 }
-Add(If_else,3444040,368,391)
+Add(If_else,3444040,382,391)
 {
  Op2=Integer(1)
  link(onTrue,13075698:doTimer,[])
- link(onFalse,5624068:doWork3,[(422,404)(422,470)(119,470)])
+ link(onFalse,12144234:doWork1,[(431,404)])
 }
 Add(MultiStrData,7235833,315,391)
 {
  Char="/"
+ Count=3
  link(onPart1,3444040:doCompare,[])
- link(onPart2,12265756:doValue,[(360,404)(360,432)])
+ link(onPart2,12265756:doValue,[(373,404)(373,432)])
+ link(onPart3,11953925:doCompare,[(357,411)(357,460)])
 }
-Add(GlobalVar,3561828,674,209)
+Add(GlobalVar,3561828,667,337)
 {
  @Color=5635925
  Name="Prev"
@@ -416,7 +426,6 @@ Add(Message,7924872,1137,438)
  Type=2
  Icon=4
  Point(onYES)
- link(onYES,3823536:In,[])
 }
 Add(Memory,15025016,1084,372)
 {
@@ -438,9 +447,56 @@ Add(GlobalVar,2357353,1033,417)
  Name="3"
  link(onValue,9854672:doCompare,[])
 }
-Add(LineBreak,16521881,254,294)
+Add(Memory,3078037,434,454)
 {
- Caption="6"
- Color=16776960
- Primary=[3823536,929,151]
+ Default=String(https://github.com/Kamikoto-sama/Kamis-Code/raw/master/PLS/PLS_3.exe)
+}
+Add(If_else,11953925,389,454)
+{
+ Type=5
+ Op2=String()
+ link(onTrue,3078037:doValue,[])
+}
+Add(LineBreak,8760119,434,497)
+{
+ Caption="Link"
+ Type=1
+ Color=65535
+ link(Data,3078037:Value,[])
+ Primary=[13996345,-147,-252]
+}
+Add(HubEx,12144234,427,438)
+{
+ Angle=2
+ link(onEvent,5624068:doWork3,[(119,444)])
+}
+Add(Hub,1370075,628,364)
+{
+ link(onEvent1,13376442:doString,[])
+ link(onEvent2,12144234:doWork2,[(654,377)(654,444)])
+}
+Add(HubEx,2984068,609,364)
+{
+ link(onEvent,1370075:doEvent1,[])
+}
+Add(Hub,8304837,595,301)
+{
+ link(onEvent1,1682762:doText,[(624,307)(624,286)])
+ link(onEvent2,16073011:doData,[(617,314)(617,300)])
+}
+Add(Label,11446783,693,294)
+{
+ Left=180
+ Top=30
+ Width=94
+ Height=23
+ Color=16777215
+ Font=[Consolas,12,0,0,204]
+ Caption="CONNECTING"
+ MakeTrans(Caption)
+}
+Add(DoData,16073011,639,294)
+{
+ Data=String(LOADING)
+ link(onEventData,11446783:doText,[])
 }

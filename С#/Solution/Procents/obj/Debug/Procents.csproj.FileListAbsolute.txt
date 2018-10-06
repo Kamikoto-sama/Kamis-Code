@@ -1,5 +1,0 @@
-D:\My_Programms\С#\Solution\Procents\bin\Debug\Procents.exe
-D:\My_Programms\С#\Solution\Procents\bin\Debug\Procents.pdb
-D:\My_Programms\С#\Solution\Procents\obj\Debug\Procents.csprojResolveAssemblyReference.cache
-D:\My_Programms\С#\Solution\Procents\obj\Debug\Procents.exe
-D:\My_Programms\С#\Solution\Procents\obj\Debug\Procents.pdb

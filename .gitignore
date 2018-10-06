@@ -7,4 +7,4 @@ venv
 *.png
 *.exe
 !PLS/PLS_3.exe
-С#\Solution
+С#/Solution/*

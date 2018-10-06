@@ -8,3 +8,4 @@ venv
 *.exe
 !PLS/PLS_3.exe
 С#/Solution/*
+HiAsm/PlayListStore 3.0/Data.db

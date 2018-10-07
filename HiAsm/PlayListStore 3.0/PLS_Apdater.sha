@@ -313,7 +313,7 @@ Add(Timer,1405158,601,248)
  AutoStop=1
  link(onTimer,9610219:doExec,[])
 }
-Add(LineBreak,12877562,70,391)
+Add(LineBreak,298669,70,391)
 {
  Caption="Close"
  Color=16776960
@@ -355,98 +355,6 @@ Add(GlobalVar,3561828,667,337)
  @Color=5635925
  Name="Prev"
 }
-Add(HTTP_Get,3602494,881,457)
-{
- URL="http://apiexperts.ru/lib_pls/ver.txt"
- link(onStatus,3055953:doValue,[])
- link(onDownload,825475:doConvert,[(957,470)(957,423)])
- link(onURLSize,2917570:doEvent1,[])
- link(onStop,1368524:doCompare,[(922,484)(922,567)])
- link(Position,5600774:Value,[])
-}
-Add(Convertor,825475,987,417)
-{
- Mode=11
- link(onResult,2357353:doValue,[])
-}
-Add(Case,11975342,988,598)
-{
- Value=Integer(0)
- link(onTrue,16752006:doMessage,[])
-}
-Add(Message,16752006,1032,605)
-{
- Message="CONNECTION ERROR"
- Caption="PLS: Update checker"
- Icon=1
- Point(onOK)
-}
-Add(Hub,2917570,946,471)
-{
- OutCount=3
- link(onEvent1,3602494:doDownload,[(977,477)(977,502)(869,502)(869,463)])
- link(onEvent2,11975342:doCase,[(970,484)(970,604)])
- link(onEvent3,10006871:doValue,[(983,491)(983,503)])
-}
-Add(Memory,5600774,895,408)
-{
- Default=Integer(0)
-}
-Add(Memory,3055953,988,457)
-{
- Default=Integer(0)
-}
-Add(If_else,1368524,988,561)
-{
- Type=1
- link(onTrue,11460347:doMessage,[])
- link(Op1,3055953:Value,[])
- link(Op2,10006871:Value,[(1001,544)(1012,544)])
-}
-Add(Message,11460347,1032,561)
-{
- Message="SERVER ERROR !!!"
- Caption="PLS: Update checker"
- Icon=1
- Point(onOK)
-}
-Add(Memory,10006871,1006,497)
-{
-}
-Add(If_else,9854672,1077,417)
-{
- link(onTrue,1292377:doMessage,[(1128,423)(1128,397)])
- link(onFalse,7924872:doMessage,[(1127,430)(1127,444)])
- link(Op2,15025016:Value,[])
-}
-Add(Message,7924872,1137,438)
-{
- Message="A new update is available! Update now?"
- Caption="PLS: Update checker"
- Type=2
- Icon=4
- Point(onYES)
-}
-Add(Memory,15025016,1084,372)
-{
-}
-Add(Message,1292377,1138,391)
-{
- Message="There is not new updates!"
- Caption="PLS: Update checker"
- Icon=4
- Point(onOK)
-}
-Add(Hub,3574678,823,471)
-{
- link(onEvent1,3602494:GetURLSize,[])
-}
-Add(GlobalVar,2357353,1033,417)
-{
- @Color=5635925
- Name="3"
- link(onValue,9854672:doCompare,[])
-}
 Add(Memory,3078037,434,454)
 {
  Default=String(https://github.com/Kamikoto-sama/Kamis-Code/raw/master/PLS/PLS_3.exe)
@@ -457,7 +365,7 @@ Add(If_else,11953925,389,454)
  Op2=String()
  link(onTrue,3078037:doValue,[])
 }
-Add(LineBreak,8760119,434,497)
+Add(LineBreak,12928381,434,497)
 {
  Caption="Link"
  Type=1

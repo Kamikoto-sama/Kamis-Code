@@ -499,16 +499,11 @@ class New_Title(QtWidgets.QWidget):
     # ON click row
     def on_t_select(self,event=None):
         try:
-            # Move scroll bar
-            if self.p.rowList.count() >= 12:
-                place = self.p.scrollArea
-                value = place.verticalScrollBar().value()
-                print(self.mapToParent(QtCore.QPoint(5,-5)))
+            self.p.scroll_to(100)
             if self.p.curRow not in [self, None]:
                 self.p.curRow.leave()
+
             if self.p.curRow is not self:
-
-
                 self.setStyleSheet('''
                     #t_row{border-color: blue}
                     #title_name,#count,#con_date{background: %s}'''%Color[self.color])
@@ -617,7 +612,7 @@ class New_Title(QtWidgets.QWidget):
         self.con_date.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
 class New_Playlist(QtWidgets.QWidget):
-    def __init__(self,parent=None, name=''):
+    def __init__(self,parent, name):
         super(New_Playlist,self).__init__(parent)
         try:
             loadUi('GUI/New_Playlist.ui',self)
@@ -645,6 +640,14 @@ class New_Playlist(QtWidgets.QWidget):
 
             self.load_titles(name)
         except Exception as e: print("New_Playlist:",e)
+
+    # Move scroll bar
+    def scroll_to(self, moveTo):
+        if self.rowList.count() >= 6:
+            area = self.scrollArea
+            current = area.verticalScrollBar().value()
+            area.verticalScrollBar().setValue(moveTo)
+            print(area.verticalScrollBar().maximum())
 
     def resizeEvent(self,event=None):
         try:
@@ -699,8 +702,8 @@ class New_Playlist(QtWidgets.QWidget):
                     self.delP.hide()
             else:
                 titles = list(sql.execute(
-                 '''SELECT title_name,count,id,icon,color 
-                    FROM Titles WHERE playlist="%s"''' %name))
+                    '''SELECT title_name,count,id,icon,color 
+                       FROM Titles WHERE playlist="%s"''' %name))
                 for t in titles:
                     self.add_row(t[0], t[1], t[2], t[3], t[4])
             self.row_count.setText('Тайтлов в плейлисте:' + str(self.rowList.count()))

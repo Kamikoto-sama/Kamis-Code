@@ -1,3 +1,5 @@
+import PyQt5
+
 def array(a:list):
 	a[0] = 5
 

@@ -416,6 +416,7 @@ class NewTitle(QtWidgets.QWidget):
             self.row_layout.setAlignment(QtCore.Qt.AlignTop)
 
             self.title_name.setText(name)
+            #todo: EventFilter
             # self.title_name.mouseDoubleClickEvent = self.on_line_edit
             self.title_name.mousePressEvent = self.on_t_select
             self.title_name.returnPressed.connect(self.on_line_edited)
@@ -644,6 +645,7 @@ class NewPlaylist(QtWidgets.QWidget):
     # Move scroll bar
     def scroll_to(self, moveTo):
         if self.rowList.count() >= 6:
+            #todo: Scroll to
             area = self.scrollArea
             current = area.verticalScrollBar().value()
             area.verticalScrollBar().setValue(moveTo)

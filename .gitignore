@@ -3,10 +3,14 @@ Users
 trainer
 venv
 .idea
+С#/Solution/*
+HiAsm/PlayListStore 3.0/Data.db
+*test.*
+t.*
+
 *.jpg
 *.png
 *.exe
-!Python\PlayListStore_4.0\Icons\*
+
+!Python/PlayListStore_4.0/Icons/*.*
 !PLS/PLS_3.exe
-С#/Solution/*
-HiAsm/PlayListStore 3.0/Data.db

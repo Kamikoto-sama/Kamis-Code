@@ -4,13 +4,13 @@ from time import strftime
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.uic import loadUi
 
-#LOAD DB
+# LOAD DB
 try:
     if not os.path.exists("Data.pls"):
         db = sqlite3.connect("Data.pls")
         sql = db.cursor()
         sql.execute("CREATE TABLE Playlists (name varchar(100))")
-        sql.execute("CREATE TABLE Data (name varchar(10),value varchar(40))")
+        sql.execute('CREATE TABLE Data (name varchar(10),value varchar(40))')
         sql.execute("""
             CREATE TABLE Titles (
             title_name varchar(255) NOT NULL,
@@ -37,7 +37,7 @@ try:
     TotalViewed = data[1]
     TotalAdded = data[2]
 except Exception as e:print('Load db:',e)
-#CONSTANTS
+# CONSTANTS
 Icon = {
     'n':'',
     'viewed':'Icons/viewed.png',
@@ -54,7 +54,7 @@ Color = {
     'pause':'#DC143C',
     'is_con':'#FEE02F'
 }
-#Skin = 'Skins/dark_orange.css'
+# Skin = 'Skins/dark_orange.css'
 Skin = 'style.css'
 SideWidth = 300
 SideAnimDur = 500
@@ -79,16 +79,16 @@ def save_data(save, value=1):
         db.commit()
     except Exception as e:print('Main.save_data:', e)
 
-class Self_Styled_Icon(QtWidgets.QProxyStyle):
+class SelfStyledIcon(QtWidgets.QProxyStyle):
     def pixelMetric(self, q_style_pixel_metric, option=None, widget=None):
         if q_style_pixel_metric == QtWidgets.QStyle.PM_SmallIconSize: return 30
         else:
             return QtWidgets.QProxyStyle.pixelMetric(self, q_style_pixel_metric,
                                                         option, widget)
 
-class Row_Buttons(QtWidgets.QWidget):
+class RowButtons(QtWidgets.QWidget):
     def __init__(self, con=False):
-        super(Row_Buttons,self).__init__()
+        super(RowButtons, self).__init__()
         try:
             self.p = None
             self.btns = QtWidgets.QHBoxLayout(self)
@@ -210,10 +210,10 @@ class Row_Buttons(QtWidgets.QWidget):
             self.p.p.sideBar.load_side_data(self.p.id)
         except Exception as e:print('select_mark:',e)
 
-class Add_Title_Form(QtWidgets.QWidget):
+class AddTitleForm(QtWidgets.QWidget):
     def __init__(self,parent):
         try:
-            super(Add_Title_Form,self).__init__(parent)
+            super(AddTitleForm, self).__init__(parent)
             loadUi('GUI/Add_Title_Form.ui',self)
             self.parent = parent
             self.hide()
@@ -273,16 +273,16 @@ class Add_Title_Form(QtWidgets.QWidget):
                 self.show_add_form()
         except Exception as e:print('on_ok:',e)
 
-class Tab_Bar(QtWidgets.QTabBar):
+class TabBar(QtWidgets.QTabBar):
     def __init__(self,parent):
-        super(Tab_Bar,self).__init__(parent)
+        super(TabBar, self).__init__(parent)
         self.setMovable(True)
         self.setTabsClosable(True)
         self.setExpanding(True)
 
-class Side_Bar(QtWidgets.QWidget):
+class SideBar(QtWidgets.QWidget):
     def __init__(self,parent):
-        super(Side_Bar,self).__init__(parent)
+        super(SideBar, self).__init__(parent)
         try:
             loadUi('GUI/Side_Bar.ui',self)
             self.p = parent
@@ -401,9 +401,9 @@ class Side_Bar(QtWidgets.QWidget):
             self.animSide.start()
         except Exception as e: print('SideBar/reHideSide:',e)
 
-class New_Title(QtWidgets.QWidget):
+class NewTitle(QtWidgets.QWidget):
     def __init__(self, parent, name, count, id_, icon, color):
-        super(New_Title,self).__init__(parent)
+        super(NewTitle, self).__init__(parent)
         loadUi('GUI/New_Title.ui',self)
         try:
             self.color = color
@@ -416,6 +416,7 @@ class New_Title(QtWidgets.QWidget):
             self.row_layout.setAlignment(QtCore.Qt.AlignTop)
 
             self.title_name.setText(name)
+            #todo: EventFilter
             # self.title_name.mouseDoubleClickEvent = self.on_line_edit
             self.title_name.mousePressEvent = self.on_t_select
             self.title_name.returnPressed.connect(self.on_line_edited)
@@ -611,22 +612,22 @@ class New_Title(QtWidgets.QWidget):
         self.con_date.setReadOnly(True)
         self.con_date.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
-class New_Playlist(QtWidgets.QWidget):
+class NewPlaylist(QtWidgets.QWidget):
     def __init__(self,parent, name):
-        super(New_Playlist,self).__init__(parent)
+        super(NewPlaylist, self).__init__(parent)
         try:
             loadUi('GUI/New_Playlist.ui',self)
             self.p = parent
             self.con = True if name == ConListName else False
             self.curRow = None
             self.rowMap = []
-            self.rowButns = Row_Buttons(self.con)
+            self.rowButns = RowButtons(self.con)
 
             self.rowList.setAlignment(QtCore.Qt.AlignTop)
             self.bar_left.setAlignment(QtCore.Qt.AlignLeft)
             self.bar_right.setAlignment(QtCore.Qt.AlignRight)
 
-            self.add_form = Add_Title_Form(self)
+            self.add_form = AddTitleForm(self)
             self.add_form.setGeometry(9,49,370,0)
             self.animAddT = QtCore.QPropertyAnimation(self.add_form,b"size")
             self.animAddT.setEasingCurve(QtCore.QEasingCurve.OutExpo)
@@ -635,7 +636,7 @@ class New_Playlist(QtWidgets.QWidget):
             self.addT.clicked.connect(self.add_form.show_add_form)
             self.delP.clicked.connect(self.delete_playlist)
 
-            self.sideBar = Side_Bar(self)
+            self.sideBar = SideBar(self)
             self.side_hiden = True
 
             self.load_titles(name)
@@ -644,6 +645,7 @@ class New_Playlist(QtWidgets.QWidget):
     # Move scroll bar
     def scroll_to(self, moveTo):
         if self.rowList.count() >= 6:
+            #todo: Scroll to
             area = self.scrollArea
             current = area.verticalScrollBar().value()
             area.verticalScrollBar().setValue(moveTo)
@@ -684,7 +686,7 @@ class New_Playlist(QtWidgets.QWidget):
 
     def add_row(self, name, count, t_id, icon, color = 'n'):
         try:
-            row = New_Title(self, name, count, t_id, icon, color)
+            row = NewTitle(self, name, count, t_id, icon, color)
             self.rowList.addWidget(row)
             self.rowMap.append(name)
             return row
@@ -729,7 +731,7 @@ class MainForm(QtWidgets.QMainWindow):
         self.pName.returnPressed.connect(self.addP.click)
         self.closePName.clicked.connect(self.keyPressEvent)
 
-        self.tabBar = Tab_Bar(self)
+        self.tabBar = TabBar(self)
         self.tabBar.currentChanged.connect(self.select_tab)
         self.tabBar.tabCloseRequested.connect(self.close_tab)
         self.tabBar.tabMoved.connect(self.on_move_tab)
@@ -764,7 +766,7 @@ class MainForm(QtWidgets.QMainWindow):
                 self.tabWidget.setCurrentIndex(self.tabMap.index(tab_name))
             else:
                 self.tabMap.insert(0,tab_name)
-                self.tabWidget.insertTab(0,New_Playlist(self, tab_name),tab_name)
+                self.tabWidget.insertTab(0, NewPlaylist(self, tab_name), tab_name)
                 self.tabWidget.setCurrentIndex(0)
                 # tab = self.tabWidget.currentWidget()
                 # tab.load_titles(tab_name)
@@ -829,7 +831,7 @@ class MainForm(QtWidgets.QMainWindow):
         print("\n\t'Launched'")
 
 app = QtWidgets.QApplication(sys.argv)
-app.setStyle(Self_Styled_Icon('Fusion'))
+app.setStyle(SelfStyledIcon('Fusion'))
 exe = MainForm()
 exe.show()
 print("\t'Start'\n")

@@ -5,6 +5,7 @@ venv
 .idea
 С#/Solution/*
 HiAsm/PlayListStore 3.0/Data.db
+Python/Test/*
 
 *test.*
 t.*

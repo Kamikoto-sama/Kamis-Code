@@ -5,9 +5,9 @@ venv
 .idea
 С#/Solution/*
 HiAsm/PlayListStore 3.0/Data.db
+
 *test.*
 t.*
-
 *.jpg
 *.png
 *.exe

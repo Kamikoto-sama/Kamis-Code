@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 import sys, os, sqlite3
+
+from PyQt5.QtCore import QEventLoop, QTimer
 from time import strftime
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.uic import loadUi
@@ -66,7 +68,6 @@ RowHeightMax = 72
 ConListName = '*Список продолжений*'
 main = [None, None]
 
-
 def save_data(save, value=1):
     try:
         global ID, TotalAdded, TotalViewed
@@ -84,7 +85,6 @@ def save_data(save, value=1):
     except Exception as e:
         print('Main.save_data:', e)
 
-
 class SelfStyledIcon(QtWidgets.QProxyStyle):
     def pixelMetric(self, q_style_pixel_metric, option=None, widget=None):
         if q_style_pixel_metric == QtWidgets.QStyle.PM_SmallIconSize:
@@ -92,7 +92,6 @@ class SelfStyledIcon(QtWidgets.QProxyStyle):
         else:
             return QtWidgets.QProxyStyle.pixelMetric(self, q_style_pixel_metric,
                                                      option, widget)
-
 
 class RowButtons(QtWidgets.QWidget):
     def __init__(self, con=False):
@@ -223,7 +222,6 @@ class RowButtons(QtWidgets.QWidget):
         except Exception as e:
             print('select_mark:', e)
 
-
 class AddTitleForm(QtWidgets.QWidget):
     def __init__(self, parent):
         try:
@@ -294,14 +292,12 @@ class AddTitleForm(QtWidgets.QWidget):
         except Exception as e:
             print('on_ok:', e)
 
-
 class TabBar(QtWidgets.QTabBar):
     def __init__(self, parent):
         super(TabBar, self).__init__(parent)
         self.setMovable(True)
         self.setTabsClosable(True)
         self.setExpanding(True)
-
 
 class SideBar(QtWidgets.QWidget):
     def __init__(self, parent):
@@ -429,7 +425,6 @@ class SideBar(QtWidgets.QWidget):
         except Exception as e:
             print('SideBar/reHideSide:', e)
 
-
 class NewTitle(QtWidgets.QWidget):
     def __init__(self, parent, name, count, id_, icon, color):
         super(NewTitle, self).__init__(parent)
@@ -471,6 +466,7 @@ class NewTitle(QtWidgets.QWidget):
                 self.set_icon(icon)
                 self.set_color(self.color, True)
 
+            # todo: переделать по sroll_to timer...
             self.animOn = QtCore.QTimer(self)
             self.animOn.timeout.connect(self.row_on)
             self.animOff = QtCore.QTimer(self)
@@ -651,7 +647,6 @@ class NewTitle(QtWidgets.QWidget):
         self.con_date.setReadOnly(True)
         self.con_date.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
-
 class NewPlaylist(QtWidgets.QWidget):
     def __init__(self, parent, name):
         super(NewPlaylist, self).__init__(parent)
@@ -691,16 +686,27 @@ class NewPlaylist(QtWidgets.QWidget):
             self.scroll_to(int(index))
 
     # Move scroll bar
-    # todo: scroll
     def scroll_to(self, index):
         try:
-            if index >= 5:
-                bar = self.scrollArea.verticalScrollBar()
-                max = bar.maximum()
-                shift = max // self.rowList.count() * RowHeightMin * index
-                bar.setValue(shift)
-                print(bar.maximum()," ", shift)
-        except Exception as e: print("sroll_to: ", e)
+            bar = self.scrollArea.verticalScrollBar()
+            step = bar.pageStep()
+            row_size = RowHeightMin + self.rowList.spacing()
+            target_pos = row_size * index + self.rowList.spacing()
+            bottom_border = bar.value() + step - RowHeightMax
+
+            def anim_scroll(direction):
+                loop = QEventLoop()
+                QTimer.singleShot(40, loop.quit)
+                loop.exec_()
+                bar.setValue(bar.value() + direction*30)
+
+            if target_pos < bar.value():
+                while bar.value() > target_pos: anim_scroll(-1)
+            elif target_pos > bottom_border:
+                while bar.value() < target_pos and bar.value() < bar.maximum():
+                    anim_scroll(1)
+            print('scroll finished')
+        except Exception as e: print("scroll_to: ", e)
 
     def resizeEvent(self, event=None):
         try:
@@ -766,7 +772,6 @@ class NewPlaylist(QtWidgets.QWidget):
             self.row_count.setText('Тайтлов в плейлисте:' + str(self.rowList.count()))
         except Exception as e:
             print("load_titles:", e)
-
 
 class MainForm(QtWidgets.QMainWindow):
 
@@ -893,7 +898,6 @@ class MainForm(QtWidgets.QMainWindow):
         self.select_p()
         self.viewed_count.setText('Всего просмотрено:' + str(TotalViewed))
         print("\n\t'Launched'")
-
 
 app = QtWidgets.QApplication(sys.argv)
 app.setStyle(SelfStyledIcon('Fusion'))

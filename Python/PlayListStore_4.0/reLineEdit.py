@@ -1,12 +1,9 @@
+from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QLineEdit
 
-class reLineEdit(QLineEdit):
-    def __init__(self, parent=None):
-        super(reLineEdit, self).__init__(parent)
-        self.parent = parent
 
+class reLineEdit(QLineEdit):
+    clicked = pyqtSignal()
     def mousePressEvent(self, event):
-        super(reLineEdit, self).mousePressEvent(event)
-        try:
-            self.parent.on_select()
-        except Exception as e:print('reLineEdit:',e)
+        self.clicked.emit()
+        QLineEdit.mousePressEvent(self, event)

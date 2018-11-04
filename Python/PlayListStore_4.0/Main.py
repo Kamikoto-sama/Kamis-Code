@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 import sys, os, sqlite3
 
-from PyQt5.QtCore import QEventLoop, QTimer
+from PyQt5.QtCore import QEventLoop, QTimer, QObject
+from PyQt5.QtWidgets import QWidget
 from time import strftime
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.uic import loadUi
+import reLineEdit
 
 # LOAD DB
 try:
@@ -439,10 +441,11 @@ class NewTitle(QtWidgets.QWidget):
 
             self.row_layout.setAlignment(QtCore.Qt.AlignTop)
 
-            self.title_name.setText(name)
             # todo: EventFilter
+
+            self.title_name.setText(name)
             # self.title_name.mouseDoubleClickEvent = self.on_line_edit
-            self.title_name.mousePressEvent = self.on_select
+            # self.title_name.mousePressEvent = self.on_select
             self.title_name.returnPressed.connect(self.on_line_edited)
             self.title_name.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
@@ -471,8 +474,7 @@ class NewTitle(QtWidgets.QWidget):
             self.animOn.timeout.connect(self.row_on)
             self.animOff = QtCore.QTimer(self)
             self.animOff.timeout.connect(self.row_off)
-        except Exception as e:
-            print('new_title:', e)
+        except Exception as e: print('new_title:', e)
 
     def delete_title(self):
         try:
@@ -526,7 +528,7 @@ class NewTitle(QtWidgets.QWidget):
             self.p.rowButns.viewing.setEnabled(True)
 
     # ON click row
-    def on_select(self, event=None):
+    def select_row(self):
         try:
             if self.p.curRow not in [self, None]:
                 self.p.curRow.leave()
@@ -737,7 +739,7 @@ class NewPlaylist(QtWidgets.QWidget):
             sql.execute("INSERT INTO Titles VALUES ('%s',%s,%s,'%s','%s','%s','%s','%s','%s','n')" %
                         (t_name, count, ID, p_name, icon, color, genre, link, desc))
             db.commit()
-            self.add_row(t_name, count, ID, icon, color).on_select()
+            self.add_row(t_name, count, ID, icon, color).select_row()
             self.row_count.setText('Тайтлов в плейлисте:' + str(self.rowList.count()))
             save_data('id')
             save_data('added')

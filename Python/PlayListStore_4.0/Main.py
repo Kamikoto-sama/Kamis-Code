@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-import sys, os, sqlite3
+import os
+import sqlite3
+import sys
 
-from PyQt5.QtCore import QEventLoop, QTimer, QObject
-from PyQt5.QtWidgets import QWidget
-from time import strftime
 from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt5.QtCore import QEventLoop, QTimer
 from PyQt5.uic import loadUi
-import reLineEdit
+from time import strftime
 
 # LOAD DB
 try:
@@ -429,9 +429,9 @@ class SideBar(QtWidgets.QWidget):
 
 class NewTitle(QtWidgets.QWidget):
     def __init__(self, parent, name, count, id_, icon, color):
-        super(NewTitle, self).__init__(parent)
-        loadUi('GUI/New_Title.ui', self)
         try:
+            super(NewTitle, self).__init__(parent)
+            loadUi('GUI/New_Title.ui', self)
             self.color = color
             self.name = name
             self.icon = icon
@@ -441,24 +441,22 @@ class NewTitle(QtWidgets.QWidget):
 
             self.row_layout.setAlignment(QtCore.Qt.AlignTop)
 
-            # todo: EventFilter
-
             self.title_name.setText(name)
-            # self.title_name.mouseDoubleClickEvent = self.on_line_edit
-            # self.title_name.mousePressEvent = self.on_select
-            self.title_name.returnPressed.connect(self.on_line_edited)
+            self.title_name.clicked.connect(self.select_row)
+            self.title_name.doubleClicked.connect(self.edit_line)
+            self.title_name.returnPressed.connect(self.end_line_edit)
             self.title_name.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
             self.count.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
             self.count.setValidator(QtGui.QIntValidator(0, 9999))
             self.count.setText(str(count))
-            self.count.returnPressed.connect(self.on_line_edited)
-            # self.count.mouseDoubleClickEvent = self.on_line_edit
-            # self.count.mousePressEvent = self.on_t_select
+            self.count.returnPressed.connect(self.end_line_edit)
+            self.count.clicked.connect(self.select_row)
+            self.count.doubleClicked.connect(self.edit_line)
 
-            # self.con_date.mouseDoubleClickEvent = self.on_line_edit
-            # self.con_date.mousePressEvent = self.on_t_select
-            self.con_date.returnPressed.connect(self.on_line_edited)
+            self.con_date.clicked.connect(self.select_row)
+            self.con_date.doubleClicked.connect(self.edit_line)
+            self.con_date.returnPressed.connect(self.end_line_edit)
             self.con_date.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
             if parent.con:
@@ -532,7 +530,6 @@ class NewTitle(QtWidgets.QWidget):
         try:
             if self.p.curRow not in [self, None]:
                 self.p.curRow.leave()
-
             if self.p.curRow is not self:
                 self.setStyleSheet('''
                     #t_row{border-color: blue}
@@ -550,10 +547,10 @@ class NewTitle(QtWidgets.QWidget):
                 if self.icon in ['viewed', 'con']:
                     self.p.rowButns.viewing.setEnabled(False)
         except Exception as e:
-            print('on_t_select:', e)
+            print('select_row:', e)
 
     # ON doubleclick row
-    def on_line_edit(self, event):
+    def edit_line(self):
         try:
             self.title_name.setReadOnly(False)
             self.title_name.setCursor(QtGui.QCursor(QtCore.Qt.IBeamCursor))
@@ -569,7 +566,7 @@ class NewTitle(QtWidgets.QWidget):
             print('on_line_edit:', e)
 
     # ON enter pressed
-    def on_line_edited(self):
+    def end_line_edit(self):
         try:
             self.title_name.clearFocus()
             self.count.clearFocus()

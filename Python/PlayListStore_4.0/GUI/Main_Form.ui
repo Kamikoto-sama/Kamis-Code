@@ -96,33 +96,17 @@
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
          </property>
-         <widget class="QPushButton" name="adv">
+         <widget class="QPushButton" name="options">
           <property name="geometry">
            <rect>
-            <x>1</x>
-            <y>1</y>
-            <width>41</width>
-            <height>23</height>
-           </rect>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
-          </property>
-          <property name="text">
-           <string>CLEAR</string>
-          </property>
-         </widget>
-         <widget class="QPushButton" name="con_list">
-          <property name="geometry">
-           <rect>
-            <x>40</x>
-            <y>1</y>
-            <width>31</width>
+            <x>10</x>
+            <y>0</y>
+            <width>62</width>
             <height>23</height>
            </rect>
           </property>
           <property name="text">
-           <string>CON</string>
+           <string>Опции</string>
           </property>
          </widget>
         </widget>
@@ -272,6 +256,50 @@
            </size>
           </property>
          </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QFrame" name="options_frame">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <property name="spacing">
+        <number>5</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QPushButton" name="con_list">
+         <property name="text">
+          <string>CON</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="adv">
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
+         <property name="text">
+          <string>CLEAR</string>
+         </property>
         </widget>
        </item>
       </layout>

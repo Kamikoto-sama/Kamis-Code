@@ -3,8 +3,10 @@ import os
 import sqlite3
 import sys
 
-from PyQt5 import QtWidgets, QtCore, QtGui
-from PyQt5.QtCore import QEventLoop, QTimer
+from PyQt5.QtCore import QEventLoop, QTimer, Qt, QPoint, QPropertyAnimation, QEasingCurve, QSize, QRect
+from PyQt5.QtGui import QIntValidator, QCursor, QIcon, QPixmap
+from PyQt5.QtWidgets import QMessageBox, QProxyStyle, QWidget, QHBoxLayout, QPushButton, QMenu, QTabBar, QMainWindow, \
+    QApplication, QLineEdit, QStyle, QInputDialog
 from PyQt5.uic import loadUi
 from time import strftime
 
@@ -87,44 +89,44 @@ def save_data(save, value=1):
     except Exception as e:
         print('Main.save_data:', e)
 
-class SelfStyledIcon(QtWidgets.QProxyStyle):
+class SelfStyledIcon(QProxyStyle):
     def pixelMetric(self, q_style_pixel_metric, option=None, widget=None):
-        if q_style_pixel_metric == QtWidgets.QStyle.PM_SmallIconSize:
+        if q_style_pixel_metric == QStyle.PM_SmallIconSize:
             return 30
         else:
-            return QtWidgets.QProxyStyle.pixelMetric(self, q_style_pixel_metric,
+            return QProxyStyle.pixelMetric(self, q_style_pixel_metric,
                                                      option, widget)
 
-class RowButtons(QtWidgets.QWidget):
+class RowButtons(QWidget):
     def __init__(self, con=False):
         super(RowButtons, self).__init__()
         try:
             self.p = None
-            self.btns = QtWidgets.QHBoxLayout(self)
+            self.btns = QHBoxLayout(self)
             self.btns.setContentsMargins(3, 0, 3, 0)
 
-            self.delT = QtWidgets.QPushButton('УДАЛИТЬ')
-            self.delT.setFocusPolicy(QtCore.Qt.NoFocus)
-            self.delT.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+            self.delT = QPushButton('УДАЛИТЬ')
+            self.delT.setFocusPolicy(Qt.NoFocus)
+            self.delT.setCursor(QCursor(Qt.PointingHandCursor))
             self.delT.clicked.connect(self.delete_title)
             if con:
                 self.btns.addWidget(self.delT)
             else:
-                self.row_left = QtWidgets.QHBoxLayout()
-                self.row_left.setAlignment(QtCore.Qt.AlignLeft)
-                self.row_right = QtWidgets.QHBoxLayout()
-                self.row_right.setAlignment(QtCore.Qt.AlignRight)
+                self.row_left = QHBoxLayout()
+                self.row_left.setAlignment(Qt.AlignLeft)
+                self.row_right = QHBoxLayout()
+                self.row_right.setAlignment(Qt.AlignRight)
 
-                self.viewing = QtWidgets.QPushButton('СМОТРЮ')
+                self.viewing = QPushButton('СМОТРЮ')
                 self.viewing.setFixedSize(115, 30)
-                self.viewing.setFocusPolicy(QtCore.Qt.NoFocus)
-                self.viewing.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+                self.viewing.setFocusPolicy(Qt.NoFocus)
+                self.viewing.setCursor(QCursor(Qt.PointingHandCursor))
                 self.viewing.clicked.connect(self.viewing_now)
 
-                self.viewed = QtWidgets.QPushButton('ПРОСМОТРЕНО')
+                self.viewed = QPushButton('ПРОСМОТРЕНО')
                 self.viewed.setFixedSize(170, 30)
-                self.viewed.setFocusPolicy(QtCore.Qt.NoFocus)
-                self.viewed.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+                self.viewed.setFocusPolicy(Qt.NoFocus)
+                self.viewed.setCursor(QCursor(Qt.PointingHandCursor))
                 self.viewed.clicked.connect(self.select_mark)
 
                 self.delT.setFixedSize(90, 30)
@@ -135,8 +137,8 @@ class RowButtons(QtWidgets.QWidget):
                 self.btns.addLayout(self.row_left)
                 self.btns.addLayout(self.row_right)
 
-                self.date = QtWidgets.QLineEdit(strftime('%Y'), self)
-                self.date.setAlignment(QtCore.Qt.AlignCenter)
+                self.date = QLineEdit(strftime('%Y'), self)
+                self.date.setAlignment(Qt.AlignCenter)
                 self.date.setGeometry(123, 0, 170, 30)
                 self.date.hide()
                 self.date.focusOutEvent = lambda x: self.date.hide()
@@ -185,21 +187,21 @@ class RowButtons(QtWidgets.QWidget):
 
     def select_mark(self):
         try:
-            menu = QtWidgets.QMenu(self)
+            menu = QMenu(self)
 
-            ico = QtGui.QIcon('Icons/viewed.png')
+            ico = QIcon('Icons/viewed.png')
             on_viewed = menu.addAction(ico, 'Просмотрен')
             on_viewed.setEnabled(self.p.icon != 'viewed')
 
-            ico = QtGui.QIcon('Icons/continuation.ico')
+            ico = QIcon('Icons/continuation.ico')
             on_con = menu.addAction(ico, 'Будет продолжение')
             on_con.setEnabled(self.p.icon != 'con')
 
-            ico = QtGui.QIcon('Icons/pause.ico')
+            ico = QIcon('Icons/pause.ico')
             on_pause = menu.addAction(ico, 'Просмотр брошен')
             on_pause.setEnabled(self.p.icon not in ['viewed', 'con'])
 
-            cursor = QtCore.QPoint(self.viewed.x(), -35)
+            cursor = QPoint(self.viewed.x(), -35)
             selected = menu.exec_(self.mapToGlobal(cursor))
 
             if selected == on_viewed:
@@ -224,7 +226,7 @@ class RowButtons(QtWidgets.QWidget):
         except Exception as e:
             print('select_mark:', e)
 
-class AddTitleForm(QtWidgets.QWidget):
+class AddTitleForm(QWidget):
     def __init__(self, parent):
         try:
             super(AddTitleForm, self).__init__(parent)
@@ -232,11 +234,11 @@ class AddTitleForm(QtWidgets.QWidget):
             self.parent = parent
             self.hide()
 
-            self.anim = QtCore.QPropertyAnimation(self, b"size")
-            self.anim.setEasingCurve(QtCore.QEasingCurve.OutExpo)
+            self.anim = QPropertyAnimation(self, b"size")
+            self.anim.setEasingCurve(QEasingCurve.OutExpo)
             self.anim.setDuration(AddFormDur)
 
-            self.count.setValidator(QtGui.QIntValidator(0, 9999))
+            self.count.setValidator(QIntValidator(0, 9999))
             self.count.returnPressed.connect(self.ok.click)
 
             self.title_name.returnPressed.connect(self.ok.click)
@@ -253,13 +255,13 @@ class AddTitleForm(QtWidgets.QWidget):
                 self.show()
                 self.title_name.setFocus()
                 self.title_name.selectAll()
-                self.anim.setEndValue(QtCore.QSize(370, 245))
+                self.anim.setEndValue(QSize(370, 245))
                 self.anim.start()
             else:
                 self.anim.stop()
-                self.anim.setEndValue(QtCore.QSize(370, 0))
+                self.anim.setEndValue(QSize(370, 0))
                 self.anim.start()
-                QtCore.QTimer.singleShot(SideAnimDur, self.close)
+                QTimer.singleShot(SideAnimDur, self.close)
         except Exception as e:
             print('show_add_form:', e)
 
@@ -272,11 +274,11 @@ class AddTitleForm(QtWidgets.QWidget):
             desc = self.desc.toPlainText()
 
             if name == '':
-                QtWidgets.QMessageBox.warning(
+                QMessageBox.warning(
                     self, "PLS", "Title name is require field!")
                 self.title_name.setFocus()
             elif count == '':
-                QtWidgets.QMessageBox.warning(
+                QMessageBox.warning(
                     self, "PLS", "Count is require field!")
                 self.count.setFocus()
             else:
@@ -294,14 +296,14 @@ class AddTitleForm(QtWidgets.QWidget):
         except Exception as e:
             print('on_ok:', e)
 
-class TabBar(QtWidgets.QTabBar):
+class TabBar(QTabBar):
     def __init__(self, parent):
         super(TabBar, self).__init__(parent)
         self.setMovable(True)
         self.setTabsClosable(True)
         self.setExpanding(True)
 
-class SideBar(QtWidgets.QWidget):
+class SideBar(QWidget):
     def __init__(self, parent):
         super(SideBar, self).__init__(parent)
         try:
@@ -312,13 +314,13 @@ class SideBar(QtWidgets.QWidget):
             self.closeSide.clicked.connect(self.hide_show_side)
 
             self.genre.mouseDoubleClickEvent = self.on_edit
-            self.genre.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+            self.genre.setCursor(QCursor(Qt.PointingHandCursor))
             self.genre.returnPressed.connect(self.save_desc)
 
             self.desc.mouseDoubleClickEvent = self.on_edit
 
             self.link.mouseDoubleClickEvent = self.on_edit
-            self.link.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+            self.link.setCursor(QCursor(Qt.PointingHandCursor))
             self.link.returnPressed.connect(self.save_desc)
 
             self.save.clicked.connect(self.save_desc)
@@ -326,8 +328,8 @@ class SideBar(QtWidgets.QWidget):
             self.is_con.stateChanged.connect(self.on_is_con)
             self.is_finished.stateChanged.connect(self.on_is_finished)
 
-            self.animSide = QtCore.QPropertyAnimation(self, b"geometry")
-            self.animSide.setEasingCurve(QtCore.QEasingCurve.OutExpo)
+            self.animSide = QPropertyAnimation(self, b"geometry")
+            self.animSide.setEasingCurve(QEasingCurve.OutExpo)
             self.animSide.setDuration(SideAnimDur)
         except Exception as e:
             print(e)
@@ -335,11 +337,11 @@ class SideBar(QtWidgets.QWidget):
     def save_desc(self):
         try:
             self.genre.setReadOnly(True)
-            self.genre.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+            self.genre.setCursor(QCursor(Qt.PointingHandCursor))
             self.link.setReadOnly(True)
-            self.link.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+            self.link.setCursor(QCursor(Qt.PointingHandCursor))
             self.desc.setReadOnly(True)
-            self.desc.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+            self.desc.setCursor(QCursor(Qt.PointingHandCursor))
 
             genre = self.genre.text()
             link = self.link.text()
@@ -368,25 +370,25 @@ class SideBar(QtWidgets.QWidget):
     # On doubleclick
     def on_edit(self, event):
         self.genre.setReadOnly(False)
-        self.genre.setCursor(QtGui.QCursor(QtCore.Qt.IBeamCursor))
+        self.genre.setCursor(QCursor(Qt.IBeamCursor))
         self.link.setReadOnly(False)
-        self.link.setCursor(QtGui.QCursor(QtCore.Qt.IBeamCursor))
+        self.link.setCursor(QCursor(Qt.IBeamCursor))
         self.desc.setReadOnly(False)
-        self.desc.setCursor(QtGui.QCursor(QtCore.Qt.IBeamCursor))
+        self.desc.setCursor(QCursor(Qt.IBeamCursor))
 
     # On esc at side bar
     def keyPressEvent(self, event):
         try:
-            if event == '' or event.key() == QtCore.Qt.Key_Escape:
+            if event == '' or event.key() == Qt.Key_Escape:
                 self.genre.undo()
                 self.genre.setReadOnly(True)
-                self.genre.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+                self.genre.setCursor(QCursor(Qt.PointingHandCursor))
                 self.link.undo()
                 self.link.setReadOnly(True)
-                self.link.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+                self.link.setCursor(QCursor(Qt.PointingHandCursor))
                 self.desc.undo()
                 self.desc.setReadOnly(True)
-                self.desc.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+                self.desc.setCursor(QCursor(Qt.PointingHandCursor))
         except Exception as e:
             print('sideBar esc:', e)
 
@@ -414,12 +416,12 @@ class SideBar(QtWidgets.QWidget):
     def hide_show_side(self):
         try:
             if self.p.side_hiden:
-                self.animSide.setEndValue(QtCore.QRect(self.p.w - SideWidth, 0,
+                self.animSide.setEndValue(QRect(self.p.w - SideWidth, 0,
                                                        SideWidth, self.p.h))
                 self.p.side_hiden = False
                 self.closeSide.setText('>')
             else:
-                self.animSide.setEndValue(QtCore.QRect(self.p.w - 20, 0,
+                self.animSide.setEndValue(QRect(self.p.w - 20, 0,
                                                        SideWidth, self.p.h))
                 self.p.side_hiden = True
                 self.closeSide.setText('<')
@@ -427,7 +429,7 @@ class SideBar(QtWidgets.QWidget):
         except Exception as e:
             print('SideBar/reHideSide:', e)
 
-class NewTitle(QtWidgets.QWidget):
+class NewTitle(QWidget):
     def __init__(self, parent, name, count, id_, icon, color):
         try:
             super(NewTitle, self).__init__(parent)
@@ -439,16 +441,16 @@ class NewTitle(QtWidgets.QWidget):
             self.id = id_
             self.h = RowHeightMin
 
-            self.row_layout.setAlignment(QtCore.Qt.AlignTop)
+            self.row_layout.setAlignment(Qt.AlignTop)
 
             self.title_name.setText(name)
             self.title_name.clicked.connect(self.select_row)
             self.title_name.doubleClicked.connect(self.edit_line)
             self.title_name.returnPressed.connect(self.end_line_edit)
-            self.title_name.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+            self.title_name.setCursor(QCursor(Qt.PointingHandCursor))
 
-            self.count.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-            self.count.setValidator(QtGui.QIntValidator(0, 9999))
+            self.count.setCursor(QCursor(Qt.PointingHandCursor))
+            self.count.setValidator(QIntValidator(0, 9999))
             self.count.setText(str(count))
             self.count.returnPressed.connect(self.end_line_edit)
             self.count.clicked.connect(self.select_row)
@@ -457,7 +459,7 @@ class NewTitle(QtWidgets.QWidget):
             self.con_date.clicked.connect(self.select_row)
             self.con_date.doubleClicked.connect(self.edit_line)
             self.con_date.returnPressed.connect(self.end_line_edit)
-            self.con_date.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+            self.con_date.setCursor(QCursor(Qt.PointingHandCursor))
 
             if parent.con:
                 self.status.hide()
@@ -468,9 +470,9 @@ class NewTitle(QtWidgets.QWidget):
                 self.set_color(self.color, True)
 
             # todo: переделать по sroll_to timer...
-            self.animOn = QtCore.QTimer(self)
+            self.animOn = QTimer(self)
             self.animOn.timeout.connect(self.row_on)
-            self.animOff = QtCore.QTimer(self)
+            self.animOff = QTimer(self)
             self.animOff.timeout.connect(self.row_off)
         except Exception as e: print('new_title:', e)
 
@@ -491,7 +493,7 @@ class NewTitle(QtWidgets.QWidget):
             print('delete_title:', e)
 
     def set_icon(self, ico):
-        icon = QtGui.QPixmap(Icon[ico]).scaled(30, 30)
+        icon = QPixmap(Icon[ico]).scaled(30, 30)
         self.status.setPixmap(icon)
         if ico != self.icon:
             self.icon = ico
@@ -553,11 +555,11 @@ class NewTitle(QtWidgets.QWidget):
     def edit_line(self):
         try:
             self.title_name.setReadOnly(False)
-            self.title_name.setCursor(QtGui.QCursor(QtCore.Qt.IBeamCursor))
+            self.title_name.setCursor(QCursor(Qt.IBeamCursor))
             self.count.setReadOnly(False)
-            self.count.setCursor(QtGui.QCursor(QtCore.Qt.IBeamCursor))
+            self.count.setCursor(QCursor(Qt.IBeamCursor))
             self.con_date.setReadOnly(False)
-            self.con_date.setCursor(QtGui.QCursor(QtCore.Qt.IBeamCursor))
+            self.con_date.setCursor(QCursor(Qt.IBeamCursor))
             self.set_color('edit')
 
             if not self.p.side_hiden:
@@ -583,7 +585,7 @@ class NewTitle(QtWidgets.QWidget):
     # ON edit ecs
     def keyPressEvent(self, event):
         try:
-            if event == '' or event.key() == QtCore.Qt.Key_Escape:
+            if event == '' or event.key() == Qt.Key_Escape:
                 self.title_name.clearFocus()
                 self.title_name.undo()
                 self.count.clearFocus()
@@ -640,13 +642,13 @@ class NewTitle(QtWidgets.QWidget):
             self.set_color(self.color)
 
         self.title_name.setReadOnly(True)
-        self.title_name.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.title_name.setCursor(QCursor(Qt.PointingHandCursor))
         self.count.setReadOnly(True)
-        self.count.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.count.setCursor(QCursor(Qt.PointingHandCursor))
         self.con_date.setReadOnly(True)
-        self.con_date.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.con_date.setCursor(QCursor(Qt.PointingHandCursor))
 
-class NewPlaylist(QtWidgets.QWidget):
+class NewPlaylist(QWidget):
     def __init__(self, parent, name):
         super(NewPlaylist, self).__init__(parent)
         try:
@@ -657,15 +659,12 @@ class NewPlaylist(QtWidgets.QWidget):
             self.rowMap = []
             self.rowButns = RowButtons(self.con)
 
-            self.rowList.setAlignment(QtCore.Qt.AlignTop)
-            self.bar_left.setAlignment(QtCore.Qt.AlignLeft)
-            self.bar_right.setAlignment(QtCore.Qt.AlignRight)
+            self.rowList.setAlignment(Qt.AlignTop)
+            self.bar_left.setAlignment(Qt.AlignLeft)
+            self.bar_right.setAlignment(Qt.AlignRight)
 
             self.add_form = AddTitleForm(self)
             self.add_form.setGeometry(9, 49, 370, 0)
-            self.animAddT = QtCore.QPropertyAnimation(self.add_form, b"size")
-            self.animAddT.setEasingCurve(QtCore.QEasingCurve.OutExpo)
-            self.animAddT.setDuration(AddFormDur)
 
             self.addT.clicked.connect(self.add_form.show_add_form)
             self.delP.clicked.connect(self.delete_playlist)
@@ -680,7 +679,7 @@ class NewPlaylist(QtWidgets.QWidget):
             print("New_Playlist:", e)
 
     def push_scroll(self):
-        index, ok = QtWidgets.QInputDialog.getText(self, 'Title', 'Index')
+        index, ok = QInputDialog.getText(self, 'Title', 'Index')
         if ok and int(index) >= 0:
             self.scroll_to(int(index))
 
@@ -772,7 +771,7 @@ class NewPlaylist(QtWidgets.QWidget):
         except Exception as e:
             print("load_titles:", e)
 
-class MainForm(QtWidgets.QMainWindow):
+class MainForm(QMainWindow):
 
     def __init__(self):
         super(MainForm, self).__init__()
@@ -798,7 +797,27 @@ class MainForm(QtWidgets.QMainWindow):
         self.tabBar.tabMoved.connect(self.on_move_tab)
         self.tabWidget.setTabBar(self.tabBar)
 
+        self.options.clicked.connect(self.open_options)
+        self.options_frame.setVisible(False)
+
+        self.option_anim = QPropertyAnimation(self.options_frame, b"size")
+        self.option_anim.setEasingCurve(QEasingCurve.OutExpo)
+        self.option_anim.setDuration(500)
+
         self.launch()
+
+    def open_options(self):
+        try:
+            width = self.options_frame.width()
+            if self.options_frame.isVisible():
+                self.option_anim.setEndValue(QSize(width, 0))
+                self.option_anim.finished.connect(self.options_frame.hide)
+                print('here')
+            else:
+                self.option_anim.setEndValue(QSize(900, 25))
+                self.options_frame.show()
+            self.option_anim.start()
+        except Exception as e: print('open_options: ', e)
 
     def open_con_list(self):
         self.add_tab('*Список продолжений*')
@@ -867,6 +886,8 @@ class MainForm(QtWidgets.QMainWindow):
     # Temp
     def _clear(self):
         try:
+            action = QMessageBox.question(self, "Message", "Sure?", QMessageBox.Yes | QMessageBox.No)
+            if action == QMessageBox.No: return
             sql.execute("DELETE FROM Playlists")
             sql.execute("DELETE FROM Titles")
             sql.execute('UPDATE Data SET value="0"')
@@ -876,12 +897,11 @@ class MainForm(QtWidgets.QMainWindow):
             self.tabMap.clear()
             global ID
             ID = 0
-        except Exception as e:
-            print(e)
+        except Exception as e: print(e)
 
     def keyPressEvent(self, event):
         try:
-            if not event or (event.key() == QtCore.Qt.Key_Escape and self.pName.isVisible()):
+            if not event or (event.key() == Qt.Key_Escape and self.pName.isVisible()):
                 self.pName.hide()
                 self.closePName.hide()
         except Exception as e:
@@ -896,11 +916,10 @@ class MainForm(QtWidgets.QMainWindow):
         self.pList.addItems([row[0] for row in load])
         self.select_p()
         self.viewed_count.setText('Всего просмотрено:' + str(TotalViewed))
-        print("\n\t'Launched'")
+        print(">>>'Launched'")
 
-app = QtWidgets.QApplication(sys.argv)
+app = QApplication(sys.argv)
 app.setStyle(SelfStyledIcon('Fusion'))
 exe = MainForm()
 exe.show()
-print("\t'Start'\n")
 sys.exit(app.exec_())

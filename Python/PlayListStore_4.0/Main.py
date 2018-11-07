@@ -182,8 +182,7 @@ class RowButtons(QWidget):
                 id_ = self.p.id
                 date = self.date.text()
                 tab.add_row(name, count, id_, date)
-        except Exception as e:
-            print('con refresh:', e)
+        except Exception as e: print('set_con_date:', e)
 
     def select_mark(self):
         try:
@@ -654,9 +653,9 @@ class NewPlaylist(QWidget):
         try:
             loadUi('GUI/New_Playlist.ui', self)
             self.p = parent
-            self.con = True if name == ConListName else False
+            self.con = name == ConListName
             self.curRow = None
-            self.rowMap = []
+            self.rowMap = list()
             self.rowButns = RowButtons(self.con)
 
             self.rowList.setAlignment(Qt.AlignTop)
@@ -672,16 +671,9 @@ class NewPlaylist(QWidget):
             self.sideBar = SideBar(self)
             self.side_hiden = True
 
-            self.scroll_.clicked.connect(self.push_scroll)
-
             self.load_titles(name)
         except Exception as e:
             print("New_Playlist:", e)
-
-    def push_scroll(self):
-        index, ok = QInputDialog.getText(self, 'Title', 'Index')
-        if ok and int(index) >= 0:
-            self.scroll_to(int(index))
 
     # Move scroll bar
     def scroll_to(self, index):
@@ -746,21 +738,21 @@ class NewPlaylist(QWidget):
         try:
             row = NewTitle(self, name, count, t_id, icon, color)
             self.rowList.addWidget(row)
-            self.rowMap.append(name)
+            self.rowMap.append(t_id)
             return row
         except Exception as e:
             print("add_row:", e)
 
     def load_titles(self, name):
         try:
-            # self.rowList.clear()
+            self.rowList.clear()
             if self.con:
+                self.addT.setFixedSize(0, 0)
+                self.delP.setFixedSize(0, 0)
                 titles = list(sql.execute(
                     'select title_name,count,id,date from titles where date!="n"'))
                 for t in titles:
                     self.add_row(t[0], t[1], t[2], t[3])
-                    self.addT.hide()
-                    self.delP.hide()
             else:
                 titles = list(sql.execute(
                     '''SELECT title_name,count,id,icon,color 

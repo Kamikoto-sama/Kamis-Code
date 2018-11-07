@@ -61,6 +61,9 @@
       </property>
       <item>
        <layout class="QHBoxLayout" name="bar_left">
+        <property name="sizeConstraint">
+         <enum>QLayout::SetFixedSize</enum>
+        </property>
         <item>
          <widget class="QPushButton" name="addT">
           <property name="maximumSize">
@@ -77,13 +80,6 @@
           </property>
          </widget>
         </item>
-        <item>
-         <widget class="QPushButton" name="scroll_">
-          <property name="text">
-           <string>Scroll</string>
-          </property>
-         </widget>
-        </item>
        </layout>
       </item>
       <item>
@@ -95,6 +91,9 @@
       </item>
       <item>
        <layout class="QHBoxLayout" name="bar_right">
+        <property name="sizeConstraint">
+         <enum>QLayout::SetFixedSize</enum>
+        </property>
         <item>
          <widget class="QPushButton" name="delP">
           <property name="maximumSize">

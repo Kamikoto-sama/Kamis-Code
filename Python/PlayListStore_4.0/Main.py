@@ -806,13 +806,13 @@ class MainForm(QMainWindow):
 
         self.launch()
 
+    # todo: options
     def open_options(self):
         try:
             width = self.options_frame.width()
             if self.options_frame.isVisible():
                 self.option_anim.setEndValue(QSize(width, 0))
                 self.option_anim.finished.connect(self.options_frame.hide)
-                print('here')
             else:
                 self.option_anim.setEndValue(QSize(900, 25))
                 self.options_frame.show()

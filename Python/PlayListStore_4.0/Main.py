@@ -809,14 +809,20 @@ class MainForm(QMainWindow):
     # todo: options
     def open_options(self):
         try:
-            width = self.options_frame.width()
-            if self.options_frame.isVisible():
-                self.option_anim.setEndValue(QSize(width, 0))
-                self.option_anim.finished.connect(self.options_frame.hide)
-            else:
-                self.option_anim.setEndValue(QSize(900, 25))
-                self.options_frame.show()
-            self.option_anim.start()
+            menu = QMenu(self)
+
+            ico = QIcon('Icons/continuation.ico')
+            con_list = menu.addAction(ico, 'Список просмотренных')
+
+            clear = menu.addAction('Clear')
+
+            cursor = QPoint(self.options.x()+5, self.options.y()+10)
+            selected = menu.exec_(self.mapToGlobal(cursor))
+
+            if selected == con_list:
+                self.open_con_list()
+            if selected == clear:
+                self._clear()
         except Exception as e: print('open_options: ', e)
 
     def open_con_list(self):

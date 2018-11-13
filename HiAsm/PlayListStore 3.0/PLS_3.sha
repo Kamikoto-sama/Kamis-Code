@@ -988,7 +988,7 @@ BEGIN_SDK
   Add(FormatStr,2726353,279,166)
   {
    DataCount=1
-   Mask="INSERT INTO Data values (-1,0,0,0,"0/%1")"
+   Mask="INSERT INTO Data values (-1,0,0,0,"%1")"
    link(onFString,9873255:doExec,[])
    link(Str1,9257033:Var,[])
   }
@@ -1744,14 +1744,14 @@ Add(Hub,12937000,462,604)
  link(onEvent1,5693718:doData,[])
  link(onEvent2,11026930:doData,[(486,617)(486,674)])
 }
-Add(LineBreak,15726669,560,320)
+Add(LineBreak,6601150,560,320)
 {
  Caption="Vis"
  Color=16776960
  link(Out,3859674:doVisible,[])
  Primary=[3445455,617,-124]
 }
-Add(LineBreak,3418957,-49,420)
+Add(LineBreak,5845710,-49,420)
 {
  Caption="Vis"
  Color=16776960
@@ -1962,7 +1962,7 @@ Add(Hub,10325791,613,507)
  link(onEvent1,10788532:doWork3,[(865,513)])
  link(onEvent2,8550673:doWork2,[])
 }
-Add(LineBreak,16474687,588,585)
+Add(LineBreak,13677456,588,585)
 {
  @Color=5635840
  Caption="Add"
@@ -3555,7 +3555,7 @@ Add(GetDataEx,16314538,1218,418)
 {
  link(Data,15047573:Var2,[])
 }
-Add(LineBreak,14536952,802,342)
+Add(LineBreak,1623402,802,342)
 {
  Caption="Update"
  Color=65535
@@ -3567,7 +3567,7 @@ Add(Hub,7321965,1860,513)
  link(onEvent1,11871916:doWork1,[])
  link(onEvent2,14906478:doWork1,[(1969,526)])
 }
-Add(LineBreak,16569646,1993,440)
+Add(LineBreak,13320942,1993,440)
 {
  Caption="Vied"
  Color=65280
@@ -3801,7 +3801,7 @@ Add(GetDataEx,11336753,1774,481)
  Angle=3
  link(Data,11204165:Var3,[(1584,486)(1584,502)(1479,502)])
 }
-Add(LineBreak,15265534,1906,532)
+Add(LineBreak,4828682,1906,532)
 {
  Caption="DelT"
  Color=16776960
@@ -5402,7 +5402,7 @@ Add(GetDataEx,6916240,1459,425)
  Angle=3
  link(Data,4238524:Var3,[])
 }
-Add(LineBreak,6922714,756,346)
+Add(LineBreak,4064860,756,346)
 {
  Caption="FindT"
  Type=1
@@ -5410,21 +5410,21 @@ Add(LineBreak,6922714,756,346)
  link(Data,6317184:Var2,[])
  Primary=[15343789,1320,242]
 }
-Add(LineBreak,645470,1989,616)
+Add(LineBreak,10641584,1989,616)
 {
  Caption="ON"
  Color=16776960
  link(Out,2670315:doEvent1,[])
  Primary=[8846522,-1263,-687]
 }
-Add(LineBreak,14170089,599,293)
+Add(LineBreak,16175210,599,293)
 {
  Caption="FindT"
  Color=65535
  link(Out,6138279:doWork1,[(674,299)])
  Primary=[2529076,1599,369]
 }
-Add(LineBreak,8408421,926,391)
+Add(LineBreak,13675376,926,391)
 {
  Caption="FindT"
  Color=65535
@@ -5496,7 +5496,7 @@ Add(GetDataEx,4458253,1173,436)
  Angle=3
  link(Data,2150447:Var3,[])
 }
-Add(LineBreak,3203061,1217,552)
+Add(LineBreak,15425436,1217,552)
 {
  Caption="FindT"
  Type=1
@@ -6131,7 +6131,7 @@ Add(HubEx,4942821,2059,520)
 {
  link(onEvent,11641710:doWork2,[])
 }
-Add(LineBreak,13805016,1993,458)
+Add(LineBreak,13755456,1993,458)
 {
  Caption="DelP"
  Color=16776960
@@ -7284,7 +7284,7 @@ Add(GetDataEx,13214870,535,165)
  Angle=3
  link(Data,16536674:Var3,[(492,170)(492,170)])
 }
-Add(LineBreak,2357580,288,234)
+Add(LineBreak,6060276,288,234)
 {
  Caption="OpenP"
  Color=65535
@@ -7373,7 +7373,7 @@ BEGIN_SDK
    link(onEvent2,807475:doClear,[(187,90)(187,28)(109,28)(109,47)])
   }
 END_SDK
-Add(LineBreak,10519878,1669,344)
+Add(LineBreak,15786301,1669,344)
 {
  Caption="OpP"
  Color=16776960
@@ -7389,7 +7389,7 @@ Add(GetDataEx,4390914,493,392)
 {
  link(Data,16177219:Var1,[])
 }
-Add(LineBreak,13913477,518,413)
+Add(LineBreak,9921887,518,413)
 {
  Caption="OpP"
  Type=1
@@ -7397,7 +7397,7 @@ Add(LineBreak,13913477,518,413)
  link(Data,10100023:Var2,[])
  Primary=[7397204,1214,-122]
 }
-Add(LineBreak,3451858,386,351)
+Add(LineBreak,7257915,386,351)
 {
  Caption="OpP"
  Color=16776960
@@ -7547,7 +7547,7 @@ BEGIN_SDK
    Format="Y.M.D"
   }
 END_SDK
-Add(LineBreak,11553836,598,413)
+Add(LineBreak,7095554,598,413)
 {
  Caption="ID"
  Type=1
@@ -7568,7 +7568,7 @@ Add(InfoTip,7123853,1615,200)
  Width=242
  Height=171
 }
-Add(LineBreak,14974468,931,370)
+Add(LineBreak,14686171,931,370)
 {
  Caption="FL"
  Color=65535
@@ -7803,7 +7803,7 @@ Add(HubEx,11375153,714,26)
  Angle=1
  link(onEvent,4661319:doWork1,[])
 }
-Add(LineBreak,9385469,1997,698)
+Add(LineBreak,7464185,1997,698)
 {
  Caption="CList"
  Color=16776960
@@ -7960,7 +7960,7 @@ Add(GetDataEx,4238524,1274,425)
  Angle=3
  link(Data,14936585:Var3,[])
 }
-Add(LineBreak,1514793,1899,224)
+Add(LineBreak,8133475,1899,224)
 {
  Caption="Lang"
  Color=65280
@@ -7968,7 +7968,7 @@ Add(LineBreak,1514793,1899,224)
  link(Out,10686572:doWork1,[])
  Primary=[6484029,-1222,-120]
 }
-Add(LineBreak,2482752,-53,441)
+Add(LineBreak,13651015,-53,441)
 {
  Caption="AdT"
  Color=33023
@@ -8284,7 +8284,7 @@ Add(HubEx,8404904,105,485)
  Angle=1
  link(onEvent,8083924:doNext,[(109,512)])
 }
-Add(LineBreak,8682829,2083,700)
+Add(LineBreak,2587541,2083,700)
 {
  Caption="SetV"
  Color=16776960
@@ -8313,7 +8313,7 @@ Add(HubEx,7173464,168,657)
 {
  link(onEvent,10641799:doEvent1,[])
 }
-Add(LineBreak,816252,266,-18)
+Add(LineBreak,14843401,266,-18)
 {
  Caption="Update"
  Color=16776960
@@ -8341,7 +8341,7 @@ Add(DSC_Query,9004277,426,-43)
  link(onQuery,14773068:doVisible,[])
  link(onError,8919347:doWork1,[(466,-23)(466,-95)])
 }
-Add(LineBreak,6834379,497,106)
+Add(LineBreak,7762769,497,106)
 {
  Caption="INFO"
  Color=65535
@@ -8990,7 +8990,7 @@ BEGIN_SDK
   {
   }
 END_SDK
-Add(LineBreak,8525790,1275,343)
+Add(LineBreak,3142483,1275,343)
 {
  Caption="TabVi"
  Color=65535
@@ -9006,7 +9006,7 @@ Add(Hub,6553047,1449,595)
  link(onEvent1,11464812:doWork2,[])
  link(onEvent2,1936124:In,[(1471,608)(1471,613)])
 }
-Add(LineBreak,9254906,1750,777)
+Add(LineBreak,14240078,1750,777)
 {
  @Color=5636095
  Caption="Move"
@@ -9029,7 +9029,7 @@ Add(Hub,11590624,688,-64)
  link(onEvent1,8846522:In,[(714,-58)(714,-65)])
  link(onEvent2,10765293:doWork1,[(993,-51)])
 }
-Add(LineBreak,6063002,1036,196)
+Add(LineBreak,12509802,1036,196)
 {
  Caption="VIS"
  Color=65535
@@ -9048,7 +9048,7 @@ Add(IndexToChanel,10912741,2660,1050)
  link(onEvent2,3218692:doLoad,[(2706,1063)(2706,1056)])
  link(Index,15486197:Var,[])
 }
-Add(LineBreak,3515682,2604,1050)
+Add(LineBreak,1329146,2604,1050)
 {
  @Color=5636095
  Caption="Img"
@@ -9066,7 +9066,7 @@ Add(PopupMenu,998819,1652,112)
  Menu=#15:Add to favorite|1:-|18:Show favorite list|
  link(onClick,5385078:doWork1,[])
 }
-Add(LineBreak,14819772,1546,105)
+Add(LineBreak,12606427,1546,105)
 {
  Caption="AdFav"
  Color=65535
@@ -10544,7 +10544,7 @@ BEGIN_SDK
   {
    link(onEvent,7776193:doWrite,[])
   }
-  Add(LineBreak,4116509,455,-63)
+  Add(LineBreak,7701979,455,-63)
   {
    link(Out,7776193:doRead,[(562,-57)(562,-43)])
    Primary=[15472165,-284,309]
@@ -10681,6 +10681,7 @@ BEGIN_SDK
   Add(MultiElement,5971066,343,296)
   {
    @Hint=#6:Update|
+   @Color=43520
    link(onEvent1,9610219:doExec,[])
    link(onEvent2,8495898:doEnabled,[(387,309)(387,358)(278,358)(278,325)])
    link(Data1,6791534:Var2,[])
@@ -10891,8 +10892,8 @@ BEGIN_SDK
   Add(MultiElement,8930059,406,238)
   {
    link(onEvent1,11987612:doWrite,[(450,244)(450,276)(281,276)(281,217)])
-   link(Data1,6791534:Var3,[(412,226)(382,226)(382,264)])
    link(onEvent2,518356:doWork1,[(458,251)(458,286)(326,286)])
+   link(Data1,6791534:Var3,[(412,226)(382,226)(382,264)])
   }
   BEGIN_SDK
     Add(EditMulti,7643104,21,21)
@@ -11018,7 +11019,7 @@ BEGIN_SDK
    link(onEvent,7784258:doString,[])
   }
 END_SDK
-Add(LineBreak,14246516,791,315)
+Add(LineBreak,5785331,791,315)
 {
  Caption="SaveSel"
  Color=16776960
@@ -11029,7 +11030,7 @@ Add(HubEx,10788532,861,342)
 {
  link(onEvent,11994160:doWork3,[])
 }
-Add(LineBreak,8540150,2083,714)
+Add(LineBreak,6497855,2083,714)
 {
  Caption="SetV"
  Color=16776960

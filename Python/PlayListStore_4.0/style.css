@@ -68,7 +68,7 @@ QToolTip{
 	QMenu{
 		border: 1px solid red;
 		font-size: 18px;
-		width: 250px;
+		width: 240px;
 	}
 	/*QMenu::icon{width: 30px;height: 30px;}*/
 	QMenu::item:selected{color: white;width: 220px;}

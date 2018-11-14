@@ -304,9 +304,11 @@ class SideBar(QWidget):
             # todo: fix events (like rowButtons)
             self.genre.mouseDoubleClickEvent = self.do_edit
             self.genre.setCursor(QCursor(Qt.PointingHandCursor))
-            self.genre.returnPressed.connect(self.save_desc)
+            self.genre.editingFinished.connect(self.save_desc)
 
             self.desc.mouseDoubleClickEvent = self.do_edit
+            self.desc.setTextCursor(QCursor(Qt.PointingHandCursor))
+            # self.desc.returnPressed.connect(self.save_desc)
 
             self.link.mouseDoubleClickEvent = self.do_edit
             self.link.setCursor(QCursor(Qt.PointingHandCursor))

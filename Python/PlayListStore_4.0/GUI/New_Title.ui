@@ -187,7 +187,7 @@
   <customwidget>
    <class>ReLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>ReLineEdit.h</header>
+   <header>ReObjects.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -114,7 +114,7 @@
          <number>10</number>
         </property>
         <item>
-         <widget class="QLineEdit" name="genre">
+         <widget class="ReLineEdit" name="genre">
           <property name="cursor">
            <cursorShape>PointingHandCursor</cursorShape>
           </property>
@@ -127,7 +127,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="link">
+         <widget class="ReLineEdit" name="link">
           <property name="cursor">
            <cursorShape>PointingHandCursor</cursorShape>
           </property>
@@ -140,7 +140,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QTextEdit" name="desc">
+         <widget class="ReTextEdit" name="desc">
           <property name="horizontalScrollBarPolicy">
            <enum>Qt::ScrollBarAlwaysOff</enum>
           </property>
@@ -210,6 +210,18 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ReLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>ReObjects.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ReTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>ReObjects.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

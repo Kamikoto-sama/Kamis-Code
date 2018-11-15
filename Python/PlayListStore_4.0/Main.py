@@ -301,16 +301,14 @@ class SideBar(QWidget):
 
             self.closeSide.clicked.connect(self.hide_show_side)
 
-            # todo: fix events (like rowButtons)
-            self.genre.mouseDoubleClickEvent = self.do_edit
+            self.genre.doubleClicked.connect(self.do_edit)
             self.genre.setCursor(QCursor(Qt.PointingHandCursor))
-            self.genre.editingFinished.connect(self.save_desc)
+            self.genre.returnPressed.connect(self.save_desc)
 
-            self.desc.mouseDoubleClickEvent = self.do_edit
-            self.desc.setTextCursor(QCursor(Qt.PointingHandCursor))
-            # self.desc.returnPressed.connect(self.save_desc)
+            self.desc.doubleClicked.connect(self.do_edit)
+            self.desc.setCursor(QCursor(Qt.PointingHandCursor))
 
-            self.link.mouseDoubleClickEvent = self.do_edit
+            self.link.doubleClicked.connect(self.do_edit)
             self.link.setCursor(QCursor(Qt.PointingHandCursor))
             self.link.returnPressed.connect(self.save_desc)
 
@@ -327,7 +325,7 @@ class SideBar(QWidget):
 
     def save_desc(self):
         try:
-            self.do_edit(None, False)
+            self.do_edit(False)
             genre = self.genre.text()
             link = self.link.text()
             desc = self.desc.toPlainText()
@@ -352,7 +350,7 @@ class SideBar(QWidget):
                 self.p.curRow.set_color('n')
 
     # On doubleclick
-    def do_edit(self, event, edit=True):
+    def do_edit(self, edit=True):
         self.genre.setReadOnly(not edit)
         self.link.setReadOnly(not edit)
         self.desc.setReadOnly(not edit)
@@ -373,14 +371,14 @@ class SideBar(QWidget):
                 self.genre.undo()
                 self.link.undo()
                 self.desc.undo()
-                self.do_edit(None, False)
+                self.do_edit(False)
         except Exception as e:
             print('sideBar esc:', e)
 
     # Load and set title-data into side bar
     def load_side_data(self, t_id):
         try:
-            self.do_edit(None, False)
+            self.do_edit(False)
 
             data = list(sql.execute('SELECT genre,link,desc,icon,color FROM Titles WHERE id=%s' % t_id))[0]
             self.genre.setText(data[0])
@@ -467,6 +465,7 @@ class NewTitle(QWidget):
             # Delete title from con list
             if self.p.con:
                 sql.execute('update Titles set date="n",icon="viewed" WHERE id=%s' % self.id)
+                # todo: сделать синхронинзацию при удалении из con_list
             else:
                 sql.execute('DELETE FROM Titles WHERE id=%s' % self.id)
             db.commit()
@@ -608,6 +607,14 @@ class NewTitle(QWidget):
             else:
                 self.animOff.stop()
 
+    def anim_row(self, direction):
+        def anim(direction):
+            self.setFixedHeight(self.height() + direction)
+
+        self.setFixedHeight(self.height() + direction)
+        while RowHeightMin < self.height() < RowHeightMax:
+            anim(direction)
+
     def leave(self, change=True):
         self.animOff.stop()
         self.animOn.stop()
@@ -637,9 +644,10 @@ class NewPlaylist(QWidget):
         try:
             loadUi('GUI/New_Playlist.ui', self)
             self.p = parent
-            self.con = name == ConListName
+            self.name = name
             self.curRow = None
             self.rowMap = list()
+            self.con = name == ConListName
             self.rowButns = RowButtons(self.con)
 
             self.rowList.setAlignment(Qt.AlignTop)
@@ -655,9 +663,25 @@ class NewPlaylist(QWidget):
             self.sideBar = SideBar(self)
             self.side_hiden = True
 
+            self.test.clicked.connect(self._test)
+
             self.load_titles(name)
         except Exception as e:
             print("New_Playlist:", e)
+
+    # TEMP
+    def _test(self):
+        try:
+            menu = QMenu(self)
+
+            act1 = menu.addAction('Take index')
+
+            selected = menu.exec_(self.mapToGlobal(QPoint(0,0)))
+
+            if selected == act1:
+                self.p.refresh_tab(self)
+
+        except Exception as e: print("_test: ", e)
 
     # Move scroll bar
     def scroll_to(self, index):
@@ -745,7 +769,6 @@ class NewPlaylist(QWidget):
         except Exception as e:
             print("load_titles:", e)
 
-
 class MainForm(QMainWindow):
 
     def __init__(self):
@@ -830,7 +853,9 @@ class MainForm(QMainWindow):
             else:
                 self.tabMap.insert(0, tab_name)
                 self.tabWidget.insertTab(0, NewPlaylist(self, tab_name), tab_name)
-                self.tabWidget.setCurrentIndex(0)  # tab = self.tabWidget.currentWidget()  # tab.load_titles(tab_name)
+                self.tabWidget.setCurrentIndex(0)
+                # tab = self.tabWidget.currentWidget()
+                # tab.load_titles(tab_name)
         except Exception as e:
             print('add_tab:', e)
 

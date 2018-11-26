@@ -417,12 +417,13 @@ class NewTitle(QWidget):
         try:
             super(NewTitle, self).__init__(parent)
             loadUi('GUI/New_Title.ui', self)
-            self.color = color
-            self.name = name
-            self.icon = icon
-            self.p = parent
             self.id = id_
-            self.h = RowHeightMin
+            self.p = parent
+            self.icon = icon
+            self.name = name
+            self.color = color
+            self.borderColor = "blue"
+            self.hoverColor = "#6ebcd2"
 
             self.row_layout.setAlignment(Qt.AlignTop)
 
@@ -452,11 +453,11 @@ class NewTitle(QWidget):
                 self.set_icon(icon)
                 self.set_color(self.color, True)
 
-            # todo: переделать по sroll_to timer...
+            self.min_height = RowHeightMin
             self.animOn = QTimer(self)
-            self.animOn.timeout.connect(self.row_on)
+            self.animOn.timeout.connect(self.anim_down)
             self.animOff = QTimer(self)
-            self.animOff.timeout.connect(self.row_off)
+            self.animOff.timeout.connect(self.anim_up)
         except Exception as e:
             print('new_title:', e)
 
@@ -469,8 +470,9 @@ class NewTitle(QWidget):
             else:
                 sql.execute('DELETE FROM Titles WHERE id=%s' % self.id)
             db.commit()
-            self.h = 0
+            self.min_height = 0
             self.animOff.start(2)
+            self.p.row_count.setText('Тайтлов в плейлисте:' + str(self.p.rowList.count()))
             if self.color == 'viewed': save_data('viewed', -1)
             save_data('added', -1)
         except Exception as e:
@@ -486,15 +488,15 @@ class NewTitle(QWidget):
 
     def set_color(self, color, load=False):
         if self.color != 'is_con' or color in ('is_con', 'edit') or (
-                self.color == 'is_con' and color == 'n' and self.icon in ['n', 'not_finished']):
-
+           self.color == 'is_con' and color == 'n' and self.icon in ['n', 'not_finished']):
             if load:
-                self.setStyleSheet('#title_name,#count,#con_date{background: %s}' % Color[color])
+                self.setStyleSheet('''
+                #title_name,#count,#con_date{background: %s}''' % Color[color])
             else:
                 self.setStyleSheet('''
                     #title_name,#count,#con_date{background: %s}
-                    #t_row{border-color: blue}
-                    ''' % Color[color])
+                    #t_row{border-color: %s}
+                    ''' % (Color[color], self.borderColor))
 
             if color not in ['edit', self.color]:
                 self.color = color
@@ -516,8 +518,9 @@ class NewTitle(QWidget):
                 self.p.curRow.leave()
             if self.p.curRow is not self:
                 self.setStyleSheet('''
-                    #t_row{border-color: blue}
-                    #title_name,#count,#con_date{background: %s}''' % Color[self.color])
+                    #t_row{border-color: %s}
+                    #title_name,#count,#con_date{background: %s}
+                    ''' % (self.borderColor, Color[self.color]))
                 self.p.curRow = self
                 self.p.sideBar.closeSide.setEnabled(True)
                 self.p.sideBar.load_side_data(self.id)
@@ -525,6 +528,8 @@ class NewTitle(QWidget):
 
                 self.p.rowButns.setParent(self)
                 self.p.rowButns.p = self
+
+                self.p.scroll_to(self.p.rowMap.index(self.id))
 
                 if self.icon == 'viewing':
                     self.p.rowButns.viewing.setText('НЕ СМОТРЮ')
@@ -536,12 +541,7 @@ class NewTitle(QWidget):
     # ON doubleclick row
     def edit_line(self):
         try:
-            self.title_name.setReadOnly(False)
-            self.title_name.setCursor(QCursor(Qt.IBeamCursor))
-            self.count.setReadOnly(False)
-            self.count.setCursor(QCursor(Qt.IBeamCursor))
-            self.con_date.setReadOnly(False)
-            self.con_date.setCursor(QCursor(Qt.IBeamCursor))
+            self.set_edit()
             self.set_color('edit')
 
             if not self.p.side_hiden:
@@ -564,6 +564,19 @@ class NewTitle(QWidget):
         except Exception as e:
             print('on_line_edited:', e)
 
+    def set_edit(self, edit=True):
+        self.title_name.setReadOnly(not edit)
+        self.count.setReadOnly(not edit)
+        self.con_date.setReadOnly(not edit)
+        if edit:
+            self.title_name.setCursor(QCursor(Qt.IBeamCursor))
+            self.count.setCursor(QCursor(Qt.IBeamCursor))
+            self.con_date.setCursor(QCursor(Qt.IBeamCursor))
+        else:
+            self.title_name.setCursor(QCursor(Qt.PointingHandCursor))
+            self.count.setCursor(QCursor(Qt.PointingHandCursor))
+            self.con_date.setCursor(QCursor(Qt.PointingHandCursor))
+
     # ON edit ecs
     def keyPressEvent(self, event):
         try:
@@ -581,7 +594,7 @@ class NewTitle(QWidget):
             print('on row edit esc:', e)
 
     # Anim row down
-    def row_on(self):
+    def anim_down(self):
         try:
             if self.height() < RowHeightMax:
                 self.setFixedHeight(self.height() + 1)
@@ -592,51 +605,33 @@ class NewTitle(QWidget):
             print('row_on:', e)
 
     # Anim row up
-    def row_off(self):
-        if self.height() > self.h:
+    def anim_up(self):
+        if self.height() > self.min_height:
             self.setFixedHeight(self.height() - 1)
         else:
-            if self.h == 0:
+            if self.min_height == 0:
                 self.animOff.stop()
                 self.p.rowButns.setParent(None)
                 self.setParent(None)
                 self.p.curRow = None
-                self.h = RowHeightMin
-                self.p.row_count.setText('Тайтлов в плейлисте:' + str(self.p.rowList.count()))
                 del self
             else:
                 self.animOff.stop()
-
-    def anim_row(self, direction):
-        def anim(direction):
-            self.setFixedHeight(self.height() + direction)
-
-        self.setFixedHeight(self.height() + direction)
-        while RowHeightMin < self.height() < RowHeightMax:
-            anim(direction)
 
     def leave(self, change=True):
         self.animOff.stop()
         self.animOn.stop()
         if change:
-            # ON change row
             self.set_buttons(False)
             self.keyPressEvent('')
             self.animOff.start(RowAnimDur[1])
             self.setStyleSheet('''
             #t_row{border-color: #F0F0F0}
             QLineEdit{background: %s}
-            #t_row:hover{border-color: #6ebcd2;}''' % Color[self.color])
+            #t_row:hover{border-color: %s;}''' % (Color[self.color], self.hoverColor))
         else:
             self.set_color(self.color)
-
-        self.title_name.setReadOnly(True)
-        self.title_name.setCursor(QCursor(Qt.PointingHandCursor))
-        self.count.setReadOnly(True)
-        self.count.setCursor(QCursor(Qt.PointingHandCursor))
-        self.con_date.setReadOnly(True)
-        self.con_date.setCursor(QCursor(Qt.PointingHandCursor))
-
+        self.set_edit(False)
 
 class NewPlaylist(QWidget):
     def __init__(self, parent, name):
@@ -703,7 +698,6 @@ class NewPlaylist(QWidget):
             elif target_pos > bottom_border:
                 while bar.value() < target_pos and bar.value() < bar.maximum():
                     anim_scroll(1)
-            print('scroll finished')
         except Exception as e:
             print("scroll_to: ", e)
 
@@ -752,6 +746,7 @@ class NewPlaylist(QWidget):
         except Exception as e:
             print("add_row:", e)
 
+    # todo: anim load
     def load_titles(self, name):
         try:
             if self.con:
@@ -775,8 +770,8 @@ class MainForm(QMainWindow):
         super(MainForm, self).__init__()
         loadUi('GUI/Main_Form.ui', self)
 
-        with open(Skin) as css:
-            self.setStyleSheet(css.read())
+        with open(Skin) as style:
+            self.setStyleSheet(style.read())
         self.SelectedTab = ""
         self.tabMap = []
 
@@ -787,7 +782,9 @@ class MainForm(QMainWindow):
         self.pList.activated.connect(self.select_p)
 
         self.pName.returnPressed.connect(self.addP.click)
+        self.pName.hide()
         self.closePName.clicked.connect(self.keyPressEvent)
+        self.closePName.hide()
 
         self.tabBar = TabBar(self)
         self.tabBar.currentChanged.connect(self.select_tab)
@@ -802,7 +799,7 @@ class MainForm(QMainWindow):
         self.option_anim.setEasingCurve(QEasingCurve.OutExpo)
         self.option_anim.setDuration(500)
 
-        self.launch()
+        # self.launch()
 
     # todo: options
     def open_options(self):
@@ -828,7 +825,7 @@ class MainForm(QMainWindow):
     def open_con_list(self):
         self.add_tab('*Список продолжений*')
 
-    # Switch show/hide add playlist
+    # Show/hide add playlist
     def add_p(self):
         if self.pName.isHidden():
             self.pName.show()
@@ -916,8 +913,6 @@ class MainForm(QMainWindow):
 
     def launch(self):
         main[0] = self
-        self.pName.hide()
-        self.closePName.hide()
         load = list(sql.execute("SELECT * FROM Playlists ORDER BY rowid desc"))
         self.pList.addItems([row[0] for row in load])
         self.select_p()

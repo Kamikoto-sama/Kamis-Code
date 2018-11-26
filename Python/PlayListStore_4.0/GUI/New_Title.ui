@@ -80,7 +80,7 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="ReLineEdit" name="con_date">
+         <widget class="ExLineEdit" name="con_date">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -121,7 +121,7 @@
          </widget>
         </item>
         <item>
-         <widget class="ReLineEdit" name="count">
+         <widget class="ExLineEdit" name="count">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -149,7 +149,7 @@
          </widget>
         </item>
         <item>
-         <widget class="ReLineEdit" name="title_name">
+         <widget class="ExLineEdit" name="title_name">
           <property name="enabled">
            <bool>true</bool>
           </property>
@@ -185,9 +185,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>ReLineEdit</class>
+   <class>ExLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>ReObjects.h</header>
+   <header>ExObjects.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

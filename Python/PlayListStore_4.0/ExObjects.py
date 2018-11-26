@@ -2,7 +2,7 @@ from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QLineEdit, QTextEdit
 
 
-class ReLineEdit(QLineEdit):
+class ExLineEdit(QLineEdit):
     clicked = pyqtSignal()
     doubleClicked = pyqtSignal()
 
@@ -14,7 +14,7 @@ class ReLineEdit(QLineEdit):
         self.doubleClicked.emit()
         QLineEdit.mouseDoubleClickEvent(self, event)
 
-class ReTextEdit(QTextEdit):
+class ExTextEdit(QTextEdit):
     clicked = pyqtSignal()
     doubleClicked = pyqtSignal()
 

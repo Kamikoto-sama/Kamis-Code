@@ -6,7 +6,7 @@ import sys
 from PyQt5.QtCore import QEventLoop, QTimer, Qt, QPoint, QPropertyAnimation, QEasingCurve, QSize, QRect
 from PyQt5.QtGui import QIntValidator, QCursor, QIcon, QPixmap
 from PyQt5.QtWidgets import QMessageBox, QProxyStyle, QWidget, QHBoxLayout, QPushButton, QMenu, QTabBar, QMainWindow, \
-    QApplication, QLineEdit, QStyle, QInputDialog
+    QApplication, QLineEdit, QStyle
 from PyQt5.uic import loadUi
 from time import strftime
 
@@ -14,10 +14,10 @@ from time import strftime
 try:
     if not os.path.exists("Data.pls"):
         db = sqlite3.connect("Data.pls")
-        sql = db.cursor()
-        sql.execute("CREATE TABLE Playlists (name varchar(100))")
-        sql.execute('CREATE TABLE Data (name varchar(10),value varchar(40))')
-        sql.execute("""
+        sql = db.cursor().execute
+        sql("CREATE TABLE Playlists (name varchar(100))")
+        sql('CREATE TABLE Data (name varchar(10),value varchar(40))')
+        sql("""
             CREATE TABLE Titles (
             title_name varchar(255) NOT NULL,
             count int(4),
@@ -30,15 +30,15 @@ try:
             desc text,
             date varchar(10)
             )""")
-        sql.execute('INSERT INTO Data VALUES("id","0")')
-        sql.execute('INSERT INTO Data VALUES("viewed","0")')
-        sql.execute('INSERT INTO Data VALUES("added","0")')
+        sql('INSERT INTO Data VALUES("id","0")')
+        sql('INSERT INTO Data VALUES("viewed","0")')
+        sql('INSERT INTO Data VALUES("added","0")')
         db.commit()
     else:
         db = sqlite3.connect("Data.pls")
-        sql = db.cursor()
+        sql = db.cursor().execute
 
-    data = [int(d[0]) for d in sql.execute('SELECT value FROM Data')]
+    data = [int(d[0]) for d in sql('SELECT value FROM Data')]
     ID = data[0]
     TotalViewed = data[1]
     TotalAdded = data[2]
@@ -66,14 +66,14 @@ def save_data(save, value=1):
         global ID, TotalAdded, TotalViewed
         if save == 'id':
             ID += 1
-            sql.execute('UPDATE Data set value=%s where name="id"' % ID)
+            sql('UPDATE Data set value=%s where name="id"' % ID)
         if save == 'viewed':
             TotalViewed += value
             main[0].viewed_count.setText('Всего просмотрено:' + str(TotalViewed))
-            sql.execute('UPDATE Data set value=%s where name="viewed"' % TotalViewed)
+            sql('UPDATE Data set value=%s where name="viewed"' % TotalViewed)
         if save == 'added':
             TotalAdded += value
-            sql.execute('UPDATE Data set value=%s where name="added"' % TotalAdded)
+            sql('UPDATE Data set value=%s where name="added"' % TotalAdded)
         db.commit()
     except Exception as e:
         print('Main.save_data:', e)
@@ -161,7 +161,7 @@ class RowButtons(QWidget):
         self.p.set_icon('con')
         self.p.set_color('viewed')
         self.date.hide()
-        sql.execute('update titles set date="%s" where id=%s' % (self.date.text(), self.p.id))
+        sql('update titles set date="%s" where id=%s' % (self.date.text(), self.p.id))
         db.commit()
         try:
             if ConListName in main[0].tabMap:
@@ -197,7 +197,7 @@ class RowButtons(QWidget):
                 if self.p.color not in ['is_con', 'viewed']:
                     save_data('viewed')
                 if self.p.icon == 'con':
-                    sql.execute('''update Titles set date="n",icon="viewed" 
+                    sql('''update Titles set date="n",icon="viewed" 
                                 WHERE id=%s''' % self.p.id)
                 self.p.set_color('viewed')
                 self.p.set_icon('viewed')
@@ -329,7 +329,7 @@ class SideBar(QWidget):
             genre = self.genre.text()
             link = self.link.text()
             desc = self.desc.toPlainText()
-            sql.execute(
+            sql(
                 'update titles set genre="%s",link="%s",desc="%s" where id=%s' % (genre, link, desc, self.p.curRow.id))
             db.commit()
         except Exception as e:
@@ -380,7 +380,7 @@ class SideBar(QWidget):
         try:
             self.do_edit(False)
 
-            data = list(sql.execute('SELECT genre,link,desc,icon,color FROM Titles WHERE id=%s' % t_id))[0]
+            data = list(sql('SELECT genre,link,desc,icon,color FROM Titles WHERE id=%s' % t_id))[0]
             self.genre.setText(data[0])
             self.link.setText(data[1])
             self.desc.setText(data[2])
@@ -465,10 +465,10 @@ class NewTitle(QWidget):
         try:
             # Delete title from con list
             if self.p.con:
-                sql.execute('update Titles set date="n",icon="viewed" WHERE id=%s' % self.id)
+                sql('update Titles set date="n",icon="viewed" WHERE id=%s' % self.id)
                 # todo: сделать синхронинзацию при удалении из con_list
             else:
-                sql.execute('DELETE FROM Titles WHERE id=%s' % self.id)
+                sql('DELETE FROM Titles WHERE id=%s' % self.id)
             db.commit()
             self.min_height = 0
             self.animOff.start(2)
@@ -483,7 +483,7 @@ class NewTitle(QWidget):
         self.status.setPixmap(icon)
         if ico != self.icon:
             self.icon = ico
-            sql.execute('UPDATE Titles SET icon="%s" WHERE id=%s' % (ico, self.id))
+            sql('UPDATE Titles SET icon="%s" WHERE id=%s' % (ico, self.id))
             db.commit()
 
     def set_color(self, color, load=False):
@@ -500,7 +500,7 @@ class NewTitle(QWidget):
 
             if color not in ['edit', self.color]:
                 self.color = color
-                sql.execute('UPDATE Titles SET color="%s" WHERE id=%s' % (color, self.id))
+                sql('UPDATE Titles SET color="%s" WHERE id=%s' % (color, self.id))
                 db.commit()
 
     # Hide/show buttons
@@ -557,7 +557,7 @@ class NewTitle(QWidget):
             name = self.title_name.text()
             count = self.count.text()
             date = self.con_date.text()
-            sql.execute('''UPDATE Titles SET title_name="%s",count=%s,date="%s"
+            sql('''UPDATE Titles SET title_name="%s",count=%s,date="%s"
                         WHERE id=%s''' % (name, count, date, self.id))
             db.commit()
             self.leave(False)
@@ -715,8 +715,8 @@ class NewPlaylist(QWidget):
     def delete_playlist(self):
         try:
             name = self.p.pList.currentText()
-            sql.execute("DELETE FROM Playlists WHERE Name=?", [name])
-            sql.execute('delete from Titles where playlist="%s"' % name)
+            sql("DELETE FROM Playlists WHERE Name=?", [name])
+            sql('delete from Titles where playlist="%s"' % name)
             db.commit()
             self.p.close_tab(self.p.pList.currentIndex())
             self.p.pList.removeItem(self.p.pList.currentIndex())
@@ -727,7 +727,7 @@ class NewPlaylist(QWidget):
         try:
             tab_index = self.p.tabWidget.currentIndex()
             p_name = self.p.tabWidget.tabText(tab_index)
-            sql.execute("INSERT INTO Titles VALUES ('%s',%s,%s,'%s','%s','%s','%s','%s','%s','n')" % (
+            sql("INSERT INTO Titles VALUES ('%s',%s,%s,'%s','%s','%s','%s','%s','%s','n')" % (
             t_name, count, ID, p_name, icon, color, genre, link, desc))
             db.commit()
             self.add_row(t_name, count, ID, icon, color).select_row()
@@ -752,11 +752,11 @@ class NewPlaylist(QWidget):
             if self.con:
                 self.addT.setFixedSize(0, 0)
                 self.delP.setFixedSize(0, 0)
-                titles = list(sql.execute('select title_name,count,id,date from titles where date!="n"'))
+                titles = list(sql('select title_name,count,id,date from titles where date!="n"'))
                 for t in titles:
                     self.add_row(t[0], t[1], t[2], t[3])
             else:
-                titles = list(sql.execute('''SELECT title_name,count,id,icon,color 
+                titles = list(sql('''SELECT title_name,count,id,icon,color 
                        FROM Titles WHERE playlist="%s"''' % name))
                 for t in titles:
                     self.add_row(t[0], t[1], t[2], t[3], t[4])
@@ -799,7 +799,7 @@ class MainForm(QMainWindow):
         self.option_anim.setEasingCurve(QEasingCurve.OutExpo)
         self.option_anim.setDuration(500)
 
-        # self.launch()
+        self.launch()
 
     # todo: options
     def open_options(self):
@@ -835,7 +835,7 @@ class MainForm(QMainWindow):
             self.pName.selectAll()
         else:
             name = self.pName.text()
-            sql.execute("INSERT INTO Playlists VALUES (?)", [(name)])
+            sql("INSERT INTO Playlists VALUES (?)", [(name)])
             db.commit()
             self.pList.insertItem(0, name)
             self.add_tab(name)
@@ -891,9 +891,9 @@ class MainForm(QMainWindow):
         try:
             action = QMessageBox.question(self, "Message", "Sure?", QMessageBox.Yes | QMessageBox.No)
             if action == QMessageBox.No: return
-            sql.execute("DELETE FROM Playlists")
-            sql.execute("DELETE FROM Titles")
-            sql.execute('UPDATE Data SET value="0"')
+            sql("DELETE FROM Playlists")
+            sql("DELETE FROM Titles")
+            sql('UPDATE Data SET value="0"')
             db.commit()
             self.pList.clear()
             self.tabWidget.clear()
@@ -913,7 +913,7 @@ class MainForm(QMainWindow):
 
     def launch(self):
         main[0] = self
-        load = list(sql.execute("SELECT * FROM Playlists ORDER BY rowid desc"))
+        load = list(sql("SELECT * FROM Playlists ORDER BY rowid desc"))
         self.pList.addItems([row[0] for row in load])
         self.select_p()
         self.viewed_count.setText('Всего просмотрено:' + str(TotalViewed))

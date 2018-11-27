@@ -6,7 +6,7 @@ import sys
 from PyQt5.QtCore import QEventLoop, QTimer, Qt, QPoint, QPropertyAnimation, QEasingCurve, QSize, QRect
 from PyQt5.QtGui import QIntValidator, QCursor, QIcon, QPixmap
 from PyQt5.QtWidgets import QMessageBox, QProxyStyle, QWidget, QHBoxLayout, QPushButton, QMenu, QTabBar, QMainWindow, \
-    QApplication, QLineEdit, QStyle
+    QApplication, QLineEdit, QStyle, qApp
 from PyQt5.uic import loadUi
 from time import strftime
 
@@ -55,10 +55,11 @@ SideWidth = 300
 SideAnimDur = 500
 AddFormDur = 500  # Add title form anim
 RowAnimDur = (6, 6)  # (AnimDown,AnimUp)
+RowLoadDur = 20
 RowHeightMin = 34
 RowHeightMax = 72
 ConListName = '*Список продолжений*'
-main = [None, None]
+MainP = None
 
 
 def save_data(save, value=1):
@@ -69,7 +70,7 @@ def save_data(save, value=1):
             sql('UPDATE Data set value=%s where name="id"' % ID)
         if save == 'viewed':
             TotalViewed += value
-            main[0].viewed_count.setText('Всего просмотрено:' + str(TotalViewed))
+            MainP.viewed_count.setText('Всего просмотрено:' + str(TotalViewed))
             sql('UPDATE Data set value=%s where name="viewed"' % TotalViewed)
         if save == 'added':
             TotalAdded += value
@@ -143,12 +144,12 @@ class RowButtons(QWidget):
                 self.p.set_color('n')
                 self.p.set_icon('n')
                 self.viewing.setText('СМОТРЮ')
-                main[1].sideBar.load_side_data(self.p.id)
+                self.p.p.sideBar.load_side_data(self.p.id)
             else:
                 self.p.set_color('viewing')
                 self.p.set_icon('viewing')
                 self.viewing.setText('НЕ СМОТРЮ')
-                main[1].sideBar.load_side_data(self.p.id)
+                self.p.p.sideBar.load_side_data(self.p.id)
         except Exception as e:
             print('viewing_now:', e)
 
@@ -164,8 +165,8 @@ class RowButtons(QWidget):
         sql('update titles set date="%s" where id=%s' % (self.date.text(), self.p.id))
         db.commit()
         try:
-            if ConListName in main[0].tabMap:
-                tab = main[0].tabWidget.widget(main[0].tabMap.index(ConListName))
+            if ConListName in MainP.tabMap:
+                tab = MainP.tabWidget.widget(MainP.tabMap.index(ConListName))
                 name = self.p.title_name.text()
                 count = self.p.count.text()
                 id_ = self.p.id
@@ -660,7 +661,7 @@ class NewPlaylist(QWidget):
 
             self.test.clicked.connect(self._test)
 
-            self.load_titles(name)
+            QTimer.singleShot(1, self.load_titles)
         except Exception as e:
             print("New_Playlist:", e)
 
@@ -742,12 +743,14 @@ class NewPlaylist(QWidget):
             row = NewTitle(self, name, count, t_id, icon, color)
             self.rowList.addWidget(row)
             self.rowMap.append(t_id)
+            loop = QEventLoop()
+            QTimer.singleShot(RowLoadDur, loop.quit)
+            loop.exec_()
             return row
         except Exception as e:
             print("add_row:", e)
 
-    # todo: anim load
-    def load_titles(self, name):
+    def load_titles(self):
         try:
             if self.con:
                 self.addT.setFixedSize(0, 0)
@@ -757,7 +760,7 @@ class NewPlaylist(QWidget):
                     self.add_row(t[0], t[1], t[2], t[3])
             else:
                 titles = list(sql('''SELECT title_name,count,id,icon,color 
-                       FROM Titles WHERE playlist="%s"''' % name))
+                       FROM Titles WHERE playlist="%s"''' % self.name))
                 for t in titles:
                     self.add_row(t[0], t[1], t[2], t[3], t[4])
             self.row_count.setText('Тайтлов в плейлисте:' + str(self.rowList.count()))
@@ -775,11 +778,11 @@ class MainForm(QMainWindow):
         self.SelectedTab = ""
         self.tabMap = []
 
-        self.addP.clicked.connect(self.add_p)
+        self.addP.clicked.connect(self.add_playlist)
         self.adv.clicked.connect(self._clear)
         self.con_list.clicked.connect(self.open_con_list)
 
-        self.pList.activated.connect(self.select_p)
+        self.pList.activated.connect(self.select_playlist)
 
         self.pName.returnPressed.connect(self.addP.click)
         self.pName.hide()
@@ -799,7 +802,7 @@ class MainForm(QMainWindow):
         self.option_anim.setEasingCurve(QEasingCurve.OutExpo)
         self.option_anim.setDuration(500)
 
-        self.launch()
+        QTimer.singleShot(1, self.launch)
 
     # todo: options
     def open_options(self):
@@ -826,7 +829,8 @@ class MainForm(QMainWindow):
         self.add_tab('*Список продолжений*')
 
     # Show/hide add playlist
-    def add_p(self):
+    # todo: anim it
+    def add_playlist(self):
         if self.pName.isHidden():
             self.pName.show()
             self.closePName.show()
@@ -863,7 +867,7 @@ class MainForm(QMainWindow):
         except Exception as e:
             print('close_tab', e)
 
-    def select_p(self):
+    def select_playlist(self):
         if self.SelectedTab != self.pList.currentText():
             self.SelectedTab = self.pList.currentText()
             self.add_tab(self.SelectedTab)
@@ -874,7 +878,6 @@ class MainForm(QMainWindow):
                 text = self.tabWidget.tabText(index)
                 index = self.pList.findText(text)
                 self.pList.setCurrentIndex(index)
-                main[1] = self.tabWidget.currentWidget()
                 self.SelectedTab = text
             else:
                 self.SelectedTab = ""
@@ -912,12 +915,13 @@ class MainForm(QMainWindow):
             print('on esc:', e)
 
     def launch(self):
-        main[0] = self
-        load = list(sql("SELECT * FROM Playlists ORDER BY rowid desc"))
-        self.pList.addItems([row[0] for row in load])
-        self.select_p()
+        global MainP
+        MainP = self
+        playlists = list(sql("SELECT * FROM Playlists ORDER BY rowid desc"))
+        self.pList.addItems([row[0] for row in playlists])
+        self.select_playlist()
         self.viewed_count.setText('Всего просмотрено:' + str(TotalViewed))
-        print(">>>'Launched'")
+        print("Launched")
 
 
 app = QApplication(sys.argv)

@@ -88,6 +88,3 @@ class ExSQLite:
         except Exception as e:
             sql.execute("ALTER TABLE __TMP__ RENAME TO " + table_name)
             print("Something went wrong :(", e)
-
-class SQLTerminal:
-    pass

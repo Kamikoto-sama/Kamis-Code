@@ -45,10 +45,18 @@ try:
 except Exception as e:
     print('Load db:', e)
 # CONSTANTS
-Icon = {'n': '', 'viewed': 'Icons/viewed.png', 'not_finished': 'Icons/not_finished.ico',
-    'con': 'Icons/continuation.ico', 'viewing': 'Icons/looking.ico', 'pause': 'Icons/pause.ico'}
-Color = {'n': '#D9D9D9', 'edit': 'none', 'viewed': '#AEDD17', 'viewing': '#6ebcd2', 'pause': '#DC143C',
-    'is_con': '#FEE02F'}
+Icon = {'n': '',
+        'viewed': 'Icons/viewed.png',
+        'not_finished': 'Icons/not_finished.ico',
+        'con': 'Icons/continuation.ico',
+        'viewing': 'Icons/looking.ico',
+        'pause': 'Icons/pause.ico'}
+Color = {'n': '#D9D9D9',
+         'edit': 'none',
+         'viewed': '#AEDD17',
+         'viewing': '#6ebcd2',
+         'pause': '#DC143C',
+         'is_con': '#FEE02F'}
 # Skin = 'Skins/dark_orange.css'
 Skin = 'style.css'
 SideWidth = 300
@@ -87,6 +95,199 @@ class SelfStyledIcon(QProxyStyle):
         else:
             return QProxyStyle.pixelMetric(self, q_style_pixel_metric, option, widget)
 
+class AddTitleForm(QWidget):
+    def __init__(self, parent):
+        try:
+            super(AddTitleForm, self).__init__(parent)
+            loadUi('GUI/Add_Title_Form.ui', self)
+            self.parent = parent
+            self.hide()
+
+            self.anim = QPropertyAnimation(self, b"size")
+            self.anim.setEasingCurve(QEasingCurve.OutExpo)
+            self.anim.setDuration(AddFormDur)
+
+            self.count.setValidator(QIntValidator(0, 9999))
+            self.count.returnPressed.connect(self.ok.click)
+
+            self.title_name.returnPressed.connect(self.ok.click)
+            self.cancel.clicked.connect(self.show_add_form)
+            self.ok.clicked.connect(self.on_ok)  # self.is_con.stateChanged.connect(self.changed)
+        except Exception as e:
+            print('Add_Title_Form:', e)
+
+    # Show/hide add form
+    def show_add_form(self):
+        try:
+            if self.isHidden():
+                self.show()
+                self.title_name.setFocus()
+                self.title_name.selectAll()
+                self.anim.setEndValue(QSize(370, 245))
+                self.anim.start()
+            else:
+                self.anim.stop()
+                self.anim.setEndValue(QSize(370, 0))
+                self.anim.start()
+                QTimer.singleShot(SideAnimDur, self.close)
+        except Exception as e:
+            print('show_add_form:', e)
+
+    def on_ok(self):
+        try:
+            name = self.title_name.text()
+            count = self.count.text()
+            genre = self.genre.text()
+            link = self.link.text()
+            desc = self.desc.toPlainText()
+
+            if name == '':
+                QMessageBox.warning(self, "PLS", "Title name is require field!")
+                self.title_name.setFocus()
+            elif count == '':
+                QMessageBox.warning(self, "PLS", "Count is require field!")
+                self.count.setFocus()
+            else:
+                if self.is_con.checkState() == 2:
+                    color = 'is_con'
+                else:
+                    color = 'n'
+                if self.is_finished.checkState() == 2:
+                    icon = 'not_finished'
+                else:
+                    icon = 'n'
+
+                self.parent.add_title(name, count, genre, link, desc, icon, color)
+                self.show_add_form()
+        except Exception as e:
+            print('on_ok:', e)
+
+class TabBar(QTabBar):
+    def __init__(self, parent):
+        super(TabBar, self).__init__(parent)
+        self.setMovable(True)
+        self.setTabsClosable(True)
+        self.setExpanding(True)
+
+class SideBar(QWidget):
+    def __init__(self, parent):
+        super(SideBar, self).__init__(parent)
+        try:
+            loadUi('GUI/Side_Bar.ui', self)
+            self.p = parent
+            self.change_check = True
+
+            self.closeSide.clicked.connect(self.hide_show_side)
+
+            self.genre.doubleClicked.connect(self.do_edit)
+            self.genre.setCursor(QCursor(Qt.PointingHandCursor))
+            self.genre.returnPressed.connect(self.save_desc)
+
+            self.desc.doubleClicked.connect(self.do_edit)
+            self.desc.setCursor(QCursor(Qt.PointingHandCursor))
+
+            self.link.doubleClicked.connect(self.do_edit)
+            self.link.setCursor(QCursor(Qt.PointingHandCursor))
+            self.link.returnPressed.connect(self.save_desc)
+
+            self.save.clicked.connect(self.save_desc)
+
+            self.is_con.stateChanged.connect(self.on_is_con)
+            self.is_finished.stateChanged.connect(self.on_is_finished)
+
+            self.animSide = QPropertyAnimation(self, b"geometry")
+            self.animSide.setEasingCurve(QEasingCurve.OutExpo)
+            self.animSide.setDuration(SideAnimDur)
+        except Exception as e:
+            print(e)
+
+    def save_desc(self):
+        try:
+            self.do_edit(False)
+            genre = self.genre.text()
+            link = self.link.text()
+            desc = self.desc.toPlainText()
+            sql(
+                'update titles set genre="%s",link="%s",desc="%s" where id=%s' % (genre, link, desc, self.p.curRow.id))
+            db.commit()
+        except Exception as e:
+            print('save_desc:', e)
+
+    def on_is_finished(self, state):
+        if self.change_check:
+            if state == 2:
+                self.p.curRow.set_icon('not_finished')
+            else:
+                self.p.curRow.set_icon('n')
+
+    def on_is_con(self, state):
+        if self.change_check:
+            if state == 2:
+                self.p.curRow.set_color('is_con')
+            else:
+                self.p.curRow.set_color('n')
+
+    # On doubleclick
+    def do_edit(self, edit=True):
+        self.genre.setReadOnly(not edit)
+        self.link.setReadOnly(not edit)
+        self.desc.setReadOnly(not edit)
+        self.save.setEnabled(edit)
+        if edit:
+            self.genre.setCursor(QCursor(Qt.IBeamCursor))
+            self.link.setCursor(QCursor(Qt.IBeamCursor))
+            self.desc.setCursor(QCursor(Qt.IBeamCursor))
+        else:
+            self.genre.setCursor(QCursor(Qt.PointingHandCursor))
+            self.link.setCursor(QCursor(Qt.PointingHandCursor))
+            self.desc.setCursor(QCursor(Qt.PointingHandCursor))
+
+    # On esc at side bar
+    def keyPressEvent(self, event):
+        try:
+            if event == '' or event.key() == Qt.Key_Escape:
+                self.genre.undo()
+                self.link.undo()
+                self.desc.undo()
+                self.do_edit(False)
+        except Exception as e:
+            print('sideBar esc:', e)
+
+    # Load and set title-data into side bar
+    def load_side_data(self, t_id):
+        try:
+            self.do_edit(False)
+
+            data = list(sql('SELECT genre,link,desc,icon,color FROM Titles WHERE id=%s' % t_id))[0]
+            self.genre.setText(data[0])
+            self.link.setText(data[1])
+            self.desc.setText(data[2])
+
+            icon_state = 2 if data[3] == 'not_finished' else 0
+            color_state = 2 if data[4] == 'is_con' else 0
+            self.change_check = False
+            self.is_con.setCheckState(color_state)
+            self.is_con.setEnabled(data[3] in ['n', 'not_finished'])
+            self.is_finished.setCheckState(icon_state)
+            self.is_finished.setEnabled(data[3] in ['n', 'not_finished'])
+            self.change_check = True
+        except Exception as e:
+            print("load_side_data:", e)
+
+    # Switch hide/show side bar
+    def hide_show_side(self):
+        try:
+            if self.p.side_hiden:
+                self.animSide.setEndValue(QRect(self.p.w - SideWidth, 0, SideWidth, self.p.h))
+                self.p.side_hiden = False
+                self.closeSide.setText('>')
+            else:
+                self.animSide.setEndValue(QRect(self.p.w - 20, 0, SideWidth, self.p.h))
+                self.p.side_hiden = True
+                self.closeSide.setText('<')
+            self.animSide.start()
+        except Exception as e:
+            print('SideBar/reHideSide:', e)
 
 class RowButtons(QWidget):
     def __init__(self, con=False):
@@ -214,204 +415,6 @@ class RowButtons(QWidget):
             self.p.p.sideBar.load_side_data(self.p.id)
         except Exception as e:
             print('select_mark:', e)
-
-
-class AddTitleForm(QWidget):
-    def __init__(self, parent):
-        try:
-            super(AddTitleForm, self).__init__(parent)
-            loadUi('GUI/Add_Title_Form.ui', self)
-            self.parent = parent
-            self.hide()
-
-            self.anim = QPropertyAnimation(self, b"size")
-            self.anim.setEasingCurve(QEasingCurve.OutExpo)
-            self.anim.setDuration(AddFormDur)
-
-            self.count.setValidator(QIntValidator(0, 9999))
-            self.count.returnPressed.connect(self.ok.click)
-
-            self.title_name.returnPressed.connect(self.ok.click)
-            self.cancel.clicked.connect(self.show_add_form)
-            self.ok.clicked.connect(self.on_ok)  # self.is_con.stateChanged.connect(self.changed)
-        except Exception as e:
-            print('Add_Title_Form:', e)
-
-    # Show/hide add form
-    def show_add_form(self):
-        try:
-            if self.isHidden():
-                self.show()
-                self.title_name.setFocus()
-                self.title_name.selectAll()
-                self.anim.setEndValue(QSize(370, 245))
-                self.anim.start()
-            else:
-                self.anim.stop()
-                self.anim.setEndValue(QSize(370, 0))
-                self.anim.start()
-                QTimer.singleShot(SideAnimDur, self.close)
-        except Exception as e:
-            print('show_add_form:', e)
-
-    def on_ok(self):
-        try:
-            name = self.title_name.text()
-            count = self.count.text()
-            genre = self.genre.text()
-            link = self.link.text()
-            desc = self.desc.toPlainText()
-
-            if name == '':
-                QMessageBox.warning(self, "PLS", "Title name is require field!")
-                self.title_name.setFocus()
-            elif count == '':
-                QMessageBox.warning(self, "PLS", "Count is require field!")
-                self.count.setFocus()
-            else:
-                if self.is_con.checkState() == 2:
-                    color = 'is_con'
-                else:
-                    color = 'n'
-                if self.is_finished.checkState() == 2:
-                    icon = 'not_finished'
-                else:
-                    icon = 'n'
-
-                self.parent.add_title(name, count, genre, link, desc, icon, color)
-                self.show_add_form()
-        except Exception as e:
-            print('on_ok:', e)
-
-
-class TabBar(QTabBar):
-    def __init__(self, parent):
-        super(TabBar, self).__init__(parent)
-        self.setMovable(True)
-        self.setTabsClosable(True)
-        self.setExpanding(True)
-
-
-class SideBar(QWidget):
-    def __init__(self, parent):
-        super(SideBar, self).__init__(parent)
-        try:
-            loadUi('GUI/Side_Bar.ui', self)
-            self.p = parent
-            self.change_check = True
-
-            self.closeSide.clicked.connect(self.hide_show_side)
-
-            self.genre.doubleClicked.connect(self.do_edit)
-            self.genre.setCursor(QCursor(Qt.PointingHandCursor))
-            self.genre.returnPressed.connect(self.save_desc)
-
-            self.desc.doubleClicked.connect(self.do_edit)
-            self.desc.setCursor(QCursor(Qt.PointingHandCursor))
-
-            self.link.doubleClicked.connect(self.do_edit)
-            self.link.setCursor(QCursor(Qt.PointingHandCursor))
-            self.link.returnPressed.connect(self.save_desc)
-
-            self.save.clicked.connect(self.save_desc)
-
-            self.is_con.stateChanged.connect(self.on_is_con)
-            self.is_finished.stateChanged.connect(self.on_is_finished)
-
-            self.animSide = QPropertyAnimation(self, b"geometry")
-            self.animSide.setEasingCurve(QEasingCurve.OutExpo)
-            self.animSide.setDuration(SideAnimDur)
-        except Exception as e:
-            print(e)
-
-    def save_desc(self):
-        try:
-            self.do_edit(False)
-            genre = self.genre.text()
-            link = self.link.text()
-            desc = self.desc.toPlainText()
-            sql(
-                'update titles set genre="%s",link="%s",desc="%s" where id=%s' % (genre, link, desc, self.p.curRow.id))
-            db.commit()
-        except Exception as e:
-            print('save_desc:', e)
-
-    def on_is_finished(self, state):
-        if self.change_check:
-            if state == 2:
-                self.p.curRow.set_icon('not_finished')
-            else:
-                self.p.curRow.set_icon('n')
-
-    def on_is_con(self, state):
-        if self.change_check:
-            if state == 2:
-                self.p.curRow.set_color('is_con')
-            else:
-                self.p.curRow.set_color('n')
-
-    # On doubleclick
-    def do_edit(self, edit=True):
-        self.genre.setReadOnly(not edit)
-        self.link.setReadOnly(not edit)
-        self.desc.setReadOnly(not edit)
-        self.save.setEnabled(edit)
-        if edit:
-            self.genre.setCursor(QCursor(Qt.IBeamCursor))
-            self.link.setCursor(QCursor(Qt.IBeamCursor))
-            self.desc.setCursor(QCursor(Qt.IBeamCursor))
-        else:
-            self.genre.setCursor(QCursor(Qt.PointingHandCursor))
-            self.link.setCursor(QCursor(Qt.PointingHandCursor))
-            self.desc.setCursor(QCursor(Qt.PointingHandCursor))
-
-    # On esc at side bar
-    def keyPressEvent(self, event):
-        try:
-            if event == '' or event.key() == Qt.Key_Escape:
-                self.genre.undo()
-                self.link.undo()
-                self.desc.undo()
-                self.do_edit(False)
-        except Exception as e:
-            print('sideBar esc:', e)
-
-    # Load and set title-data into side bar
-    def load_side_data(self, t_id):
-        try:
-            self.do_edit(False)
-
-            data = list(sql('SELECT genre,link,desc,icon,color FROM Titles WHERE id=%s' % t_id))[0]
-            self.genre.setText(data[0])
-            self.link.setText(data[1])
-            self.desc.setText(data[2])
-
-            icon_state = 2 if data[3] == 'not_finished' else 0
-            color_state = 2 if data[4] == 'is_con' else 0
-            self.change_check = False
-            self.is_con.setCheckState(color_state)
-            self.is_con.setEnabled(data[3] in ['n', 'not_finished'])
-            self.is_finished.setCheckState(icon_state)
-            self.is_finished.setEnabled(data[3] in ['n', 'not_finished'])
-            self.change_check = True
-        except Exception as e:
-            print("load_side_data:", e)
-
-    # Switch hide/show side bar
-    def hide_show_side(self):
-        try:
-            if self.p.side_hiden:
-                self.animSide.setEndValue(QRect(self.p.w - SideWidth, 0, SideWidth, self.p.h))
-                self.p.side_hiden = False
-                self.closeSide.setText('>')
-            else:
-                self.animSide.setEndValue(QRect(self.p.w - 20, 0, SideWidth, self.p.h))
-                self.p.side_hiden = True
-                self.closeSide.setText('<')
-            self.animSide.start()
-        except Exception as e:
-            print('SideBar/reHideSide:', e)
-
 
 class NewTitle(QWidget):
     def __init__(self, parent, name, count, id_, icon, color):
@@ -666,6 +669,7 @@ class NewPlaylist(QWidget):
             print("New_Playlist:", e)
 
     # TEMP
+    # todo: message крч
     def _test(self):
         try:
             menu = QMenu(self)
@@ -675,6 +679,7 @@ class NewPlaylist(QWidget):
             selected = menu.exec_(self.mapToGlobal(QPoint(0,0)))
 
             if selected == act1:
+                QMessageBox.critical("PLS4: _test ERROR", "text")
                 self.p.refresh_tab(self)
 
         except Exception as e: print("_test: ", e)
@@ -724,6 +729,7 @@ class NewPlaylist(QWidget):
         except Exception as e:
             print('delete_playlist:', e)
 
+    # todo: add title fix
     def add_title(self, t_name, count, genre, link, desc, icon, color):
         try:
             tab_index = self.p.tabWidget.currentIndex()
@@ -755,6 +761,7 @@ class NewPlaylist(QWidget):
             if self.con:
                 self.addT.setFixedSize(0, 0)
                 self.delP.setFixedSize(0, 0)
+
                 titles = list(sql('select title_name,count,id,date from titles where date!="n"'))
                 for t in titles:
                     self.add_row(t[0], t[1], t[2], t[3])
@@ -831,21 +838,24 @@ class MainForm(QMainWindow):
     # Show/hide add playlist
     # todo: anim it
     def add_playlist(self):
-        if self.pName.isHidden():
-            self.pName.show()
-            self.closePName.show()
-            self.pName.setText("PL" + str(self.pList.count() + 1))
-            self.pName.setFocus()
-            self.pName.selectAll()
-        else:
-            name = self.pName.text()
-            sql("INSERT INTO Playlists VALUES (?)", [(name)])
-            db.commit()
-            self.pList.insertItem(0, name)
-            self.add_tab(name)
-            self.pList.setCurrentIndex(0)
-            self.pName.hide()
-            self.closePName.hide()
+        try:
+            if self.pName.isHidden():
+                self.pName.show()
+                self.closePName.show()
+                self.pName.setText("PL" + str(self.pList.count() + 1))
+                self.pName.setFocus()
+                self.pName.selectAll()
+            else:
+                name = self.pName.text()
+                sql("INSERT INTO Playlists VALUES (?)", [(name)])
+                db.commit()
+                self.pList.insertItem(0, name)
+                self.add_tab(name)
+                self.pList.setCurrentIndex(0)
+                self.pName.hide()
+                self.closePName.hide()
+        except Exception as e:
+            QMessageBox.warning(self, "PLS4: add_playlist ERROR", e)
 
     def add_tab(self, tab_name):
         try:

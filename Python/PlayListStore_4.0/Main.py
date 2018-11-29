@@ -85,7 +85,7 @@ def save_data(save, value=1):
             sql('UPDATE Data set value=%s where name="added"' % TotalAdded)
         db.commit()
     except Exception as e:
-        print('Main.save_data:', e)
+        QMessageBox.critical(MainP, "PLS4_ERROR: __main__save_data", str(e))
 
 
 class SelfStyledIcon(QProxyStyle):
@@ -199,7 +199,7 @@ class SideBar(QWidget):
             self.animSide.setEasingCurve(QEasingCurve.OutExpo)
             self.animSide.setDuration(SideAnimDur)
         except Exception as e:
-            print(e)
+            QMessageBox.critical(self, "PLS4_ERROR: SideBar__init", str(e))
 
     def save_desc(self):
         try:
@@ -211,7 +211,7 @@ class SideBar(QWidget):
                 'update titles set genre="%s",link="%s",desc="%s" where id=%s' % (genre, link, desc, self.p.curRow.id))
             db.commit()
         except Exception as e:
-            print('save_desc:', e)
+            QMessageBox.critical(self, "PLS4_ERROR: save_desc", str(e))
 
     def on_is_finished(self, state):
         if self.change_check:
@@ -251,7 +251,7 @@ class SideBar(QWidget):
                 self.desc.undo()
                 self.do_edit(False)
         except Exception as e:
-            print('sideBar esc:', e)
+            QMessageBox.critical(self, "PLS4_ERROR: sideBar_esc", str(e))
 
     # Load and set title-data into side bar
     def load_side_data(self, t_id):
@@ -272,7 +272,7 @@ class SideBar(QWidget):
             self.is_finished.setEnabled(data[3] in ['n', 'not_finished'])
             self.change_check = True
         except Exception as e:
-            print("load_side_data:", e)
+            QMessageBox.critical(self, "PLS4_ERROR: load_side_data", str(e))
 
     # Switch hide/show side bar
     def hide_show_side(self):
@@ -287,7 +287,7 @@ class SideBar(QWidget):
                 self.closeSide.setText('<')
             self.animSide.start()
         except Exception as e:
-            print('SideBar/reHideSide:', e)
+            QMessageBox.critical(self, "PLS4_ERROR: hide_show_sidebar", str(e))
 
 class RowButtons(QWidget):
     def __init__(self, con=False):
@@ -336,7 +336,7 @@ class RowButtons(QWidget):
                 self.date.focusOutEvent = lambda x: self.date.hide()
                 self.date.returnPressed.connect(self.set_con_date)
         except Exception as e:
-            print('Row_Buttons:', e)
+            QMessageBox.critical(self, "PLS4_ERROR: RowButtons__init", str(e))
 
     def viewing_now(self):
         try:
@@ -352,20 +352,21 @@ class RowButtons(QWidget):
                 self.viewing.setText('НЕ СМОТРЮ')
                 self.p.p.sideBar.load_side_data(self.p.id)
         except Exception as e:
-            print('viewing_now:', e)
+            QMessageBox.critical(self, "PLS4_ERROR: viewing_now", str(e))
 
     def delete_title(self):
         self.p.delete_title()
 
     def set_con_date(self):
-        if self.p.color not in ['is_con', 'viewed']:
-            save_data('viewed')
-        self.p.set_icon('con')
-        self.p.set_color('viewed')
-        self.date.hide()
-        sql('update titles set date="%s" where id=%s' % (self.date.text(), self.p.id))
-        db.commit()
         try:
+            if self.p.color not in ['is_con', 'viewed']:
+                save_data('viewed')
+            self.p.set_icon('con')
+            self.p.set_color('viewed')
+            self.date.hide()
+            sql('update titles set date="%s" where id=%s' % (self.date.text(), self.p.id))
+            db.commit()
+
             if ConListName in MainP.tabMap:
                 tab = MainP.tabWidget.widget(MainP.tabMap.index(ConListName))
                 name = self.p.title_name.text()
@@ -374,7 +375,7 @@ class RowButtons(QWidget):
                 date = self.date.text()
                 tab.add_row(name, count, id_, date)
         except Exception as e:
-            print('set_con_date:', e)
+            QMessageBox.critical(self, "PLS4_ERROR: set_con_date", str(e))
 
     def select_mark(self):
         try:
@@ -414,7 +415,7 @@ class RowButtons(QWidget):
 
             self.p.p.sideBar.load_side_data(self.p.id)
         except Exception as e:
-            print('select_mark:', e)
+            QMessageBox.critical(self, "PLS4_ERROR: select_mark", str(e))
 
 class NewTitle(QWidget):
     def __init__(self, parent, name, count, id_, icon, color):
@@ -463,7 +464,7 @@ class NewTitle(QWidget):
             self.animOff = QTimer(self)
             self.animOff.timeout.connect(self.anim_up)
         except Exception as e:
-            print('new_title:', e)
+            QMessageBox.critical(self, "PLS4_ERROR: NewTitle__init", str(e))
 
     def delete_title(self):
         try:
@@ -480,7 +481,7 @@ class NewTitle(QWidget):
             if self.color == 'viewed': save_data('viewed', -1)
             save_data('added', -1)
         except Exception as e:
-            print('delete_title:', e)
+            QMessageBox.critical(self, "PLS4_ERROR: delete_title", str(e))
 
     def set_icon(self, ico):
         icon = QPixmap(Icon[ico]).scaled(30, 30)
@@ -540,7 +541,7 @@ class NewTitle(QWidget):
                 if self.icon in ['viewed', 'con']:
                     self.p.rowButns.viewing.setEnabled(False)
         except Exception as e:
-            print('select_row:', e)
+            QMessageBox.critical(self, "PLS4_ERROR: select_row", str(e))
 
     # ON doubleclick row
     def edit_line(self):
@@ -551,7 +552,7 @@ class NewTitle(QWidget):
             if not self.p.side_hiden:
                 self.p.sideBar.hide_show_side()
         except Exception as e:
-            print('on_line_edit:', e)
+            QMessageBox.critical(self, "PLS4_ERROR: on_line_edit", str(e))
 
     # ON enter pressed
     def end_line_edit(self):
@@ -566,7 +567,7 @@ class NewTitle(QWidget):
             db.commit()
             self.leave(False)
         except Exception as e:
-            print('on_line_edited:', e)
+            QMessageBox.critical(self, "PLS4_ERROR: on_line_edited", str(e))
 
     def set_edit(self, edit=True):
         self.title_name.setReadOnly(not edit)
@@ -595,7 +596,7 @@ class NewTitle(QWidget):
                 if not self.p.con:
                     self.p.rowButns.date.hide()
         except Exception as e:
-            print('on row edit esc:', e)
+            QMessageBox.critical(self, "PLS4_ERROR: row_edit_esc", str(e))
 
     # Anim row down
     def anim_down(self):
@@ -606,7 +607,7 @@ class NewTitle(QWidget):
                 self.animOn.stop()
                 self.set_buttons(True)
         except Exception as e:
-            print('row_on:', e)
+            QMessageBox.critical(self, "PLS4_ERROR: anim_down", str(e))
 
     # Anim row up
     def anim_up(self):
@@ -666,10 +667,9 @@ class NewPlaylist(QWidget):
 
             QTimer.singleShot(1, self.load_titles)
         except Exception as e:
-            print("New_Playlist:", e)
+            QMessageBox.critical(self, "PLS4_ERROR: NewPlaylist__init", str(e))
 
     # TEMP
-    # todo: message крч
     def _test(self):
         try:
             menu = QMenu(self)
@@ -679,12 +679,13 @@ class NewPlaylist(QWidget):
             selected = menu.exec_(self.mapToGlobal(QPoint(0,0)))
 
             if selected == act1:
-                QMessageBox.critical("PLS4: _test ERROR", "text")
                 self.p.refresh_tab(self)
 
-        except Exception as e: print("_test: ", e)
+        except Exception as e:
+            QMessageBox.critical(self, "PLS4_ERROR: _test", str(e))
 
     # Move scroll bar
+    # todo: тоже по формуле
     def scroll_to(self, index):
         try:
             bar = self.scrollArea.verticalScrollBar()
@@ -705,7 +706,7 @@ class NewPlaylist(QWidget):
                 while bar.value() < target_pos and bar.value() < bar.maximum():
                     anim_scroll(1)
         except Exception as e:
-            print("scroll_to: ", e)
+            QMessageBox.critical(self, "PLS4_ERROR: scroll_to", str(e))
 
     def resizeEvent(self, event=None):
         try:
@@ -716,7 +717,7 @@ class NewPlaylist(QWidget):
             else:
                 self.sideBar.setGeometry(self.w - SideWidth, 0, SideWidth, self.h)
         except Exception as e:
-            print(e, "||New_P/resizeEvent")
+            QMessageBox.critical(self, "PLS4_ERROR: NewPlaylist_resizeEvent", str(e))
 
     def delete_playlist(self):
         try:
@@ -727,7 +728,7 @@ class NewPlaylist(QWidget):
             self.p.close_tab(self.p.pList.currentIndex())
             self.p.pList.removeItem(self.p.pList.currentIndex())
         except Exception as e:
-            print('delete_playlist:', e)
+            QMessageBox.critical(self, "PLS4_ERROR: delete_playlist", str(e))
 
     # todo: add title fix
     def add_title(self, t_name, count, genre, link, desc, icon, color):
@@ -742,7 +743,7 @@ class NewPlaylist(QWidget):
             save_data('id')
             save_data('added')
         except Exception as e:
-            print("add_title:", e)
+            QMessageBox.critical(self, "PLS4_ERROR: add_title", str(e))
 
     def add_row(self, name, count, t_id, icon, color='n'):
         try:
@@ -754,7 +755,7 @@ class NewPlaylist(QWidget):
             loop.exec_()
             return row
         except Exception as e:
-            print("add_row:", e)
+            QMessageBox.critical(self, "PLS4_ERROR: add_row", str(e))
 
     def load_titles(self):
         try:
@@ -772,7 +773,7 @@ class NewPlaylist(QWidget):
                     self.add_row(t[0], t[1], t[2], t[3], t[4])
             self.row_count.setText('Тайтлов в плейлисте:' + str(self.rowList.count()))
         except Exception as e:
-            print("load_titles:", e)
+            QMessageBox.critical(self, "PLS4_ERROR: load_titles", str(e))
 
 class MainForm(QMainWindow):
 
@@ -830,13 +831,13 @@ class MainForm(QMainWindow):
                 self._clear()
 
         except Exception as e:
-            print('open_options: ', e)
+            QMessageBox.critical(self, "PLS4_ERROR: open_options", str(e))
 
     def open_con_list(self):
         self.add_tab('*Список продолжений*')
 
     # Show/hide add playlist
-    # todo: anim it
+    # todo: anim it по формуле
     def add_playlist(self):
         try:
             if self.pName.isHidden():
@@ -847,7 +848,7 @@ class MainForm(QMainWindow):
                 self.pName.selectAll()
             else:
                 name = self.pName.text()
-                sql("INSERT INTO Playlists VALUES (?)", [(name)])
+                sql("INSERT INTO Playlists VALUES (%s)" % name)
                 db.commit()
                 self.pList.insertItem(0, name)
                 self.add_tab(name)
@@ -855,7 +856,7 @@ class MainForm(QMainWindow):
                 self.pName.hide()
                 self.closePName.hide()
         except Exception as e:
-            QMessageBox.warning(self, "PLS4: add_playlist ERROR", e)
+            QMessageBox.critical(self, "PLS4_ERROR: add_playlist", str(e))
 
     def add_tab(self, tab_name):
         try:
@@ -868,14 +869,14 @@ class MainForm(QMainWindow):
                 # tab = self.tabWidget.currentWidget()
                 # tab.load_titles(tab_name)
         except Exception as e:
-            print('add_tab:', e)
+            QMessageBox.critical(self, "PLS4_ERROR: add_tab", str(e))
 
     def close_tab(self, index):
         try:
             self.tabMap.remove(self.tabWidget.tabText(index))
             self.tabWidget.removeTab(index)
         except Exception as e:
-            print('close_tab', e)
+            QMessageBox.critical(self, "PLS4_ERROR: close_tab", str(e))
 
     def select_playlist(self):
         if self.SelectedTab != self.pList.currentText():
@@ -892,7 +893,7 @@ class MainForm(QMainWindow):
             else:
                 self.SelectedTab = ""
         except Exception as e:
-            print("select_tab:", e)
+            QMessageBox.critical(self, "PLS4_ERROR: select_tab", str(e))
 
     def on_move_tab(self, index):
         Tab = self.tabWidget.tabText(index)
@@ -914,7 +915,7 @@ class MainForm(QMainWindow):
             global ID
             ID = 0
         except Exception as e:
-            print(e)
+            QMessageBox.critical(self, "PLS4_ERROR: _clear", str(e))
 
     def keyPressEvent(self, event):
         try:
@@ -922,17 +923,19 @@ class MainForm(QMainWindow):
                 self.pName.hide()
                 self.closePName.hide()
         except Exception as e:
-            print('on esc:', e)
+            QMessageBox.critical(self, "PLS4_ERROR: MainForm_on_esc", str(e))
 
     def launch(self):
-        global MainP
-        MainP = self
-        playlists = list(sql("SELECT * FROM Playlists ORDER BY rowid desc"))
-        self.pList.addItems([row[0] for row in playlists])
-        self.select_playlist()
-        self.viewed_count.setText('Всего просмотрено:' + str(TotalViewed))
-        print("Launched")
-
+        try:
+            global MainP
+            MainP = self
+            playlists = list(sql("SELECT * FROM Playlists ORDER BY rowid desc"))
+            self.pList.addItems([row[0] for row in playlists])
+            self.select_playlist()
+            self.viewed_count.setText('Всего просмотрено:' + str(TotalViewed))
+            print("Launched")
+        except Exception as e:
+            QMessageBox.critical(self, "PLS4_ERROR: launch", str(e))
 
 app = QApplication(sys.argv)
 app.setStyle(SelfStyledIcon('Fusion'))

@@ -735,9 +735,16 @@ class NewPlaylist(QWidget):
         try:
             tab_index = self.p.tabWidget.currentIndex()
             p_name = self.p.tabWidget.tabText(tab_index)
+
             sql("INSERT INTO Titles VALUES ('%s',%s,%s,'%s','%s','%s','%s','%s','%s','n')" % (
-            t_name, count, ID, p_name, icon, color, genre, link, desc))
+                t_name, count, ID, p_name, icon, color, genre, link, desc))
             db.commit()
+            row_id = list(sql("""SELECT rowid FROM
+                                (CREATE TEMP TABLE t AS SELECT id FROM Titles 
+                                WHERE playlist = '%s')
+                                WHERE id = %s""" % (p_name, ID)))
+            print(row_id)
+
             self.add_row(t_name, count, ID, icon, color).select_row()
             self.row_count.setText('Тайтлов в плейлисте:' + str(self.rowList.count()))
             save_data('id')
@@ -745,10 +752,12 @@ class NewPlaylist(QWidget):
         except Exception as e:
             QMessageBox.critical(self, "PLS4_ERROR: add_title", str(e))
 
-    def add_row(self, name, count, t_id, icon, color='n'):
+    def add_row(self, name, count, t_id, icon, color='n', index=0):
         try:
             row = NewTitle(self, name, count, t_id, icon, color)
-            self.rowList.addWidget(row)
+            index = index if index > 0 else self.rowList.count()
+
+            self.rowList.insertWidget(index, row)
             self.rowMap.append(t_id)
             loop = QEventLoop()
             QTimer.singleShot(RowLoadDur, loop.quit)
@@ -848,7 +857,7 @@ class MainForm(QMainWindow):
                 self.pName.selectAll()
             else:
                 name = self.pName.text()
-                sql("INSERT INTO Playlists VALUES (%s)" % name)
+                sql("INSERT INTO Playlists VALUES ('%s')" % name)
                 db.commit()
                 self.pList.insertItem(0, name)
                 self.add_tab(name)

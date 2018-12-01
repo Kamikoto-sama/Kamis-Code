@@ -45,18 +45,20 @@ try:
 except Exception as e:
     print('Load db:', e)
 # CONSTANTS
-Icon = {'n': '',
-        'viewed': 'Icons/viewed.png',
-        'not_finished': 'Icons/not_finished.ico',
-        'con': 'Icons/continuation.ico',
-        'viewing': 'Icons/looking.ico',
-        'pause': 'Icons/pause.ico'}
-Color = {'n': '#D9D9D9',
-         'edit': 'none',
-         'viewed': '#AEDD17',
-         'viewing': '#6ebcd2',
-         'pause': '#DC143C',
-         'is_con': '#FEE02F'}
+Icon = {
+    'n': '',
+    'viewed': 'Icons/viewed.png',
+    'not_finished': 'Icons/not_finished.ico',
+    'con': 'Icons/continuation.ico',
+    'viewing': 'Icons/looking.ico',
+    'pause': 'Icons/pause.ico'}
+Color = {
+    'n': '#D9D9D9',
+    'edit': 'none',
+    'viewed': '#AEDD17',
+    'viewing': '#6ebcd2',
+    'pause': '#DC143C',
+    'is_con': '#FEE02F'}
 # Skin = 'Skins/dark_orange.css'
 Skin = 'style.css'
 SideWidth = 300
@@ -66,8 +68,10 @@ RowAnimDur = (6, 6)  # (AnimDown,AnimUp)
 RowLoadDur = 20
 RowHeightMin = 34
 RowHeightMax = 72
+ScrollDur = 1000
 ConListName = '*Список продолжений*'
 MainP = None
+TitlesSort = "count"
 
 
 def save_data(save, value=1):
@@ -94,6 +98,7 @@ class SelfStyledIcon(QProxyStyle):
             return 30
         else:
             return QProxyStyle.pixelMetric(self, q_style_pixel_metric, option, widget)
+
 
 class AddTitleForm(QWidget):
     def __init__(self, parent):
@@ -162,12 +167,14 @@ class AddTitleForm(QWidget):
         except Exception as e:
             print('on_ok:', e)
 
+
 class TabBar(QTabBar):
     def __init__(self, parent):
         super(TabBar, self).__init__(parent)
         self.setMovable(True)
         self.setTabsClosable(True)
         self.setExpanding(True)
+
 
 class SideBar(QWidget):
     def __init__(self, parent):
@@ -288,6 +295,7 @@ class SideBar(QWidget):
             self.animSide.start()
         except Exception as e:
             QMessageBox.critical(self, "PLS4_ERROR: hide_show_sidebar", str(e))
+
 
 class RowButtons(QWidget):
     def __init__(self, con=False):
@@ -417,6 +425,7 @@ class RowButtons(QWidget):
         except Exception as e:
             QMessageBox.critical(self, "PLS4_ERROR: select_mark", str(e))
 
+
 class NewTitle(QWidget):
     def __init__(self, parent, name, count, id_, icon, color):
         try:
@@ -493,7 +502,7 @@ class NewTitle(QWidget):
 
     def set_color(self, color, load=False):
         if self.color != 'is_con' or color in ('is_con', 'edit') or (
-           self.color == 'is_con' and color == 'n' and self.icon in ['n', 'not_finished']):
+                self.color == 'is_con' and color == 'n' and self.icon in ['n', 'not_finished']):
             if load:
                 self.setStyleSheet('''
                 #title_name,#count,#con_date{background: %s}''' % Color[color])
@@ -638,6 +647,7 @@ class NewTitle(QWidget):
             self.set_color(self.color)
         self.set_edit(False)
 
+
 class NewPlaylist(QWidget):
     def __init__(self, parent, name):
         super(NewPlaylist, self).__init__(parent)
@@ -676,35 +686,38 @@ class NewPlaylist(QWidget):
 
             act1 = menu.addAction('Take index')
 
-            selected = menu.exec_(self.mapToGlobal(QPoint(0,0)))
+            selected = menu.exec_(self.mapToGlobal(QPoint(0, 0)))
 
             if selected == act1:
-                self.p.refresh_tab(self)
+                self.scroll_to(13)
 
         except Exception as e:
             QMessageBox.critical(self, "PLS4_ERROR: _test", str(e))
 
     # Move scroll bar
     # todo: тоже по формуле
-    def scroll_to(self, index):
+    def scroll_to(self, index: int):
         try:
             bar = self.scrollArea.verticalScrollBar()
             step = bar.pageStep()
             row_size = RowHeightMin + self.rowList.spacing()
             target_pos = row_size * index + self.rowList.spacing()
             bottom_border = bar.value() + step - RowHeightMax
+            anim_step = abs(target_pos - bar.value()) * 0.09
+            print(anim_step)
 
-            def anim_scroll(direction):
+            def anim_scroll(anim_step):
+                anim_step = 1 if anim_step == 0 else anim_step
                 loop = QEventLoop()
                 QTimer.singleShot(40, loop.quit)
                 loop.exec_()
-                bar.setValue(bar.value() + direction * 30)
+                bar.setValue(bar.value() + anim_step)
 
             if target_pos < bar.value():
-                while bar.value() > target_pos: anim_scroll(-1)
+                while bar.value() > target_pos: anim_scroll(-anim_step)
             elif target_pos > bottom_border:
                 while bar.value() < target_pos and bar.value() < bar.maximum():
-                    anim_scroll(1)
+                    anim_scroll(anim_step)
         except Exception as e:
             QMessageBox.critical(self, "PLS4_ERROR: scroll_to", str(e))
 
@@ -730,22 +743,23 @@ class NewPlaylist(QWidget):
         except Exception as e:
             QMessageBox.critical(self, "PLS4_ERROR: delete_playlist", str(e))
 
-    # todo: add title fix
     def add_title(self, t_name, count, genre, link, desc, icon, color):
         try:
             tab_index = self.p.tabWidget.currentIndex()
             p_name = self.p.tabWidget.tabText(tab_index)
 
-            sql("INSERT INTO Titles VALUES ('%s',%s,%s,'%s','%s','%s','%s','%s','%s','n')" % (
-                t_name, count, ID, p_name, icon, color, genre, link, desc))
+            sql("INSERT INTO Titles VALUES ('%s',%s,%s,'%s','%s','%s','%s','%s','%s','n')"
+                % (t_name, count, ID, p_name, icon, color, genre, link, desc))
             db.commit()
-            row_id = list(sql("""SELECT rowid FROM
-                                (CREATE TEMP TABLE t AS SELECT id FROM Titles 
-                                WHERE playlist = '%s')
-                                WHERE id = %s""" % (p_name, ID)))
-            print(row_id)
+            row_id = list(sql("""SELECT id, {1} FROM Titles 
+                                 WHERE playlist = '{0}' ORDER BY {1}
+                                 """.format(p_name, TitlesSort)))
+            for i in range(len(row_id)):
+                if row_id[i][0] == ID:
+                    row_id = i
+                    break
 
-            self.add_row(t_name, count, ID, icon, color).select_row()
+            self.add_row(t_name, count, ID, icon, color, row_id).select_row()
             self.row_count.setText('Тайтлов в плейлисте:' + str(self.rowList.count()))
             save_data('id')
             save_data('added')
@@ -758,7 +772,7 @@ class NewPlaylist(QWidget):
             index = index if index > 0 else self.rowList.count()
 
             self.rowList.insertWidget(index, row)
-            self.rowMap.append(t_id)
+            self.rowMap.insert(index, t_id)
             loop = QEventLoop()
             QTimer.singleShot(RowLoadDur, loop.quit)
             loop.exec_()
@@ -777,12 +791,14 @@ class NewPlaylist(QWidget):
                     self.add_row(t[0], t[1], t[2], t[3])
             else:
                 titles = list(sql('''SELECT title_name,count,id,icon,color 
-                       FROM Titles WHERE playlist="%s"''' % self.name))
+                                     FROM Titles WHERE playlist="%s" ORDER BY %s
+                                     ''' % (self.name, TitlesSort)))
                 for t in titles:
                     self.add_row(t[0], t[1], t[2], t[3], t[4])
             self.row_count.setText('Тайтлов в плейлисте:' + str(self.rowList.count()))
         except Exception as e:
             QMessageBox.critical(self, "PLS4_ERROR: load_titles", str(e))
+
 
 class MainForm(QMainWindow):
 
@@ -945,6 +961,7 @@ class MainForm(QMainWindow):
             print("Launched")
         except Exception as e:
             QMessageBox.critical(self, "PLS4_ERROR: launch", str(e))
+
 
 app = QApplication(sys.argv)
 app.setStyle(SelfStyledIcon('Fusion'))

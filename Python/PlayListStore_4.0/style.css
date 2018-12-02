@@ -9,7 +9,7 @@ QPushButton:pressed{
 /* Top main bar*/
 	#mainBar{background: silver;}
 	#closePName{
-		background: url(Icons/close.png) center center no-repate;
+		background: url(Icons/close.png) center center;
 		border-radius: 15px;
 		border: 2px solid silver; 
 	}

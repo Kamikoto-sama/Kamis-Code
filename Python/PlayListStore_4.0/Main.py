@@ -2,13 +2,13 @@
 import os
 import sqlite3
 import sys
+from datetime import datetime
 
 from PyQt5.QtCore import QEventLoop, QTimer, Qt, QPoint, QPropertyAnimation, QEasingCurve, QSize, QRect
 from PyQt5.QtGui import QIntValidator, QCursor, QIcon, QPixmap
 from PyQt5.QtWidgets import QMessageBox, QProxyStyle, QWidget, QHBoxLayout, QPushButton, QMenu, QTabBar, QMainWindow, \
-    QApplication, QLineEdit, QStyle, qApp
+    QApplication, QLineEdit, QStyle
 from PyQt5.uic import loadUi
-from time import strftime
 
 # LOAD DB
 try:
@@ -71,9 +71,10 @@ RowHeightMax = 72
 ScrollDur = 1000
 ConListName = '*Список продолжений*'
 MainP = None
-TitlesSort = "count"
+TitlesSortBy = "count"
 
 
+# todo: to static
 def save_data(save, value=1):
     try:
         global ID, TotalAdded, TotalViewed
@@ -337,7 +338,8 @@ class RowButtons(QWidget):
                 self.btns.addLayout(self.row_left)
                 self.btns.addLayout(self.row_right)
 
-                self.date = QLineEdit(strftime('%Y'), self)
+                data = datetime.today().strftime('%Y')
+                self.date = QLineEdit(data, self)
                 self.date.setAlignment(Qt.AlignCenter)
                 self.date.setGeometry(123, 0, 170, 30)
                 self.date.hide()
@@ -381,7 +383,7 @@ class RowButtons(QWidget):
                 count = self.p.count.text()
                 id_ = self.p.id
                 date = self.date.text()
-                tab.add_row(name, count, id_, date)
+                tab.add_row(name, count, id_, date, 'n')
         except Exception as e:
             QMessageBox.critical(self, "PLS4_ERROR: set_con_date", str(e))
 
@@ -416,7 +418,8 @@ class RowButtons(QWidget):
                 self.date.show()
                 self.date.setFocus()
                 self.date.selectAll()
-                self.date.setStyleSheet('QLineEdit{font-size:16px;font-weight:bold;background:#D9D9D9}')
+                self.date.setStyleSheet(
+                    'QLineEdit{font-size:16px;font-weight:bold;background:#D9D9D9}')
             if selected == on_pause:
                 self.p.set_icon('pause')
                 self.p.set_color('pause')
@@ -695,7 +698,6 @@ class NewPlaylist(QWidget):
             QMessageBox.critical(self, "PLS4_ERROR: _test", str(e))
 
     # Move scroll bar
-    # todo: тоже по формуле
     def scroll_to(self, index: int):
         try:
             bar = self.scrollArea.verticalScrollBar()
@@ -745,15 +747,14 @@ class NewPlaylist(QWidget):
 
     def add_title(self, t_name, count, genre, link, desc, icon, color):
         try:
-            tab_index = self.p.tabWidget.currentIndex()
-            p_name = self.p.tabWidget.tabText(tab_index)
+            # tab_index = self.p.tabWidget.currentIndex()
 
-            sql("INSERT INTO Titles VALUES ('%s',%s,%s,'%s','%s','%s','%s','%s','%s','n')"
-                % (t_name, count, ID, p_name, icon, color, genre, link, desc))
+            sql("INSERT INTO Titles VALUES ('%s',%s,%s,'%s','%s','%s','%s','%s','%s','')"
+                % (t_name, count, ID, self.name, icon, color, genre, link, desc))
             db.commit()
             row_id = list(sql("""SELECT id, {1} FROM Titles 
                                  WHERE playlist = '{0}' ORDER BY {1}
-                                 """.format(p_name, TitlesSort)))
+                              """.format(self.name, TitlesSortBy)))
             for i in range(len(row_id)):
                 if row_id[i][0] == ID:
                     row_id = i
@@ -766,15 +767,17 @@ class NewPlaylist(QWidget):
         except Exception as e:
             QMessageBox.critical(self, "PLS4_ERROR: add_title", str(e))
 
-    def add_row(self, name, count, t_id, icon, color='n', index=0):
+    # todo: anim it по формуле
+    def add_row(self, name, count, t_id, icon_date, color, index=0, row_count=1):
         try:
-            row = NewTitle(self, name, count, t_id, icon, color)
+            row = NewTitle(self, name, count, t_id, icon_date, color)
             index = index if index > 0 else self.rowList.count()
+            delay = 20
 
             self.rowList.insertWidget(index, row)
             self.rowMap.insert(index, t_id)
             loop = QEventLoop()
-            QTimer.singleShot(RowLoadDur, loop.quit)
+            QTimer.singleShot(delay, loop.quit)
             loop.exec_()
             return row
         except Exception as e:
@@ -786,15 +789,16 @@ class NewPlaylist(QWidget):
                 self.addT.setFixedSize(0, 0)
                 self.delP.setFixedSize(0, 0)
 
-                titles = list(sql('select title_name,count,id,date from titles where date!="n"'))
+                titles = list(sql(
+                    'select title_name,count,id,date from titles where date!=""'))
                 for t in titles:
-                    self.add_row(t[0], t[1], t[2], t[3])
+                    self.add_row(t[0], t[1], t[2], t[3], 'n', len(titles))
             else:
                 titles = list(sql('''SELECT title_name,count,id,icon,color 
                                      FROM Titles WHERE playlist="%s" ORDER BY %s
-                                     ''' % (self.name, TitlesSort)))
+                                     ''' % (self.name, TitlesSortBy)))
                 for t in titles:
-                    self.add_row(t[0], t[1], t[2], t[3], t[4])
+                    self.add_row(t[0], t[1], t[2], t[3], t[4], len(titles))
             self.row_count.setText('Тайтлов в плейлисте:' + str(self.rowList.count()))
         except Exception as e:
             QMessageBox.critical(self, "PLS4_ERROR: load_titles", str(e))
@@ -862,7 +866,6 @@ class MainForm(QMainWindow):
         self.add_tab('*Список продолжений*')
 
     # Show/hide add playlist
-    # todo: anim it по формуле
     def add_playlist(self):
         try:
             if self.pName.isHidden():
@@ -942,6 +945,7 @@ class MainForm(QMainWindow):
         except Exception as e:
             QMessageBox.critical(self, "PLS4_ERROR: _clear", str(e))
 
+    # pl name esc
     def keyPressEvent(self, event):
         try:
             if not event or (event.key() == Qt.Key_Escape and self.pName.isVisible()):
@@ -950,14 +954,35 @@ class MainForm(QMainWindow):
         except Exception as e:
             QMessageBox.critical(self, "PLS4_ERROR: MainForm_on_esc", str(e))
 
+    # todo: автоотслеживание тайтлов
+    def check_continuations(self):
+        try:
+            cons = list(sql("SELECT date, id FROM Titles WHERE date != ''"))
+            today = datetime.today()
+            count = 0
+            print(cons)
+            for title in cons:
+                date = title[0] if title[0] != '0' else "0001.0.0"
+                date = datetime.strptime(date, "%Y.%m.%d")
+                if today >= date: count += 1
+            if count > 0:
+                QMessageBox.information(self, 'PLS4',
+                                        'Количество тайтлов получивших продолжение: %s\nОткрыть список продолжений?'
+                                        % count)
+        except Exception as e:
+            QMessageBox.critical(self, 'PLS4_ERROR: check_continuations', str(e))
+
     def launch(self):
         try:
             global MainP
             MainP = self
             playlists = list(sql("SELECT * FROM Playlists ORDER BY rowid desc"))
+
             self.pList.addItems([row[0] for row in playlists])
             self.select_playlist()
+
             self.viewed_count.setText('Всего просмотрено:' + str(TotalViewed))
+            self.check_continuations()
             print("Launched")
         except Exception as e:
             QMessageBox.critical(self, "PLS4_ERROR: launch", str(e))

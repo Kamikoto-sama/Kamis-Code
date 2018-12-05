@@ -68,7 +68,7 @@ RowAnimDur = (6, 6)  # (AnimDown,AnimUp)
 RowLoadDur = 20
 RowHeightMin = 34
 RowHeightMax = 72
-ScrollDur = 1000
+AddRowDur = 700
 ConListName = '*Список продолжений*'
 MainP = None
 TitlesSortBy = "count"
@@ -706,7 +706,6 @@ class NewPlaylist(QWidget):
             target_pos = row_size * index + self.rowList.spacing()
             bottom_border = bar.value() + step - RowHeightMax
             anim_step = abs(target_pos - bar.value()) * 0.09
-            print(anim_step)
 
             def anim_scroll(anim_step):
                 anim_step = 1 if anim_step == 0 else anim_step
@@ -747,14 +746,14 @@ class NewPlaylist(QWidget):
 
     def add_title(self, t_name, count, genre, link, desc, icon, color):
         try:
-            # tab_index = self.p.tabWidget.currentIndex()
-
             sql("INSERT INTO Titles VALUES ('%s',%s,%s,'%s','%s','%s','%s','%s','%s','')"
                 % (t_name, count, ID, self.name, icon, color, genre, link, desc))
             db.commit()
+
             row_id = list(sql("""SELECT id, {1} FROM Titles 
                                  WHERE playlist = '{0}' ORDER BY {1}
                               """.format(self.name, TitlesSortBy)))
+
             for i in range(len(row_id)):
                 if row_id[i][0] == ID:
                     row_id = i
@@ -767,12 +766,12 @@ class NewPlaylist(QWidget):
         except Exception as e:
             QMessageBox.critical(self, "PLS4_ERROR: add_title", str(e))
 
-    # todo: anim it по формуле
     def add_row(self, name, count, t_id, icon_date, color, index=0, row_count=1):
         try:
             row = NewTitle(self, name, count, t_id, icon_date, color)
             index = index if index > 0 else self.rowList.count()
-            delay = 20
+            delay = AddRowDur // row_count
+            if delay == 0: delay = 1
 
             self.rowList.insertWidget(index, row)
             self.rowMap.insert(index, t_id)
@@ -792,13 +791,13 @@ class NewPlaylist(QWidget):
                 titles = list(sql(
                     'select title_name,count,id,date from titles where date!=""'))
                 for t in titles:
-                    self.add_row(t[0], t[1], t[2], t[3], 'n', len(titles))
+                    self.add_row(t[0], t[1], t[2], t[3], 'n', row_count=len(titles))
             else:
                 titles = list(sql('''SELECT title_name,count,id,icon,color 
                                      FROM Titles WHERE playlist="%s" ORDER BY %s
                                      ''' % (self.name, TitlesSortBy)))
                 for t in titles:
-                    self.add_row(t[0], t[1], t[2], t[3], t[4], len(titles))
+                    self.add_row(t[0], t[1], t[2], t[3], t[4], row_count=len(titles))
             self.row_count.setText('Тайтлов в плейлисте:' + str(self.rowList.count()))
         except Exception as e:
             QMessageBox.critical(self, "PLS4_ERROR: load_titles", str(e))
@@ -960,7 +959,7 @@ class MainForm(QMainWindow):
             cons = list(sql("SELECT date, id FROM Titles WHERE date != ''"))
             today = datetime.today()
             count = 0
-            print(cons)
+            return
             for title in cons:
                 date = title[0] if title[0] != '0' else "0001.0.0"
                 date = datetime.strptime(date, "%Y.%m.%d")

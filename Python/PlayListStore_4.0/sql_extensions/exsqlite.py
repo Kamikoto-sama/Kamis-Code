@@ -1,5 +1,6 @@
 import sqlite3
 
+
 class ExSQLite:
     @staticmethod
     def delete_column(db_name, table_name, *columns):
@@ -88,3 +89,33 @@ class ExSQLite:
         except Exception as e:
             sql.execute("ALTER TABLE __TMP__ RENAME TO " + table_name)
             print("Something went wrong :(", e)
+
+
+class SQLite:
+    """
+    Create table, Insert, Select, Delete, Update;
+    """
+
+    def __init__(self, db_file_name: str):
+        self.db = sqlite3.connect(db_file_name)
+        self.query = self.db.cursor().execute
+        self.name = db_file_name
+        self.auto_commit = False
+
+    def create(self, table_name: str, columns: dict, commit=True):
+        if type(table_name) != str or type(columns) != dict:
+            raise ValueError('Wrong arguments type')
+
+        columns = ['%s %s' % (i, columns[i]) for i in columns]
+        self.query('CREATE TABLE %s' % table_name + ','.join(columns))
+        if commit:
+            self.db.commit()
+
+    def select(self, what_columns: tuple, from_table: str, where: str = '', order: str = ''):
+        what_columns = what_columns if len(what_columns) > 0 else '*'
+
+        query = 'SELECT %s FROM %s' % (what_columns, from_table)
+        query += ' WHERE %s' % where if where != '' else ''
+        query += ' ORDER BY %s' % order if order != '' else ''
+
+        return list(self.query(query))

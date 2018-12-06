@@ -109,7 +109,7 @@ class DataBase:
         if commit or self.auto_commit:
             self.commit()
 
-    def select(self, what_columns: str, from_table: str, where='', order=''):
+    def get(self, what_columns: str, from_table: str, where='', order=''):
         """SELECT <what_columns> FROM <from_table>[ WHERE <where>][ ORDER BY <order>] -> list(data)"""
         what_columns = what_columns if len(what_columns) > 0 else '*'
         query = 'SELECT %s FROM %s' % (what_columns, from_table)
@@ -135,7 +135,7 @@ class DataBase:
         if commit or self.auto_commit:
             self.commit()
 
-    def insert(self, table_name: str, values, commit=False):
+    def add(self, table_name: str, values, commit=False):
         """INSERT INTO <table_name> VALUES (*<values>/*<values => col_name:col_value>)"""
         if type(values) is tuple:
             values = ','.join(values)
@@ -147,3 +147,9 @@ class DataBase:
         self.query('INSERT INTO %s VALUES (%s)' % (table_name, ','.join(values)))
         if commit or self.auto_commit:
             self.commit()
+
+    def delete_column(self, table_name, *columns):
+        ExSQLite.delete_column(self.name, table_name, *columns)
+
+    def rename_column(self, table_name, column_name, new_name):
+        ExSQLite.rename_column(self.name, table_name, column_name, new_name)

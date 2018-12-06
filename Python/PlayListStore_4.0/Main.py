@@ -3,6 +3,7 @@ import os
 import sqlite3
 import sys
 from datetime import datetime
+from sql_extensions.exsqlite import DataBase
 
 from PyQt5.QtCore import QEventLoop, QTimer, Qt, QPoint, QPropertyAnimation, QEasingCurve, QSize, QRect
 from PyQt5.QtGui import QIntValidator, QCursor, QIcon, QPixmap
@@ -74,7 +75,6 @@ MainP = None
 TitlesSortBy = "count"
 
 
-# todo: to static
 def save_data(save, value=1):
     try:
         global ID, TotalAdded, TotalViewed
@@ -118,7 +118,7 @@ class AddTitleForm(QWidget):
 
             self.title_name.returnPressed.connect(self.ok.click)
             self.cancel.clicked.connect(self.show_add_form)
-            self.ok.clicked.connect(self.on_ok)  # self.is_con.stateChanged.connect(self.changed)
+            self.ok.clicked.connect(self.submit)  # self.is_con.stateChanged.connect(self.changed)
         except Exception as e:
             print('Add_Title_Form:', e)
 
@@ -139,8 +139,9 @@ class AddTitleForm(QWidget):
         except Exception as e:
             print('show_add_form:', e)
 
-    def on_ok(self):
+    def submit(self):
         try:
+            self.show_add_form()
             name = self.title_name.text()
             count = self.count.text()
             genre = self.genre.text()
@@ -164,9 +165,8 @@ class AddTitleForm(QWidget):
                     icon = 'n'
 
                 self.parent.add_title(name, count, genre, link, desc, icon, color)
-                self.show_add_form()
         except Exception as e:
-            print('on_ok:', e)
+            QMessageBox.critical(self, "PLS4_ERROR: submit", str(e))
 
 
 class TabBar(QTabBar):
@@ -482,15 +482,17 @@ class NewTitle(QWidget):
         try:
             # Delete title from con list
             if self.p.con:
-                sql ('update Titles set date="n",icon="viewed" WHERE id=%s' % self.id)
+                sql('update Titles set date="n",icon="viewed" WHERE id=%s' % self.id)
                 # todo: сделать синхронинзацию при удалении из con_list
             else:
                 sql('DELETE FROM Titles WHERE id=%s' % self.id)
             db.commit()
+
             self.min_height = 0
-            self.animOff.start(2)
+            self.animOff.start(1)
             self.p.row_count.setText('Тайтлов в плейлисте:' + str(self.p.rowList.count()))
-            if self.color == 'viewed': save_data('viewed', -1)
+            if self.color == 'viewed':
+                save_data('viewed', -1)
             save_data('added', -1)
         except Exception as e:
             QMessageBox.critical(self, "PLS4_ERROR: delete_title", str(e))
@@ -754,11 +756,7 @@ class NewPlaylist(QWidget):
                                  WHERE playlist = '{0}' ORDER BY {1}
                               """.format(self.name, TitlesSortBy)))
 
-            for i in range(len(row_id)):
-                if row_id[i][0] == ID:
-                    row_id = i
-                    break
-
+            row_id = row_id.index((ID, int(count)))
             self.add_row(t_name, count, ID, icon, color, row_id).select_row()
             self.row_count.setText('Тайтлов в плейлисте:' + str(self.rowList.count()))
             save_data('id')
@@ -769,9 +767,11 @@ class NewPlaylist(QWidget):
     def add_row(self, name, count, t_id, icon_date, color, index=0, row_count=1):
         try:
             row = NewTitle(self, name, count, t_id, icon_date, color)
-            index = index if index > 0 else self.rowList.count()
             delay = AddRowDur // row_count
-            if delay == 0: delay = 1
+            if delay == 0 or index > 0:
+                delay = 1
+
+            index = index if index > 0 else self.rowList.count()
 
             self.rowList.insertWidget(index, row)
             self.rowMap.insert(index, t_id)
@@ -959,15 +959,21 @@ class MainForm(QMainWindow):
             cons = list(sql("SELECT date, id FROM Titles WHERE date != ''"))
             today = datetime.today()
             count = 0
-            return
+            pattern = ('%Y', '%m', '%d')
             for title in cons:
-                date = title[0] if title[0] != '0' else "0001.0.0"
-                date = datetime.strptime(date, "%Y.%m.%d")
-                if today >= date: count += 1
+                date = title[0].split('.')
+                date = [str(today.year)] if date[0] == '0' else date
+                if len(date) == 1:
+                    date.append('12')
+                if len(date) == 2:
+                    date.append('31')
+                date = datetime.strptime(date, '.'.join(pattern))
+                if today > date:
+                    count += 1
             if count > 0:
-                QMessageBox.information(self, 'PLS4',
-                                        'Количество тайтлов получивших продолжение: %s\nОткрыть список продолжений?'
-                                        % count)
+                text = 'Количество тайтлов получивших продолжение: '
+                text += '%s\nОткрыть список продолжений?' % count
+                QMessageBox.information(self, 'PLS4', text)
         except Exception as e:
             QMessageBox.critical(self, 'PLS4_ERROR: check_continuations', str(e))
 

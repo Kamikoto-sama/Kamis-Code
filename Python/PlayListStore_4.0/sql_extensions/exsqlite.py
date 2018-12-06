@@ -91,31 +91,59 @@ class ExSQLite:
             print("Something went wrong :(", e)
 
 
-class SQLite:
-    """
-    Create table, Insert, Select, Delete, Update;
-    """
-
-    def __init__(self, db_file_name: str):
-        self.db = sqlite3.connect(db_file_name)
-        self.query = self.db.cursor().execute
+class DataBase:
+    def __init__(self, db_file_name: str, auto_commit=False):
+        db = sqlite3.connect(db_file_name)
+        self.query = db.cursor().execute
         self.name = db_file_name
-        self.auto_commit = False
+        self.commit = db.commit
+        self.auto_commit = auto_commit
 
-    def create(self, table_name: str, columns: dict, commit=True):
+    def create(self, table_name: str, columns: dict, commit=False):
+        """CREATE TABLE <table_name> (*<columns => col_name:col_type>)"""
         if type(table_name) != str or type(columns) != dict:
             raise ValueError('Wrong arguments type')
 
         columns = ['%s %s' % (i, columns[i]) for i in columns]
         self.query('CREATE TABLE %s' % table_name + ','.join(columns))
-        if commit:
-            self.db.commit()
+        if commit or self.auto_commit:
+            self.commit()
 
-    def select(self, what_columns: tuple, from_table: str, where: str = '', order: str = ''):
+    def select(self, what_columns: str, from_table: str, where='', order=''):
+        """SELECT <what_columns> FROM <from_table>[ WHERE <where>][ ORDER BY <order>] -> list(data)"""
         what_columns = what_columns if len(what_columns) > 0 else '*'
-
         query = 'SELECT %s FROM %s' % (what_columns, from_table)
         query += ' WHERE %s' % where if where != '' else ''
         query += ' ORDER BY %s' % order if order != '' else ''
-
         return list(self.query(query))
+
+    def delete(self, from_table: str, where='', commit=False):
+        """DELETE FROM <from_table>[ WHERE <where>]"""
+        query = 'DELETE FROM %s' % from_table
+        query += ' WHERE %s' % where if where != '' else ''
+        self.query(query)
+        if commit or self.auto_commit:
+            self.commit()
+
+    def update(self, table_name: str, col_values: dict, where='', commit=False):
+        """UPDATE <table_name> SET *<col_values => col_name:col_value>"""
+        query = 'UPDATE %s SET ' % table_name
+        values = ['%s=%s' % (i, col_values[i]) for i in col_values]
+        query += ','.join(values)
+        query += ' WHERE %s' % where if where != '' else ''
+        self.query(query)
+        if commit or self.auto_commit:
+            self.commit()
+
+    def insert(self, table_name: str, values, commit=False):
+        """INSERT INTO <table_name> VALUES (*<values>/*<values => col_name:col_value>)"""
+        if type(values) is tuple:
+            values = ','.join(values)
+        elif type(values) is dict:
+            values = ['%s=%s' % (i, values[i]) for i in values]
+        else:
+            raise ValueError('Values must be "tuple" or "dict"')
+
+        self.query('INSERT INTO %s VALUES (%s)' % (table_name, ','.join(values)))
+        if commit or self.auto_commit:
+            self.commit()

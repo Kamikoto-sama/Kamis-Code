@@ -482,7 +482,7 @@ class NewTitle(QWidget):
         try:
             # Delete title from con list
             if self.p.con:
-                sql('update Titles set date="n",icon="viewed" WHERE id=%s' % self.id)
+                sql ('update Titles set date="n",icon="viewed" WHERE id=%s' % self.id)
                 # todo: сделать синхронинзацию при удалении из con_list
             else:
                 sql('DELETE FROM Titles WHERE id=%s' % self.id)

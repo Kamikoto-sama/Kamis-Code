@@ -148,6 +148,11 @@ class DataBase:
         if commit or self.auto_commit:
             self.commit()
 
+    def table_exists(self, table_name: str):
+        query = "SELECT count(*) FROM sqlite_master WHERE type='table'"
+        query += " AND name='%s'" % table_name
+        return self.query(query)
+
     def delete_column(self, table_name, *columns):
         ExSQLite.delete_column(self.name, table_name, *columns)
 

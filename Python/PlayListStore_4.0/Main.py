@@ -3,20 +3,21 @@ import os
 import sqlite3
 import sys
 from datetime import datetime
-from sql_extensions.exsqlite import DataBase
 
-from PyQt5.QtCore import QEventLoop, QTimer, Qt, QPoint, QPropertyAnimation, QEasingCurve, QSize, QRect
+from PyQt5.QtCore import (QEventLoop, QTimer, Qt, QPoint,
+                          QPropertyAnimation, QEasingCurve, QSize, QRect)
 from PyQt5.QtGui import QIntValidator, QCursor, QIcon, QPixmap
-from PyQt5.QtWidgets import QMessageBox, QProxyStyle, QWidget, QHBoxLayout, QPushButton, QMenu, QTabBar, QMainWindow, \
-    QApplication, QLineEdit, QStyle
+from PyQt5.QtWidgets import (QMessageBox, QProxyStyle, QWidget, QHBoxLayout, QPushButton,
+                             QMenu, QTabBar, QMainWindow, QApplication, QLineEdit, QStyle)
 from PyQt5.uic import loadUi
 
 # LOAD DB
 try:
-    if not os.path.exists("Data.pls"):
-        db = sqlite3.connect("Data.pls")
-        sql = db.cursor().execute
-        sql("CREATE TABLE Playlists (name varchar(100))")
+    db = sqlite3.connect("Data.pls")
+    sql = db.cursor().execute
+    query = "SELECT count(*) FROM sqlite_master WHERE type='table'"
+    if not sql(query + " AND name='Data'"):
+        sql('CREATE TABLE Playlists (name varchar(100)')
         sql('CREATE TABLE Data (name varchar(10),value varchar(40))')
         sql("""
             CREATE TABLE Titles (
@@ -35,9 +36,6 @@ try:
         sql('INSERT INTO Data VALUES("viewed","0")')
         sql('INSERT INTO Data VALUES("added","0")')
         db.commit()
-    else:
-        db = sqlite3.connect("Data.pls")
-        sql = db.cursor().execute
 
     data = [int(d[0]) for d in sql('SELECT value FROM Data')]
     ID = data[0]
@@ -53,11 +51,12 @@ Icon = {
     'con': 'Icons/continuation.ico',
     'viewing': 'Icons/looking.ico',
     'pause': 'Icons/pause.ico'}
+# Associate with indexes
 Color = {
     'n': '#D9D9D9',
     'edit': 'none',
     'viewed': '#AEDD17',
-    'viewing': '#6ebcd2',
+    'viewing': '#6EBCD2',
     'pause': '#DC143C',
     'is_con': '#FEE02F'}
 # Skin = 'Skins/dark_orange.css'
@@ -118,7 +117,7 @@ class AddTitleForm(QWidget):
 
             self.title_name.returnPressed.connect(self.ok.click)
             self.cancel.clicked.connect(self.show_add_form)
-            self.ok.clicked.connect(self.submit)  # self.is_con.stateChanged.connect(self.changed)
+            self.ok.clicked.connect(self.submit)
         except Exception as e:
             print('Add_Title_Form:', e)
 
@@ -215,8 +214,9 @@ class SideBar(QWidget):
             genre = self.genre.text()
             link = self.link.text()
             desc = self.desc.toPlainText()
-            sql(
-                'update titles set genre="%s",link="%s",desc="%s" where id=%s' % (genre, link, desc, self.p.curRow.id))
+            query = "update titles set genre='%s', link='%s', desc='%s' where id=%s"\
+                     % (genre, link, desc, self.p.curRow.id)
+            sql(query)
             db.commit()
         except Exception as e:
             QMessageBox.critical(self, "PLS4_ERROR: save_desc", str(e))
@@ -266,7 +266,8 @@ class SideBar(QWidget):
         try:
             self.do_edit(False)
 
-            data = list(sql('SELECT genre,link,desc,icon,color FROM Titles WHERE id=%s' % t_id))[0]
+            query = "SELECT genre,link,desc,icon,color FROM Titles "
+            data = list(sql(query + "WHERE id=%s" % t_id))[0]
             self.genre.setText(data[0])
             self.link.setText(data[1])
             self.desc.setText(data[2])
@@ -286,7 +287,8 @@ class SideBar(QWidget):
     def hide_show_side(self):
         try:
             if self.p.side_hiden:
-                self.animSide.setEndValue(QRect(self.p.w - SideWidth, 0, SideWidth, self.p.h))
+                self.animSide.setEndValue(QRect(self.p.w - SideWidth, 0,
+                                                SideWidth, self.p.h))
                 self.p.side_hiden = False
                 self.closeSide.setText('>')
             else:
@@ -374,7 +376,8 @@ class RowButtons(QWidget):
             self.p.set_icon('con')
             self.p.set_color('viewed')
             self.date.hide()
-            sql('update titles set date="%s" where id=%s' % (self.date.text(), self.p.id))
+            sql('update titles set date="%s" where id=%s'
+                % (self.date.text(), self.p.id))
             db.commit()
 
             if ConListName in MainP.tabMap:
@@ -410,8 +413,8 @@ class RowButtons(QWidget):
                 if self.p.color not in ['is_con', 'viewed']:
                     save_data('viewed')
                 if self.p.icon == 'con':
-                    sql('''update Titles set date="n",icon="viewed" 
-                                WHERE id=%s''' % self.p.id)
+                    query = "update Titles set date='n', icon='viewed' "
+                    sql(query + "WHERE id=%s" % self.p.id)
                 self.p.set_color('viewed')
                 self.p.set_icon('viewed')
             if selected == on_con:
@@ -462,13 +465,13 @@ class NewTitle(QWidget):
             self.con_date.returnPressed.connect(self.end_line_edit)
             self.con_date.setCursor(QCursor(Qt.PointingHandCursor))
 
+            self.set_color(self.color, True)
             if parent.con:
                 self.status.hide()
                 self.con_date.setText(icon)
             else:
                 self.con_date.hide()
                 self.set_icon(icon)
-                self.set_color(self.color, True)
 
             self.min_height = RowHeightMin
             self.animOn = QTimer(self)
@@ -490,7 +493,8 @@ class NewTitle(QWidget):
 
             self.min_height = 0
             self.animOff.start(1)
-            self.p.row_count.setText('Тайтлов в плейлисте:' + str(self.p.rowList.count()))
+            row_count = str(self.p.rowList.count())
+            self.p.row_count.setText('Тайтлов в плейлисте:' + row_count)
             if self.color == 'viewed':
                 save_data('viewed', -1)
             save_data('added', -1)
@@ -507,7 +511,8 @@ class NewTitle(QWidget):
 
     def set_color(self, color, load=False):
         if self.color != 'is_con' or color in ('is_con', 'edit') or (
-                self.color == 'is_con' and color == 'n' and self.icon in ['n', 'not_finished']):
+                self.color == 'is_con' and color == 'n' and
+                self.icon in ['n', 'not_finished']):
             if load:
                 self.setStyleSheet('''
                 #title_name,#count,#con_date{background: %s}''' % Color[color])
@@ -748,7 +753,8 @@ class NewPlaylist(QWidget):
 
     def add_title(self, t_name, count, genre, link, desc, icon, color):
         try:
-            sql("INSERT INTO Titles VALUES ('%s',%s,%s,'%s','%s','%s','%s','%s','%s','')"
+            query = "INSERT INTO Titles VALUES "
+            sql(query + "('%s',%s,%s,'%s','%s','%s','%s','%s','%s','')"
                 % (t_name, count, ID, self.name, icon, color, genre, link, desc))
             db.commit()
 
@@ -788,10 +794,11 @@ class NewPlaylist(QWidget):
                 self.addT.setFixedSize(0, 0)
                 self.delP.setFixedSize(0, 0)
 
-                titles = list(sql(
-                    'select title_name,count,id,date from titles where date!=""'))
+                query = "select title_name,count,id,date from titles WHERE date!=''"
+                titles = list(sql(query))
                 for t in titles:
-                    self.add_row(t[0], t[1], t[2], t[3], 'n', row_count=len(titles))
+                    color = 'is_con' if t[3][-1] == '!' else 'n'
+                    self.add_row(t[0], t[1], t[2], t[3], color, row_count=len(titles))
             else:
                 titles = list(sql('''SELECT title_name,count,id,icon,color 
                                      FROM Titles WHERE playlist="%s" ORDER BY %s
@@ -930,7 +937,8 @@ class MainForm(QMainWindow):
     # Temp
     def _clear(self):
         try:
-            action = QMessageBox.question(self, "Message", "Sure?", QMessageBox.Yes | QMessageBox.No)
+            buttons = QMessageBox.Yes | QMessageBox.No
+            action = QMessageBox.question(self, "Message", "Sure?", buttons)
             if action == QMessageBox.No: return
             sql("DELETE FROM Playlists")
             sql("DELETE FROM Titles")
@@ -953,27 +961,37 @@ class MainForm(QMainWindow):
         except Exception as e:
             QMessageBox.critical(self, "PLS4_ERROR: MainForm_on_esc", str(e))
 
-    # todo: автоотслеживание тайтлов
     def check_continuations(self):
         try:
             cons = list(sql("SELECT date, id FROM Titles WHERE date != ''"))
             today = datetime.today()
             count = 0
             pattern = ('%Y', '%m', '%d')
+
             for title in cons:
+                if title[0][-1] == '!':
+                    continue
                 date = title[0].split('.')
                 date = [str(today.year)] if date[0] == '0' else date
+
                 if len(date) == 1:
                     date.append('12')
-                if len(date) == 2:
                     date.append('31')
-                date = datetime.strptime(date, '.'.join(pattern))
+                date = datetime.strptime('.'.join(date), '.'.join(pattern[:len(date)]))
                 if today > date:
                     count += 1
+                    query = "UPDATE Titles SET "
+                    sql(query + "date='%s' WHERE id=%s" % (title[0] + '!', title[1]))
+            db.commit()
+
             if count > 0:
                 text = 'Количество тайтлов получивших продолжение: '
                 text += '%s\nОткрыть список продолжений?' % count
-                QMessageBox.information(self, 'PLS4', text)
+                buttons = QMessageBox.Yes | QMessageBox.No
+
+                act = QMessageBox.question(self, 'PLS4', text, buttons)
+                if act == QMessageBox.Yes:
+                    self.open_con_list()
         except Exception as e:
             QMessageBox.critical(self, 'PLS4_ERROR: check_continuations', str(e))
 

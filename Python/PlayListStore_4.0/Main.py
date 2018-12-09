@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import os
 import sqlite3
 import sys
 from datetime import datetime
@@ -214,8 +213,8 @@ class SideBar(QWidget):
             genre = self.genre.text()
             link = self.link.text()
             desc = self.desc.toPlainText()
-            query = "update titles set genre='%s', link='%s', desc='%s' where id=%s"\
-                     % (genre, link, desc, self.p.curRow.id)
+            query = "update titles set genre='%s', link='%s', desc='%s' where id=%s" \
+                    % (genre, link, desc, self.p.curRow.id)
             sql(query)
             db.commit()
         except Exception as e:
@@ -510,22 +509,25 @@ class NewTitle(QWidget):
             db.commit()
 
     def set_color(self, color, load=False):
-        if self.color != 'is_con' or color in ('is_con', 'edit') or (
-                self.color == 'is_con' and color == 'n' and
-                self.icon in ['n', 'not_finished']):
-            if load:
-                self.setStyleSheet('''
-                #title_name,#count,#con_date{background: %s}''' % Color[color])
-            else:
-                self.setStyleSheet('''
-                    #title_name,#count,#con_date{background: %s}
-                    #t_row{border-color: %s}
-                    ''' % (Color[color], self.borderColor))
+        try:
+            if self.color != 'is_con' or color in ('is_con', 'edit') or (
+                    self.color == 'is_con' and color == 'n' and
+                    self.icon in ['n', 'not_finished']):
+                if load:
+                    self.setStyleSheet('''
+                    #title_name,#count,#con_date{background: %s}''' % Color[color])
+                else:
+                    self.setStyleSheet('''
+                        #title_name,#count,#con_date{background: %s}
+                        #t_row{border-color: %s}
+                        ''' % (Color[color], self.borderColor))
 
-            if color not in ['edit', self.color]:
-                self.color = color
-                sql('UPDATE Titles SET color="%s" WHERE id=%s' % (color, self.id))
-                db.commit()
+                if color not in ['edit', self.color]:
+                    self.color = color
+                    sql('UPDATE Titles SET color="%s" WHERE id=%s' % (color, self.id))
+                    db.commit()
+        except Exception as e:
+            QMessageBox.critical(self, "PLS4_ERROR: set_color", str(e))
 
     # Hide/show buttons
     def set_buttons(self, show):
@@ -567,6 +569,8 @@ class NewTitle(QWidget):
         try:
             self.set_edit()
             self.set_color('edit')
+            if self.p.con:
+                self.con_date.setText(self.con_date.text().rstrip("!"))
 
             if not self.p.side_hiden:
                 self.p.sideBar.hide_show_side()
@@ -580,10 +584,14 @@ class NewTitle(QWidget):
             self.count.clearFocus()
             name = self.title_name.text()
             count = self.count.text()
-            date = self.con_date.text()
-            sql('''UPDATE Titles SET title_name="%s",count=%s,date="%s"
-                        WHERE id=%s''' % (name, count, date, self.id))
+
+            query = "UPDATE Titles SET title_name='%s', count=%s" % (name, count)
+            if self.p.con:
+                self.color = 'n'
+                query += ", date='%s'" % self.con_date.text()
+            sql(query + " WHERE id='%s'" % self.id)
             db.commit()
+
             self.leave(False)
         except Exception as e:
             QMessageBox.critical(self, "PLS4_ERROR: on_line_edited", str(e))
@@ -602,9 +610,9 @@ class NewTitle(QWidget):
             self.con_date.setCursor(QCursor(Qt.PointingHandCursor))
 
     # ON edit ecs
-    def keyPressEvent(self, event):
+    def keyPressEvent(self, event=None, esc=False):
         try:
-            if event == '' or event.key() == Qt.Key_Escape:
+            if esc or event.key() == Qt.Key_Escape:
                 self.title_name.clearFocus()
                 self.title_name.undo()
                 self.count.clearFocus()
@@ -614,6 +622,9 @@ class NewTitle(QWidget):
                 # On esc set date of con
                 if not self.p.con:
                     self.p.rowButns.date.hide()
+                elif self.color == "is_con" and self.con_date.text()[-1] != '!':
+                    self.con_date.setText(self.con_date.text() + '!')
+
         except Exception as e:
             QMessageBox.critical(self, "PLS4_ERROR: row_edit_esc", str(e))
 
@@ -643,19 +654,24 @@ class NewTitle(QWidget):
                 self.animOff.stop()
 
     def leave(self, change=True):
-        self.animOff.stop()
-        self.animOn.stop()
-        if change:
-            self.set_buttons(False)
-            self.keyPressEvent('')
-            self.animOff.start(RowAnimDur[1])
-            self.setStyleSheet('''
-            #t_row{border-color: #F0F0F0}
-            QLineEdit{background: %s}
-            #t_row:hover{border-color: %s;}''' % (Color[self.color], self.hoverColor))
-        else:
-            self.set_color(self.color)
-        self.set_edit(False)
+        try:
+            self.animOff.stop()
+            self.animOn.stop()
+            if change:
+                self.set_buttons(False)
+                self.keyPressEvent(esc=True)
+                self.animOff.start(RowAnimDur[1])
+                self.setStyleSheet('''
+                    #t_row{border-color: #F0F0F0}
+                    QLineEdit{background: %s}
+                    #t_row:hover{border-color: %s;}'''
+                                   % (Color[self.color], self.hoverColor))
+            else:
+                self.set_color(self.color)
+
+            self.set_edit(False)
+        except Exception as e:
+            QMessageBox.critical(self, "PLS4_ERROR: leave", str(e))
 
 
 class NewPlaylist(QWidget):
@@ -774,8 +790,8 @@ class NewPlaylist(QWidget):
         try:
             row = NewTitle(self, name, count, t_id, icon_date, color)
             delay = AddRowDur // row_count
-            if delay == 0 or index > 0:
-                delay = 1
+            if index > 0:
+                delay = 0
 
             index = index if index > 0 else self.rowList.count()
 
@@ -1005,7 +1021,7 @@ class MainForm(QMainWindow):
             self.select_playlist()
 
             self.viewed_count.setText('Всего просмотрено:' + str(TotalViewed))
-            self.check_continuations()
+            QTimer.singleShot(1000, self.check_continuations)
             print("Launched")
         except Exception as e:
             QMessageBox.critical(self, "PLS4_ERROR: launch", str(e))

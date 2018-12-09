@@ -91,7 +91,7 @@ class ExSQLite:
             print("Something went wrong :(", e)
 
 
-class DataBase:
+class Useless:
     def __init__(self, db_file_name: str, auto_commit=False):
         db = sqlite3.connect(db_file_name)
         self.query = db.cursor().execute

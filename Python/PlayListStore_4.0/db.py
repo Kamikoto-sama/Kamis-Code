@@ -6,4 +6,4 @@ SQL = db.cursor().execute
 def sql(quary):
     answer = SQL(quary)
     db.commit()
-    return answer
+    return list(answer)

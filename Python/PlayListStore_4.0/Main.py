@@ -15,9 +15,9 @@ try:
     db = sqlite3.connect("Data.pls")
     sql = db.cursor().execute
     query = "SELECT count(*) FROM sqlite_master WHERE type='table'"
-    if not sql(query + " AND name='Data'"):
-        sql('CREATE TABLE Playlists (name varchar(100)')
-        sql('CREATE TABLE Data (name varchar(10),value varchar(40))')
+    if not list(sql(query + " AND name='Data'"))[0][0]:
+        sql('CREATE TABLE Playlists (name varchar(100))')
+        sql("CREATE TABLE Data (name varchar(10), value varchar(40))")
         sql("""
             CREATE TABLE Titles (
             title_name varchar(255) NOT NULL,
@@ -34,6 +34,7 @@ try:
         sql('INSERT INTO Data VALUES("id","0")')
         sql('INSERT INTO Data VALUES("viewed","0")')
         sql('INSERT INTO Data VALUES("added","0")')
+        sql('INSERT INTO Data VALUES("cur_pl","-1")')
         db.commit()
 
     data = [int(d[0]) for d in sql('SELECT value FROM Data')]
@@ -41,7 +42,7 @@ try:
     TotalViewed = data[1]
     TotalAdded = data[2]
 except Exception as e:
-    print('Load db:', e)
+    print('Load db:', e.args)
 # CONSTANTS
 Icon = {
     'n': '',
@@ -862,6 +863,7 @@ class MainForm(QMainWindow):
         self.option_anim.setDuration(500)
 
         QTimer.singleShot(1, self.launch)
+        self.launching = True
 
     # todo: options
     def open_options(self):
@@ -916,8 +918,6 @@ class MainForm(QMainWindow):
                 self.tabMap.insert(0, tab_name)
                 self.tabWidget.insertTab(0, NewPlaylist(self, tab_name), tab_name)
                 self.tabWidget.setCurrentIndex(0)
-                # tab = self.tabWidget.currentWidget()
-                # tab.load_titles(tab_name)
         except Exception as e:
             QMessageBox.critical(self, "PLS4_ERROR: add_tab", str(e))
 
@@ -935,12 +935,14 @@ class MainForm(QMainWindow):
 
     def select_tab(self, index):
         try:
-            if index >= 0:
+            if index >= 0 and not self.launching:
                 text = self.tabWidget.tabText(index)
                 index = self.pList.findText(text)
                 self.pList.setCurrentIndex(index)
                 self.SelectedTab = text
-            else:
+                sql("UPDATE Data SET value='%s' WHERE name='cur_pl'" % index)
+                db.commit()
+            elif not self.launching:
                 self.SelectedTab = ""
         except Exception as e:
             QMessageBox.critical(self, "PLS4_ERROR: select_tab", str(e))
@@ -976,6 +978,10 @@ class MainForm(QMainWindow):
                 self.closePName.hide()
         except Exception as e:
             QMessageBox.critical(self, "PLS4_ERROR: MainForm_on_esc", str(e))
+
+    # todo: set_last_playlist
+    def set_last_playlist(self):
+        pass
 
     def check_continuations(self):
         try:
@@ -1023,6 +1029,7 @@ class MainForm(QMainWindow):
             self.viewed_count.setText('Всего просмотрено:' + str(TotalViewed))
             QTimer.singleShot(1000, self.check_continuations)
             print("Launched")
+            self.launching = False
         except Exception as e:
             QMessageBox.critical(self, "PLS4_ERROR: launch", str(e))
 

@@ -1,0 +1,1 @@
+python -m PyQt5.uic.pyuic -x Main_Form.ui -o gui.py

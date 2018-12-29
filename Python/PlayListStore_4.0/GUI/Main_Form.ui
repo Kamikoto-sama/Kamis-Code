@@ -56,7 +56,7 @@
         <number>0</number>
        </property>
        <item row="0" column="4">
-        <widget class="QComboBox" name="pList">
+        <widget class="QComboBox" name="pl_list">
          <property name="minimumSize">
           <size>
            <width>100</width>
@@ -176,7 +176,7 @@
            </size>
           </property>
          </widget>
-         <widget class="QLineEdit" name="pName">
+         <widget class="QLineEdit" name="pl_name">
           <property name="enabled">
            <bool>true</bool>
           </property>
@@ -224,7 +224,7 @@
            <bool>false</bool>
           </property>
          </widget>
-         <widget class="QToolButton" name="closePName">
+         <widget class="QToolButton" name="close_pl_name">
           <property name="geometry">
            <rect>
             <x>0</x>
@@ -262,50 +262,6 @@
      </widget>
     </item>
     <item>
-     <widget class="QFrame" name="options_frame">
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <property name="spacing">
-        <number>5</number>
-       </property>
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
-       <item>
-        <widget class="QPushButton" name="con_list">
-         <property name="text">
-          <string>CON</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="adv">
-         <property name="focusPolicy">
-          <enum>Qt::NoFocus</enum>
-         </property>
-         <property name="text">
-          <string>CLEAR</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="focusPolicy">
        <enum>Qt::NoFocus</enum>
@@ -325,10 +281,9 @@
   </widget>
  </widget>
  <tabstops>
-  <tabstop>pName</tabstop>
+  <tabstop>pl_name</tabstop>
   <tabstop>addP</tabstop>
-  <tabstop>closePName</tabstop>
-  <tabstop>adv</tabstop>
+  <tabstop>close_pl_name</tabstop>
   <tabstop>tabWidget</tabstop>
  </tabstops>
  <resources/>

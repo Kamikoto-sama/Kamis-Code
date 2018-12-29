@@ -15,30 +15,8 @@ try:
     db = sqlite3.connect("Data.pls")
     sql = db.cursor().execute
     query = "SELECT count(*) FROM sqlite_master WHERE type='table'"
-    if not list(sql(query + " AND name='Data'"))[0][0]:
-        sql('CREATE TABLE Playlists (name varchar(100))')
-        sql("CREATE TABLE Data (name varchar(10), value varchar(40))")
-        sql("""
-            CREATE TABLE Titles (
-            title_name varchar(255) NOT NULL,
-            count int(4),
-            id integer PRIMARY KEY AUTOINCREMENT,
-            playlist varchar(100),
-            icon varchar(15),
-            color varchar(15),
-            genre varchar(255),
-            link text,
-            desc text,
-            date varchar(10)
-            )""")
-        sql('INSERT INTO Data VALUES("id","0")')
-        sql('INSERT INTO Data VALUES("viewed","0")')
-        sql('INSERT INTO Data VALUES("added","0")')
-        sql('INSERT INTO Data VALUES("cur_pl","-1")')
-        sql('INSERT INTO Data VALUES("viewing","-1")')
-        db.commit()
 
-    data = [int(d[0]) for d in sql('SELECT value FROM Data')]
+    data = [int(d[0]) for d in sql("SELECT value FROM Data")]
     ID = data[0]
     TotalViewed = data[1]
     TotalAdded = data[2]
@@ -69,13 +47,16 @@ RowAnimDur = (6, 6)  # (AnimDown,AnimUp)
 RowLoadDur = 20
 RowHeightMin = 34
 RowHeightMax = 72
-AddRowDur = 700
+AddRowDur = 550
+AddPlDur = 500
 ConListName = '*Список продолжений*'
 MainP = None
-TitlesSortBy = "count"
+SortTitlesBy = "count"
 
+def send_critical_error(name_from, error):
+    QMessageBox.critical(MainP, "PLS4_ERROR: %s" % name_from, str(error))
 
-def save_data(save, value=1):
+def save_data(save: str, value=1):
     try:
         global ID, TotalAdded, TotalViewed
         if save == 'id':
@@ -90,8 +71,7 @@ def save_data(save, value=1):
             sql('UPDATE Data set value=%s where name="added"' % TotalAdded)
         db.commit()
     except Exception as e:
-        QMessageBox.critical(MainP, "PLS4_ERROR: __main__save_data", str(e))
-
+        send_critical_error("__main__save_data", e)
 
 class SelfStyledIcon(QProxyStyle):
     def pixelMetric(self, q_style_pixel_metric, option=None, widget=None):
@@ -166,7 +146,7 @@ class AddTitleForm(QWidget):
 
                 self.parent.add_title(name, count, genre, link, desc, icon, color)
         except Exception as e:
-            QMessageBox.critical(self, "PLS4_ERROR: submit", str(e))
+            send_critical_error("submit", e)
 
 
 class TabBar(QTabBar):
@@ -207,7 +187,7 @@ class SideBar(QWidget):
             self.animSide.setEasingCurve(QEasingCurve.OutExpo)
             self.animSide.setDuration(SideAnimDur)
         except Exception as e:
-            QMessageBox.critical(self, "PLS4_ERROR: SideBar__init", str(e))
+            send_critical_error("SideBar__init", e)
 
     def save_desc(self):
         try:
@@ -220,7 +200,7 @@ class SideBar(QWidget):
             sql(query)
             db.commit()
         except Exception as e:
-            QMessageBox.critical(self, "PLS4_ERROR: save_desc", str(e))
+            send_critical_error("save_desc", e)
 
     def on_is_finished(self, state):
         if self.change_check:
@@ -260,7 +240,7 @@ class SideBar(QWidget):
                 self.desc.undo()
                 self.do_edit(False)
         except Exception as e:
-            QMessageBox.critical(self, "PLS4_ERROR: sideBar_esc", str(e))
+            send_critical_error("sideBar_esc", e)
 
     # Load and set title-data into side bar
     def load_side_data(self, t_id):
@@ -282,7 +262,7 @@ class SideBar(QWidget):
             self.is_finished.setEnabled(data[3] in ['n', 'not_finished'])
             self.change_check = True
         except Exception as e:
-            QMessageBox.critical(self, "PLS4_ERROR: load_side_data", str(e))
+            send_critical_error("load_side_data", e)
 
     # Switch hide/show side bar
     def hide_show_side(self):
@@ -298,7 +278,7 @@ class SideBar(QWidget):
                 self.closeSide.setText('<')
             self.animSide.start()
         except Exception as e:
-            QMessageBox.critical(self, "PLS4_ERROR: hide_show_sidebar", str(e))
+            send_critical_error("hide_show_sidebar", e)
 
 
 class RowButtons(QWidget):
@@ -341,6 +321,7 @@ class RowButtons(QWidget):
                 self.btns.addLayout(self.row_left)
                 self.btns.addLayout(self.row_right)
 
+                # todo: add validator
                 data = datetime.today().strftime('%Y')
                 self.date = QLineEdit(data, self)
                 self.date.setAlignment(Qt.AlignCenter)
@@ -349,7 +330,7 @@ class RowButtons(QWidget):
                 self.date.focusOutEvent = lambda x: self.date.hide()
                 self.date.returnPressed.connect(self.set_con_date)
         except Exception as e:
-            QMessageBox.critical(self, "PLS4_ERROR: RowButtons__init", str(e))
+            send_critical_error("RowButtons__init", e)
 
     def viewing_now(self):
         try:
@@ -359,18 +340,14 @@ class RowButtons(QWidget):
                 self.p.set_icon('n')
                 self.viewing.setText('СМОТРЮ')
                 self.p.p.sideBar.load_side_data(self.p.id)
-                query = "UPDATE Data SET value='-1'"
             else:
                 self.p.set_color('viewing')
                 self.p.set_icon('viewing')
                 self.viewing.setText('НЕ СМОТРЮ')
                 self.p.p.sideBar.load_side_data(self.p.id)
-                query = "UPDATE Data SET value='%s'" % self.p.id
 
-            sql(query + " WHERE name='viewing'")
-            db.commit()
         except Exception as e:
-            QMessageBox.critical(self, "PLS4_ERROR: viewing_now", str(e))
+            send_critical_error("viewing_now", e)
 
     def delete_title(self):
         self.p.delete_title()
@@ -386,15 +363,15 @@ class RowButtons(QWidget):
                 % (self.date.text(), self.p.id))
             db.commit()
 
-            if ConListName in MainP.tabMap:
-                tab = MainP.tabWidget.widget(MainP.tabMap.index(ConListName))
+            if ConListName in MainP.tab_map:
+                tab = MainP.tabWidget.widget(MainP.tab_map.index(ConListName))
                 name = self.p.title_name.text()
                 count = self.p.count.text()
                 id_ = self.p.id
                 date = self.date.text()
                 tab.add_row(name, count, id_, date, 'n')
         except Exception as e:
-            QMessageBox.critical(self, "PLS4_ERROR: set_con_date", str(e))
+            send_critical_error("set_con_date", e)
 
     def select_mark(self):
         try:
@@ -435,7 +412,7 @@ class RowButtons(QWidget):
 
             self.p.p.sideBar.load_side_data(self.p.id)
         except Exception as e:
-            QMessageBox.critical(self, "PLS4_ERROR: select_mark", str(e))
+            send_critical_error("select_mark", e)
 
 
 class NewTitle(QWidget):
@@ -485,27 +462,41 @@ class NewTitle(QWidget):
             self.animOff = QTimer(self)
             self.animOff.timeout.connect(self.anim_up)
         except Exception as e:
-            QMessageBox.critical(self, "PLS4_ERROR: NewTitle__init", str(e))
+            send_critical_error("NewTitle__init", e)
 
     def delete_title(self):
         try:
-            # Delete title from con list
-            if self.p.con:
-                sql('update Titles set date="n",icon="viewed" WHERE id=%s' % self.id)
-                # todo: сделать синхронинзацию при удалении из con_list
+            if not self.p.con:
+                title = "PLS4: Delete title"
+                ask = "Вы уверены, что хотите удалить '%s' из данного плейлиста?" \
+                      % self.name
+                btns = QMessageBox.Yes | QMessageBox.No
+                req = QMessageBox.question(self, title, ask, btns, QMessageBox.No)
             else:
-                sql('DELETE FROM Titles WHERE id=%s' % self.id)
-            db.commit()
+                req = QMessageBox.Yes
 
-            self.min_height = 0
-            self.animOff.start(1)
-            row_count = str(self.p.rowList.count())
-            self.p.row_count.setText('Тайтлов в плейлисте:' + row_count)
-            if self.color == 'viewed':
-                save_data('viewed', -1)
-            save_data('added', -1)
+            if req == QMessageBox.Yes:
+                if self.p.con:
+                    # Delete title from con list
+                    sql("update Titles set date='',icon='viewed' WHERE id=%s" % self.id)
+                    pl = list(sql("SELECT playlist FROM Titles WHERE id=%s" % self.id))
+                    if pl[0][0] in MainP.tab_map:
+                        index = MainP.tab_map.index(pl[0][0])
+                        MainP.close_tab(index)
+                        MainP.add_tab(pl[0][0], index)
+                else:
+                    sql('DELETE FROM Titles WHERE id=%s' % self.id)
+                db.commit()
+
+                self.min_height = 0
+                self.animOff.start(1)
+                row_count = str(self.p.rowList.count())
+                self.p.row_count.setText('Тайтлов в плейлисте:' + row_count)
+                if self.color == 'viewed':
+                    save_data('viewed', -1)
+                save_data('added', -1)
         except Exception as e:
-            QMessageBox.critical(self, "PLS4_ERROR: delete_title", str(e))
+            send_critical_error("delete_title", e)
 
     def set_icon(self, ico):
         icon = QPixmap(Icon[ico]).scaled(30, 30)
@@ -534,15 +525,15 @@ class NewTitle(QWidget):
                     sql('UPDATE Titles SET color="%s" WHERE id=%s' % (color, self.id))
                     db.commit()
         except Exception as e:
-            QMessageBox.critical(self, "PLS4_ERROR: set_color", str(e))
+            send_critical_error("set_color", e)
 
     # Hide/show buttons
     def set_buttons(self, show):
         if show:
-            self.row_layout.addWidget(self.p.rowButns)
+            self.row_layout.addWidget(self.p.row_btns)
         elif not self.p.con:
-            self.p.rowButns.viewing.setText('СМОТРЮ')
-            self.p.rowButns.viewing.setEnabled(True)
+            self.p.row_btns.viewing.setText('СМОТРЮ')
+            self.p.row_btns.viewing.setEnabled(True)
 
     # ON click row
     def select_row(self):
@@ -559,17 +550,17 @@ class NewTitle(QWidget):
                 self.p.sideBar.load_side_data(self.id)
                 self.animOn.start(RowAnimDur[0])
 
-                self.p.rowButns.setParent(self)
-                self.p.rowButns.p = self
+                self.p.row_btns.setParent(self)
+                self.p.row_btns.p = self
 
                 self.p.scroll_to(self.p.rowMap.index(self.id))
 
                 if self.icon == 'viewing':
-                    self.p.rowButns.viewing.setText('НЕ СМОТРЮ')
+                    self.p.row_btns.viewing.setText('НЕ СМОТРЮ')
                 if self.icon in ['viewed', 'con']:
-                    self.p.rowButns.viewing.setEnabled(False)
+                    self.p.row_btns.viewing.setEnabled(False)
         except Exception as e:
-            QMessageBox.critical(self, "PLS4_ERROR: select_row", str(e))
+            send_critical_error("select_row", e)
 
     # ON doubleclick row
     def edit_line(self):
@@ -582,9 +573,10 @@ class NewTitle(QWidget):
             if not self.p.side_hidden:
                 self.p.sideBar.hide_show_side()
         except Exception as e:
-            QMessageBox.critical(self, "PLS4_ERROR: on_line_edit", str(e))
+            send_critical_error("on_line_edit", e)
 
     # ON enter pressed
+    # todo: add validator
     def end_line_edit(self):
         try:
             self.title_name.clearFocus()
@@ -601,7 +593,7 @@ class NewTitle(QWidget):
 
             self.leave(False)
         except Exception as e:
-            QMessageBox.critical(self, "PLS4_ERROR: on_line_edited", str(e))
+            send_critical_error("on_line_edited", e)
 
     def set_edit(self, edit=True):
         self.title_name.setReadOnly(not edit)
@@ -628,12 +620,12 @@ class NewTitle(QWidget):
                 self.leave(False)
                 # On esc set date of con
                 if not self.p.con:
-                    self.p.rowButns.date.hide()
+                    self.p.row_btns.date.hide()
                 elif self.color == "is_con" and self.con_date.text()[-1] != '!':
                     self.con_date.setText(self.con_date.text() + '!')
 
         except Exception as e:
-            QMessageBox.critical(self, "PLS4_ERROR: row_edit_esc", str(e))
+            send_critical_error("row_edit_esc", e)
 
     # Anim row down
     def anim_down(self):
@@ -644,7 +636,7 @@ class NewTitle(QWidget):
                 self.animOn.stop()
                 self.set_buttons(True)
         except Exception as e:
-            QMessageBox.critical(self, "PLS4_ERROR: anim_down", str(e))
+            send_critical_error("anim_down", e)
 
     # Anim row up
     def anim_up(self):
@@ -653,7 +645,7 @@ class NewTitle(QWidget):
         else:
             if self.min_height == 0:
                 self.animOff.stop()
-                self.p.rowButns.setParent(None)
+                self.p.row_btns.setParent(None)
                 self.setParent(None)
                 self.p.curRow = None
                 del self
@@ -678,7 +670,7 @@ class NewTitle(QWidget):
 
             self.set_edit(False)
         except Exception as e:
-            QMessageBox.critical(self, "PLS4_ERROR: leave", str(e))
+            send_critical_error("leave", e)
 
 
 class NewPlaylist(QWidget):
@@ -691,7 +683,7 @@ class NewPlaylist(QWidget):
             self.curRow = None
             self.rowMap = list()
             self.con = name == ConListName
-            self.rowButns = RowButtons(self.con)
+            self.row_btns = RowButtons(self.con)
 
             self.rowList.setAlignment(Qt.AlignTop)
             self.bar_left.setAlignment(Qt.AlignLeft)
@@ -710,7 +702,7 @@ class NewPlaylist(QWidget):
 
             QTimer.singleShot(1, self.load_titles)
         except Exception as e:
-            QMessageBox.critical(self, "PLS4_ERROR: NewPlaylist__init", str(e))
+            send_critical_error("NewPlaylist__init", e)
 
     # TEMP
     def _test(self):
@@ -722,16 +714,16 @@ class NewPlaylist(QWidget):
             selected = menu.exec_(self.mapToGlobal(QPoint(0, 0)))
 
             if selected == act1:
-                self.scroll_to(13)
+                self.scroll_to0(13)
 
         except Exception as e:
-            QMessageBox.critical(self, "PLS4_ERROR: _test", str(e))
+            send_critical_error("_test", e)
 
     def select_row(self, index):
         try:
-            self.rowList.itemAt(self.rowMap.index(int(index))).widget().select_row()
+            self.rowList.itemAt(self.rowMap.index(index)).widget().select_row()
         except Exception as e:
-            QMessageBox.critical(self, "PLS4_ERROR: select_row", str(e))
+            send_critical_error("select_row", e)
 
     # Move scroll bar
     def scroll_to(self, index: int):
@@ -756,7 +748,7 @@ class NewPlaylist(QWidget):
                 while bar.value() < target_pos and bar.value() < bar.maximum():
                     anim_scroll(anim_step)
         except Exception as e:
-            QMessageBox.critical(self, "PLS4_ERROR: scroll_to", str(e))
+            send_critical_error('scroll_to', e)
 
     def resizeEvent(self, event=None):
         try:
@@ -767,19 +759,31 @@ class NewPlaylist(QWidget):
             else:
                 self.sideBar.setGeometry(self.w - SideWidth, 0, SideWidth, self.h)
         except Exception as e:
-            QMessageBox.critical(self, "PLS4_ERROR: NewPlaylist_resizeEvent", str(e))
+            send_critical_error('NewPlaylist_resizeEvent', e)
 
     def delete_playlist(self):
         try:
-            name = self.p.pList.currentText()
-            sql("DELETE FROM Playlists WHERE Name=?", [name])
-            sql('delete from Titles where playlist="%s"' % name)
-            db.commit()
-            self.p.close_tab(self.p.pList.currentIndex())
-            self.p.pList.removeItem(self.p.pList.currentIndex())
-        except Exception as e:
-            QMessageBox.critical(self, "PLS4_ERROR: delete_playlist", str(e))
+            title = "PLS4: Delete playlist"
+            ask = "Вы действительно хотите удалить весь плейлист '%s' ?" % self.name
+            btns = QMessageBox.Yes | QMessageBox.No
+            response = QMessageBox.warning(self, title, ask, btns, QMessageBox.No)
+            if response == QMessageBox.Yes:
+                sql("DELETE FROM Playlists WHERE Name=?", [self.name])
+                sql('DELETE FROM Titles WHERE playlist="%s"' % self.name)
+                db.commit()
 
+                for i in range(self.rowList.count()):
+                    if self.rowList.itemAt(i).widget().color == 'viewed':
+                        save_data('viewed', -1)
+
+                self.p.pl_list.removeItem(self.p.pl_list.currentIndex())
+                self.p.close_tab(self.p.tab_map.index(self.name))
+                if not self.p.tab_map:
+                    self.p.select_playlist()
+        except Exception as e:
+            send_critical_error('delete_playlist', e)
+
+    # todo: add validator
     def add_title(self, t_name, count, genre, link, desc, icon, color):
         try:
             query = "INSERT INTO Titles VALUES "
@@ -789,7 +793,7 @@ class NewPlaylist(QWidget):
 
             row_id = list(sql("""SELECT id, {1} FROM Titles 
                                  WHERE playlist = '{0}' ORDER BY {1}
-                              """.format(self.name, TitlesSortBy)))
+                              """.format(self.name, SortTitlesBy)))
 
             row_id = row_id.index((ID, int(count)))
             self.add_row(t_name, count, ID, icon, color, row_id).select_row()
@@ -797,51 +801,56 @@ class NewPlaylist(QWidget):
             save_data('id')
             save_data('added')
         except Exception as e:
-            QMessageBox.critical(self, "PLS4_ERROR: add_title", str(e))
+            send_critical_error('add_title', e)
 
-    def add_row(self, name, count, t_id, icon_date, color, index=0, row_count=1):
+    def add_row(self, name, count, t_id, icon_date, color, index, delay=0):
         try:
             row = NewTitle(self, name, count, t_id, icon_date, color)
-            delay = AddRowDur // row_count
-            if index > 0:
-                delay = 0
-
-            index = index if index > 0 else self.rowList.count()
-
-            self.rowList.insertWidget(index, row)
-            self.rowMap.insert(index, t_id)
             loop = QEventLoop()
             QTimer.singleShot(delay, loop.quit)
             loop.exec_()
+            self.rowList.insertWidget(index, row)
+            self.rowMap.insert(index, t_id)
             return row
         except Exception as e:
-            QMessageBox.critical(self, "PLS4_ERROR: add_row", str(e))
+            send_critical_error('add_row', e)
 
+    # todo: разбить по методам
     def load_titles(self):
         try:
+            index = 0
+
             if self.con:
                 self.addT.setFixedSize(0, 0)
                 self.delP.setFixedSize(0, 0)
 
                 query = "select title_name,count,id,date from titles WHERE date!=''"
                 titles = list(sql(query))
+                delay = AddRowDur // len(titles)
                 for t in titles:
                     color = 'is_con' if t[3][-1] == '!' else 'n'
-                    self.add_row(t[0], t[1], t[2], t[3], color, row_count=len(titles))
+                    self.add_row(t[0], t[1], t[2], t[3], color, index, delay)
+                    index += 1
 
             else:
                 query = "SELECT title_name,count,id,icon,color FROM Titles WHERE "
                 titles = list(sql(query + "playlist='%s' ORDER BY %s "
-                                  % (self.name, TitlesSortBy)))
+                                  % (self.name, SortTitlesBy)))
+                if not len(titles):
+                    return
+                delay = AddRowDur // len(titles)
                 for t in titles:
-                    self.add_row(t[0], t[1], t[2], t[3], t[4], row_count=len(titles))
+                    self.add_row(t[0], t[1], t[2], t[3], t[4], index, delay)
+                    index += 1
+
                 if self.p.set_viewing:
                     self.select_row(self.p.set_viewing)
+                    self.sideBar.hide_show_side()
                     self.p.set_viewing = False
 
             self.row_count.setText('Тайтлов в плейлисте:' + str(self.rowList.count()))
         except Exception as e:
-            QMessageBox.critical(self, "PLS4_ERROR: load_titles", str(e))
+            send_critical_error('load_titles', e)
 
 
 class MainForm(QMainWindow):
@@ -850,34 +859,32 @@ class MainForm(QMainWindow):
         super(MainForm, self).__init__()
         loadUi('GUI/Main_Form.ui', self)
 
+        global MainP
+        MainP = self
         with open(Skin) as style:
             self.setStyleSheet(style.read())
         self.SelectedTab = ""
-        self.tabMap = []
+        self.tab_map = []
 
         self.addP.clicked.connect(self.add_playlist)
-        self.adv.clicked.connect(self._clear)
-        self.con_list.clicked.connect(self.open_con_list)
+        self.pl_list.activated.connect(self.select_playlist)
 
-        self.pList.activated.connect(self.select_playlist)
-
-        self.pName.returnPressed.connect(self.addP.click)
-        self.pName.hide()
-        self.closePName.clicked.connect(self.keyPressEvent)
-        self.closePName.hide()
+        self.pl_name.returnPressed.connect(self.addP.click)
+        self.pl_name.hide()
+        self.close_pl_name.clicked.connect(self.keyPressEvent)
+        self.close_pl_name.hide()
 
         self.tabBar = TabBar(self)
         self.tabBar.currentChanged.connect(self.select_tab)
         self.tabBar.tabCloseRequested.connect(self.close_tab)
-        self.tabBar.tabMoved.connect(self.on_move_tab)
+        self.tabBar.tabMoved.connect(self.move_tab)
         self.tabWidget.setTabBar(self.tabBar)
 
         self.options.clicked.connect(self.open_options)
-        self.options_frame.setVisible(False)
 
-        self.option_anim = QPropertyAnimation(self.options_frame, b"size")
-        self.option_anim.setEasingCurve(QEasingCurve.OutExpo)
-        self.option_anim.setDuration(500)
+        self.add_pl_anim = QPropertyAnimation(self.pl_name, b"geometry")
+        self.add_pl_anim.setEasingCurve(QEasingCurve.OutExpo)
+        self.add_pl_anim.setDuration(AddPlDur)
 
         QTimer.singleShot(1, self.launch)
         self.launching = True
@@ -887,9 +894,11 @@ class MainForm(QMainWindow):
     def open_options(self):
         try:
             menu = QMenu(self)
+            cons = list(sql("SELECT date, id FROM Titles WHERE date != ''"))
 
             ico = QIcon('Icons/continuation.ico')
             con_list = menu.addAction(ico, 'Список продолжений')
+            con_list.setEnabled(bool(cons))
 
             clear = menu.addAction('Clear')
 
@@ -902,7 +911,7 @@ class MainForm(QMainWindow):
                 self._clear()
 
         except Exception as e:
-            QMessageBox.critical(self, "PLS4_ERROR: open_options", str(e))
+            send_critical_error('open_options', e)
 
     def open_con_list(self):
         self.add_tab('*Список продолжений*')
@@ -910,53 +919,71 @@ class MainForm(QMainWindow):
     # Show/hide add playlist
     def add_playlist(self):
         try:
-            if self.pName.isHidden():
-                self.pName.show()
-                self.closePName.show()
-                self.pName.setText("PL" + str(self.pList.count() + 1))
-                self.pName.setFocus()
-                self.pName.selectAll()
+            if self.pl_name.isHidden():
+                self.pl_name.setText("PL" + str(self.pl_list.count() + 1))
+                self.anim_add_pl(True)
             else:
-                name = self.pName.text()
+                name = self.pl_name.text()
                 sql("INSERT INTO Playlists VALUES ('%s')" % name)
                 db.commit()
-                self.pList.insertItem(0, name)
+                self.pl_list.insertItem(0, name)
                 self.add_tab(name)
-                self.pList.setCurrentIndex(0)
-                self.pName.hide()
-                self.closePName.hide()
+                self.pl_list.setCurrentIndex(0)
+                self.anim_add_pl(False)
         except Exception as e:
-            QMessageBox.critical(self, "PLS4_ERROR: add_playlist", str(e))
+            send_critical_error('add_playlist', e)
 
-    def add_tab(self, tab_name):
+    def anim_add_pl(self, open):
+        if open:
+            self.pl_name.show()
+            self.add_pl_anim.setStartValue(QRect(34 + 255, 11, 0, 30))
+            self.add_pl_anim.setEndValue(QRect(34, 11, 255, 30))
+        else:
+            self.close_pl_name.hide()
+            self.add_pl_anim.setStartValue(QRect(34, 11, 255, 30))
+            self.add_pl_anim.setEndValue(QRect(34 + 255, 11, 0, 30))
+
+        self.add_pl_anim.start()
+        loop = QEventLoop()
+        QTimer.singleShot(AddPlDur - 200, loop.quit)
+        loop.exec_()
+        if open:
+            self.close_pl_name.show()
+            self.pl_name.setFocus()
+            self.pl_name.selectAll()
+        else:
+            self.pl_name.hide()
+
+    def add_tab(self, tab_name, refresh=0):
         try:
-            if tab_name in self.tabMap:
-                self.tabWidget.setCurrentIndex(self.tabMap.index(tab_name))
+            if tab_name in self.tab_map:
+                self.tabWidget.setCurrentIndex(self.tab_map.index(tab_name))
             else:
-                self.tabMap.insert(0, tab_name)
-                self.tabWidget.insertTab(0, NewPlaylist(self, tab_name), tab_name)
-                self.tabWidget.setCurrentIndex(0)
+                self.tab_map.insert(refresh, tab_name)
+                self.tabWidget.insertTab(refresh, NewPlaylist(self, tab_name), tab_name)
+                if not refresh:
+                    self.tabWidget.setCurrentIndex(0)
         except Exception as e:
-            QMessageBox.critical(self, "PLS4_ERROR: add_tab", str(e))
+            send_critical_error('add_tab', e)
 
     def close_tab(self, index):
         try:
-            self.tabMap.remove(self.tabWidget.tabText(index))
+            self.tab_map.remove(self.tabWidget.tabText(index))
             self.tabWidget.removeTab(index)
         except Exception as e:
-            QMessageBox.critical(self, "PLS4_ERROR: close_tab", str(e))
+            send_critical_error('close_tab', e)
 
     def select_playlist(self):
-        if self.SelectedTab != self.pList.currentText():
-            self.SelectedTab = self.pList.currentText()
+        if self.SelectedTab != self.pl_list.currentText():
+            self.SelectedTab = self.pl_list.currentText()
             self.add_tab(self.SelectedTab)
 
     def select_tab(self, index):
         try:
             if index >= 0 and not self.launching:
                 text = self.tabWidget.tabText(index)
-                index = self.pList.findText(text)
-                self.pList.setCurrentIndex(index)
+                index = self.pl_list.findText(text)
+                self.pl_list.setCurrentIndex(index)
                 self.SelectedTab = text
 
                 sql("UPDATE Data SET value='%s' WHERE name='cur_pl'" % index)
@@ -964,12 +991,12 @@ class MainForm(QMainWindow):
             elif not self.launching:
                 self.SelectedTab = ""
         except Exception as e:
-            QMessageBox.critical(self, "PLS4_ERROR: select_tab", str(e))
+            send_critical_error('select_tab', e)
 
-    def on_move_tab(self, index):
-        Tab = self.tabWidget.tabText(index)
-        self.tabMap.remove(Tab)
-        self.tabMap.insert(index, Tab)
+    def move_tab(self, index):
+        tab = self.tabWidget.tabText(index)
+        self.tab_map.remove(tab)
+        self.tab_map.insert(index, tab)
 
     # Temp
     def _clear(self):
@@ -981,42 +1008,35 @@ class MainForm(QMainWindow):
             sql("DELETE FROM Titles")
             sql('UPDATE Data SET value="0"')
             db.commit()
-            self.pList.clear()
+            self.pl_list.clear()
             self.tabWidget.clear()
-            self.tabMap.clear()
+            self.tab_map.clear()
             global ID
             ID = 0
         except Exception as e:
-            QMessageBox.critical(self, "PLS4_ERROR: _clear", str(e))
+            send_critical_error('_clear', e)
 
     # pl name esc
     def keyPressEvent(self, event):
         try:
-            if not event or (event.key() == Qt.Key_Escape and self.pName.isVisible()):
-                self.pName.hide()
-                self.closePName.hide()
+            if not event or (event.key() == Qt.Key_Escape and self.pl_name.isVisible()):
+                self.anim_add_pl(False)
         except Exception as e:
-            QMessageBox.critical(self, "PLS4_ERROR: MainForm_on_esc", str(e))
+            send_critical_error('MainForm_on_esc', e)
 
     def select_last_playlist(self):
         try:
             pl = list(sql("SELECT value FROM Data WHERE name='cur_pl'"))[0][0]
-            title_id = list(sql("SELECT value FROM Data WHERE name='viewing'"))[0][0]
-            if title_id != '-1':
-                query = "SELECT playlist FROM Titles WHERE id=%s" % title_id
-                pl = list(sql(query))
-                if pl:
-                    self.pList.setCurrentIndex(self.pList.findText(pl[0][0]))
-                    self.set_viewing = title_id
-                else:
-                    sql("UPDATE Data SET value='-1' WHERE name='viewing'")
-                    db.commit()
-            if not pl and pl != '-1':
-                self.pList.setCurrentIndex(int(pl))
+            title_id = list(sql("SELECT id, playlist FROM Titles WHERE icon='viewing'"))
+            if title_id:
+                self.pl_list.setCurrentIndex(self.pl_list.findText(title_id[-1][1]))
+                self.set_viewing = int(title_id[-1][0])
+            elif pl != '-1':
+                self.pl_list.setCurrentIndex(int(pl))
 
             self.select_playlist()
         except Exception as e:
-            QMessageBox.critical(self, "PLS4_ERROR: select_last_playlist", str(e))
+            send_critical_error('select_last_playlist', e)
 
     def check_continuations(self):
         try:
@@ -1050,14 +1070,12 @@ class MainForm(QMainWindow):
                 if act == QMessageBox.Yes:
                     self.open_con_list()
         except Exception as e:
-            QMessageBox.critical(self, 'PLS4_ERROR: check_continuations', str(e))
+            send_critical_error('check_continuations', e)
 
     def launch(self):
         try:
-            global MainP
-            MainP = self
             playlists = list(sql("SELECT * FROM Playlists ORDER BY rowid desc"))
-            self.pList.addItems([row[0] for row in playlists])
+            self.pl_list.addItems([row[0] for row in playlists])
 
             self.select_last_playlist()
 
@@ -1066,11 +1084,11 @@ class MainForm(QMainWindow):
             print("Launched")
             self.launching = False
         except Exception as e:
-            QMessageBox.critical(self, "PLS4_ERROR: launch", str(e))
+            send_critical_error('launch', e)
 
-
-app = QApplication(sys.argv)
-app.setStyle(SelfStyledIcon('Fusion'))
-exe = MainForm()
-exe.show()
-sys.exit(app.exec_())
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    app.setStyle(SelfStyledIcon('Fusion'))
+    exe = MainForm()
+    exe.show()
+    sys.exit(app.exec_())

@@ -29,7 +29,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QFrame" name="mainBar">
+     <widget class="QFrame" name="main_bar">
       <property name="minimumSize">
        <size>
         <width>0</width>
@@ -55,6 +55,19 @@
        <property name="spacing">
         <number>0</number>
        </property>
+       <item row="0" column="2">
+        <widget class="QLabel" name="viewed_count">
+         <property name="maximumSize">
+          <size>
+           <width>200</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Всего просмотрено:0</string>
+         </property>
+        </widget>
+       </item>
        <item row="0" column="4">
         <widget class="QComboBox" name="pl_list">
          <property name="minimumSize">
@@ -109,19 +122,6 @@
            <string>Опции</string>
           </property>
          </widget>
-        </widget>
-       </item>
-       <item row="0" column="2">
-        <widget class="QLabel" name="viewed_count">
-         <property name="maximumSize">
-          <size>
-           <width>200</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Всего просмотрено:0</string>
-         </property>
         </widget>
        </item>
        <item row="0" column="6">

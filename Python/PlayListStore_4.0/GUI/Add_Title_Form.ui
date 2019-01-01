@@ -45,6 +45,9 @@
         </property>
         <item>
          <widget class="QLineEdit" name="title_name">
+          <property name="maxLength">
+           <number>100</number>
+          </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
           </property>

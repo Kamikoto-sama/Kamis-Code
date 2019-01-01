@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>807</width>
+    <width>853</width>
     <height>518</height>
    </rect>
   </property>
@@ -60,34 +60,92 @@
        <number>0</number>
       </property>
       <item>
-       <layout class="QHBoxLayout" name="bar_left">
-        <property name="sizeConstraint">
-         <enum>QLayout::SetFixedSize</enum>
+       <widget class="QFrame" name="left_frame">
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
         </property>
-        <item>
-         <widget class="QPushButton" name="addT">
-          <property name="maximumSize">
-           <size>
-            <width>100</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
-          </property>
-          <property name="text">
-           <string>ADD</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="test">
-          <property name="text">
-           <string>TEST</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <widget class="QLineEdit" name="search_edit">
+         <property name="geometry">
+          <rect>
+           <x>70</x>
+           <y>7</y>
+           <width>182</width>
+           <height>25</height>
+          </rect>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>300</width>
+           <height>27</height>
+          </size>
+         </property>
+         <property name="maxLength">
+          <number>255</number>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <property name="placeholderText">
+          <string>Название тайтла</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="addT">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>7</y>
+           <width>70</width>
+           <height>25</height>
+          </rect>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
+         <property name="text">
+          <string>ДОБАВИТЬ</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="search">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>7</y>
+           <width>70</width>
+           <height>25</height>
+          </rect>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
+         <property name="text">
+          <string>ИСКАТЬ</string>
+         </property>
+        </widget>
+        <zorder>search</zorder>
+        <zorder>search_edit</zorder>
+        <zorder>addT</zorder>
+       </widget>
       </item>
       <item>
        <widget class="QLabel" name="row_count">
@@ -97,27 +155,58 @@
        </widget>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="bar_right">
-        <property name="sizeConstraint">
-         <enum>QLayout::SetFixedSize</enum>
-        </property>
-        <item>
-         <widget class="QPushButton" name="delP">
-          <property name="maximumSize">
-           <size>
-            <width>100</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
-          </property>
-          <property name="text">
-           <string>УДАЛИТЬ</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       <widget class="QFrame" name="frame_2">
+        <widget class="QPushButton" name="delP">
+         <property name="geometry">
+          <rect>
+           <x>210</x>
+           <y>6</y>
+           <width>75</width>
+           <height>25</height>
+          </rect>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
+         <property name="text">
+          <string>УДАЛИТЬ</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="rename">
+         <property name="geometry">
+          <rect>
+           <x>96</x>
+           <y>6</y>
+           <width>111</width>
+           <height>25</height>
+          </rect>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
+         <property name="text">
+          <string>ПЕРЕИМЕНОВАТЬ</string>
+         </property>
+        </widget>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -138,7 +227,7 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>775</width>
+        <width>821</width>
         <height>461</height>
        </rect>
       </property>

@@ -8,16 +8,18 @@ QPushButton:pressed{
 	padding-top: 3px;
     padding-left: 4px;
 }
+
 /* Top main bar*/
 	#main_bar{background: silver;}
+    #options{font-size: 16px;font-weight: bold;}
+    #con_info{border-radius: 15px;}
 	#close_pl_name{
-		background: url(Icons/close.png) center center;
 		border-radius: 15px;
 		border: 2px solid silver; 
 	}
 	#close_pl_name:hover{border: 2px solid #6ebcd2;}
 	#close_pl_name:pressed{border: 3px solid #6ebcd2;}
-	#viewed_count{font-size: 19px;}
+	#viewed_count{font-size: 20px;font-weight: bold;}
 
 QWidget{font-family: "Comic Sans MS";}
 QMessageBox{font-size: 20px;}
@@ -42,6 +44,9 @@ QToolTip{
 	#sideBar QCheckBox{padding-left: 5px;}
 	#desc{background: #F2F2F2;border-radius: 5px;}
 	#closeSide{font-size: 12px;font-weight: bold;}
+
+/*Top bar    */
+    #topBar QLineEdit{height: 25px;font-size: 16px;}
 
 /*Title row*/
 	#t_row{border:2px solid #F0F0F0;border-radius: 7px;}

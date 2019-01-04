@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>360</width>
-    <height>245</height>
+    <height>257</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -46,7 +46,7 @@
         <item>
          <widget class="QLineEdit" name="title_name">
           <property name="maxLength">
-           <number>100</number>
+           <number>60</number>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -66,6 +66,9 @@
           </property>
           <property name="text">
            <string>12</string>
+          </property>
+          <property name="maxLength">
+           <number>4</number>
           </property>
           <property name="echoMode">
            <enum>QLineEdit::Normal</enum>
@@ -112,6 +115,9 @@
       </item>
       <item>
        <widget class="QLineEdit" name="genre">
+        <property name="maxLength">
+         <number>60</number>
+        </property>
         <property name="placeholderText">
          <string>Жанр</string>
         </property>
@@ -119,6 +125,9 @@
       </item>
       <item>
        <widget class="QLineEdit" name="link">
+        <property name="maxLength">
+         <number>2000</number>
+        </property>
         <property name="placeholderText">
          <string>Ссылка</string>
         </property>
@@ -131,6 +140,9 @@
         </property>
         <property name="tabChangesFocus">
          <bool>true</bool>
+        </property>
+        <property name="acceptRichText">
+         <bool>false</bool>
         </property>
         <property name="placeholderText">
          <string>Описание</string>

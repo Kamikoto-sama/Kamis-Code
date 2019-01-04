@@ -99,7 +99,7 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout">
         <property name="spacing">
-         <number>10</number>
+         <number>7</number>
         </property>
         <property name="leftMargin">
          <number>10</number>
@@ -114,9 +114,51 @@
          <number>10</number>
         </property>
         <item>
+         <layout class="QHBoxLayout" name="_2">
+          <item alignment="Qt::AlignLeft">
+           <widget class="QLabel" name="title_time">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>9999h-99m</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item alignment="Qt::AlignRight">
+           <widget class="QLabel" name="title_date">
+            <property name="font">
+             <font>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>0000.00.00</string>
+            </property>
+            <property name="scaledContents">
+             <bool>false</bool>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
          <widget class="ExLineEdit" name="genre">
           <property name="cursor">
            <cursorShape>PointingHandCursor</cursorShape>
+          </property>
+          <property name="maxLength">
+           <number>60</number>
           </property>
           <property name="readOnly">
            <bool>true</bool>
@@ -130,6 +172,9 @@
          <widget class="ExLineEdit" name="link">
           <property name="cursor">
            <cursorShape>PointingHandCursor</cursorShape>
+          </property>
+          <property name="maxLength">
+           <number>2000</number>
           </property>
           <property name="readOnly">
            <bool>true</bool>
@@ -152,6 +197,9 @@
           </property>
           <property name="readOnly">
            <bool>true</bool>
+          </property>
+          <property name="acceptRichText">
+           <bool>false</bool>
           </property>
           <property name="placeholderText">
            <string>Описание</string>

@@ -16,6 +16,11 @@
     <height>345</height>
    </size>
   </property>
+  <property name="font">
+   <font>
+    <family>Comic Sans MS</family>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>PlayListStore 4.0 alpha</string>
   </property>
@@ -246,7 +251,7 @@
            <string/>
           </property>
           <property name="maxLength">
-           <number>100</number>
+           <number>30</number>
           </property>
           <property name="echoMode">
            <enum>QLineEdit::Normal</enum>

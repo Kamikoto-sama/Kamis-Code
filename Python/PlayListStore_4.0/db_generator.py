@@ -6,19 +6,20 @@ db_name = "Data.pls"
 def create_db():
     db = sqlite3.connect(db_name)
     sql = db.cursor().execute
-    sql('CREATE TABLE Playlists (name varchar(100))')
+    sql('CREATE TABLE Playlists (name varchar(30))')
     sql("CREATE TABLE Data (name varchar(10), value varchar(40))")
     sql("""
             CREATE TABLE Titles (
-            title_name varchar(255) NOT NULL,
+            title_name varchar(60) NOT NULL,
             count int(4),
             id integer PRIMARY KEY AUTOINCREMENT,
             playlist varchar(100),
             icon varchar(15),
             color varchar(15),
-            genre varchar(255),
+            genre varchar(60),
             link text,
             desc text,
+            con_date varchar(10),
             date varchar(10)
             )""")
 

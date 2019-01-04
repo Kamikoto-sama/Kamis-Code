@@ -36,6 +36,14 @@ QToolTip{
 	#sideBar QWidget{
 		font-size: 16px;
 	}
+	#title_time{
+		background: #F2F2F2;
+		border: none;
+		border-radius: 5px;
+		height: 25px;
+		font-weight: bold;
+		color: #6EBCD2;
+	}
 	#sideBar,#genre,#link{
 	    background: #ebebeb;
 	    border: none;

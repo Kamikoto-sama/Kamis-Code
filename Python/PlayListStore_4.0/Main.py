@@ -23,13 +23,6 @@ try:
 except Exception as e:
     print('Load db:', e.args)
 # CONSTANTS
-# Icon = {
-#     'n': '',
-#     'viewed': 'Icons/viewed.png',
-#     'not_finished': 'Icons/not_finished.ico',
-#     'con': 'Icons/continuation.ico',
-#     'viewing': 'Icons/looking.ico',
-#     'pause': 'Icons/pause.ico'}
 Icon = [
     'Icons/viewed.png',
     'Icons/continuation.ico',
@@ -37,6 +30,13 @@ Icon = [
     '',
     'Icons/not_finished.ico',
     'Icons/pause.ico']
+Icons = {
+    'n': 3,
+    'viewed': 0,
+    'not_finished': 4,
+    'con': 1,
+    'viewing': 2,
+    'pause': 5}
 Color = {
     'n': '#D9D9D9',
     'edit': 'none',
@@ -155,9 +155,9 @@ class AddTitleForm(QWidget):
             else:
                 color = 'n'
             if self.is_finished.checkState() == 2:
-                icon = 'not_finished'
+                icon = Icons['not_finished']
             else:
-                icon = 'n'
+                icon = Icons['n']
 
             self.show_()
             self.parent.add_title(name, count, genre, link, desc, icon, color)
@@ -230,9 +230,9 @@ class SideBar(QWidget):
     def set_is_finished(self, state):
         if self.change_check:
             if state == 2:
-                self.p.curRow.set_icon('not_finished')
+                self.p.curRow.set_icon(Icons['not_finished'])
             else:
-                self.p.curRow.set_icon('n')
+                self.p.curRow.set_icon(Icons['n'])
 
     def set_is_con(self, state):
         if self.change_check:
@@ -276,13 +276,13 @@ class SideBar(QWidget):
             self.title_date.setText(data[3])
             self.title_time.setText(self.count_title_time(data[4]))
 
-            icon_state = 2 if data[5] == 'not_finished' else 0
+            icon_state = 2 if data[5] == Icons['not_finished'] else 0
             color_state = 2 if data[6] == 'is_con' else 0
             self.change_check = False
             self.is_con.setCheckState(color_state)
-            self.is_con.setEnabled(data[5] in ['n', 'not_finished'])
+            self.is_con.setEnabled(data[5] in [Icons['n'], Icons['not_finished']])
             self.is_finished.setCheckState(icon_state)
-            self.is_finished.setEnabled(data[5] in ['n', 'not_finished'])
+            self.is_finished.setEnabled(data[5] in [Icons['n'], Icons['not_finished']])
             self.change_check = True
         except Exception as e:
             show_exception("load_side_data", e)
@@ -371,14 +371,14 @@ class RowButtons(QWidget):
     def viewing_now(self):
         try:
             self.p.leave(False)
-            if self.p.icon == 'viewing':
+            if self.p.icon == Icons['viewing']:
                 self.p.set_color('n')
-                self.p.set_icon('n')
+                self.p.set_icon(Icons['n'])
                 self.viewing.setText('СМОТРЮ')
                 self.p.p.side_bar.load_side_data(self.p.id)
             else:
                 self.p.set_color('viewing')
-                self.p.set_icon('viewing')
+                self.p.set_icon(Icons['viewing'])
                 self.viewing.setText('НЕ СМОТРЮ')
                 self.p.p.side_bar.load_side_data(self.p.id)
 
@@ -392,7 +392,7 @@ class RowButtons(QWidget):
         try:
             if self.p.color not in ['is_con', 'viewed']:
                 save_data('viewed')
-            self.p.set_icon('con')
+            self.p.set_icon(Icons['con'])
             self.p.set_color('viewed')
             self.date.hide()
 
@@ -415,17 +415,17 @@ class RowButtons(QWidget):
         try:
             menu = QMenu(self)
 
-            ico = QIcon('Icons/viewed.png')
+            ico = QIcon(Icon[Icons['viewed']])
             on_viewed = menu.addAction(ico, 'Просмотрен')
-            on_viewed.setEnabled(self.p.icon != 'viewed')
+            on_viewed.setEnabled(self.p.icon != Icons['viewed'])
 
-            ico = QIcon('Icons/continuation.ico')
+            ico = QIcon(Icon[Icons['con']])
             on_con = menu.addAction(ico, 'Будет продолжение')
-            on_con.setEnabled(self.p.icon != 'con')
+            on_con.setEnabled(self.p.icon != Icons['con'])
 
-            ico = QIcon('Icons/pause.ico')
+            ico = QIcon(Icon[Icons['pause']])
             on_pause = menu.addAction(ico, 'Просмотр брошен')
-            on_pause.setEnabled(self.p.icon not in ['viewed', 'con'])
+            on_pause.setEnabled(self.p.icon not in [Icons['viewed'], Icons['con']])
 
             cursor = QPoint(self.viewed.x(), -35)
             selected = menu.exec_(self.mapToGlobal(cursor))
@@ -433,19 +433,19 @@ class RowButtons(QWidget):
             if selected == on_viewed:
                 if self.p.color not in ['is_con', 'viewed']:
                     save_data('viewed')
-                if self.p.icon == 'con':
-                    query = "update Titles set con_date='', icon='viewed' "
-                    sql(query + "WHERE id=%s" % self.p.id)
+                if self.p.icon == Icons['con']:
+                    query = "update Titles set con_date='', icon='%s'" % Icons['viewed']
+                    sql(query + " WHERE id=%s" % self.p.id)
                 self.p.set_color('viewed')
-                self.p.set_icon('viewed')
+                self.p.set_icon(Icons['viewed'])
             if selected == on_con:
                 self.date.show()
                 self.date.setText(datetime.today().strftime('%Y'))
                 self.date.setFocus()
                 self.date.selectAll()
             if selected == on_pause:
-                self.p.set_icon('pause')
                 self.p.set_color('pause')
+                self.p.set_icon(Icons['pause'])
 
             self.p.p.side_bar.load_side_data(self.p.id)
         except Exception as e:
@@ -520,7 +520,8 @@ class Title(QWidget):
             if req == QMessageBox.Yes:
                 if self.p.con:
                     # Delete title from con list
-                    sql("update Titles set con_date'',icon='viewed' WHERE id=%s" % self.id)
+                    query = "update Titles set con_date'',icon='%s'" % Icons['viewed']
+                    sql(query + " WHERE id=%s" % self.id)
                     pl = list(sql("SELECT playlist FROM Titles WHERE id=%s" % self.id))
                     if pl[0][0] in MainP.tab_map:
                         index = MainP.tab_map.index(pl[0][0])
@@ -544,18 +545,21 @@ class Title(QWidget):
             show_exception("delete_title", e)
 
     def set_icon(self, ico):
-        icon = QPixmap(Icon[ico]).scaled(30, 30)
-        self.status.setPixmap(icon)
-        if ico != self.icon:
-            self.icon = ico
-            sql('UPDATE Titles SET icon="%s" WHERE id=%s' % (ico, self.id))
-            db.commit()
+        try:
+            icon = QPixmap(Icon[ico]).scaled(30, 30)
+            self.status.setPixmap(icon)
+            if ico != self.icon:
+                self.icon = ico
+                sql('UPDATE Titles SET icon="%s" WHERE id=%s' % (ico, self.id))
+                db.commit()
+        except Exception as e:
+            show_exception("set_icon", e)
 
     def set_color(self, color, load=False):
         try:
             if self.color != 'is_con' or color in ('is_con', 'edit') or (
                     self.color == 'is_con' and color == 'n' and
-                    self.icon in ['n', 'not_finished']):
+                    self.icon in [Icons['n'], Icons['not_finished']]):
                 if load:
                     self.setStyleSheet('''
                     #title_name,#count,#con_date{background: %s}''' % Color[color])
@@ -927,11 +931,13 @@ class Playlist(QWidget):
                 % (t_name, count, ID, self.name, icon, color, genre, link, desc, date))
             db.commit()
 
-            row_id = list(sql("""SELECT id, {1} FROM Titles 
-                                 WHERE playlist = '{0}' ORDER BY {1}
-                              """.format(self.name, SortTitlesBy)))
+            query = "SELECT id,count,icon FROM Titles WHERE playlist = '%s'" % self.name
+            row_id = list(sql(query + " ORDER BY count desc,icon desc,id desc"))
 
-            row_id = row_id.index((ID, int(count)))
+            for i, item in enumerate(row_id):
+                if item[0] == ID:
+                    row_id = i
+                    break
             self.add_row(t_name, count, ID, icon, color, row_id).select_row()
             self.row_count.setText('Тайтлов в плейлисте:' + str(self.rowList.count()))
             save_data('id')
@@ -953,7 +959,6 @@ class Playlist(QWidget):
             show_exception('add_row', e)
 
     # todo: разбить по методам
-    # todo: SELECT * FROM %1 ORDER BY Nam desc,Ico desc,ID desc
     def load_titles(self):
         try:
             index = 0
@@ -970,7 +975,7 @@ class Playlist(QWidget):
             else:
                 query = "SELECT title_name,count,id,icon,color FROM Titles WHERE " \
                         "playlist='%s' ORDER BY " % self.name
-                titles = list(sql(query + "title_name desc,icon desc,id desc "))
+                titles = list(sql(query + "count desc, icon desc, id desc"))
                 if not len(titles):
                     return
                 delay = AddRowDur // len(titles)
@@ -1033,7 +1038,7 @@ class MainForm(QMainWindow):
             menu = QMenu(self)
             cons = list(sql("SELECT con_date, id FROM Titles WHERE con_date != ''"))
 
-            ico = QIcon('Icons/continuation.ico')
+            ico = QIcon(Icon[Icons['con']])
             con_list = menu.addAction(ico, 'Список продолжений')
             con_list.setEnabled(bool(cons))
 

@@ -1,6 +1,8 @@
 import sqlite3
 import os
+from Main import Color, Icons
 from random import randint
+from itertools import product
 
 db_name = "Data.pls"
 alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
@@ -33,15 +35,18 @@ def create_db():
     db.commit()
 
 
-def add_titles(sql, pl_name, t_count, id_, **flags):
-    if not flags:
-        flags['count'] = 0
+def add_titles(sql, pl_name, t_count, id_, fix_count=0, perms=False):
+    if perms:
+        perms = list(Icons.values())
+        t_count = len(perms)
     for i in range(t_count):
         name = alpha[i] if i < 52 else str(i)
-        count = flags['count'] if not flags and flags['count'] else randint(1, 200)
+        count = fix_count if fix_count else randint(1, 200)
+        icon = perms[i] if perms else 3
+        color = 'viewed' if perms[i] in ['con', 'viewed'] else 'n'
         genre = alpha[:randint(1, 20)]
         desc = alpha[:randint(1, 52)]
-        title = (name, count, id_, pl_name, 3, 'n', genre, '', desc, '04.01.2019')
+        title = (name, count, id_, pl_name, icon, color, genre, '', desc, '04.01.2019')
         query = "INSERT INTO Titles VALUES "
         sql(query + "('%s',%s,%s,'%s','%s','%s','%s','%s','%s','', '%s')" % title)
         id_ += 1
@@ -67,9 +72,10 @@ def generate_data(sql, db, pl_count, title_count):
 
 
 def init():
-    print("Exit - Enter\nGen data - 0\nXTitle - 1")
+    print("Exit - Enter\nGen data - 0\nFixed titles - 1\nMixed title - 2")
     req = input()
-    os.remove(db_name)
+    if os.path.exists(db_name):
+        os.remove(db_name)
     create_db()
     db = sqlite3.connect(db_name)
     sql = db.cursor().execute
@@ -78,10 +84,14 @@ def init():
     if req == '0':
         req = input("pl_count titles_count: ").split()
         generate_data(sql, db, int(req[0]), int(req[1]))
+
+    add_playlist(sql, "PL1")
     if req == '1':
         req = input("title_count count: ").split()
-        add_playlist(sql, "PL1")
-        add_titles(sql, "PL1", int(req[0]), 0, count=int(req[1]))
+        add_titles(sql, "PL1", int(req[0]), 0, fix_count=int(req[1]))
+        db.commit()
+    if req == '2':
+        add_titles(sql, "PL1", 0, 0, fix_count=12, perms=True)
         db.commit()
 
     print("Done...\n")

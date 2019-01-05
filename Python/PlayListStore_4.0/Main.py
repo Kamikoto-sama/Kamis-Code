@@ -12,10 +12,9 @@ from PyQt5.uic import loadUi
 
 # LOAD DB
 try:
-    db = sqlite3.connect("Data.pls")
-    sql = db.cursor().execute
-    query = "SELECT count(*) FROM sqlite_master WHERE type='table'"
-
+    if __name__ == "__main__":
+        db = sqlite3.connect("Data.pls")
+        sql = db.cursor().execute
     data = [int(d[0]) for d in sql("SELECT value FROM Data")]
     ID = data[0]
     TotalViewed = data[1]
@@ -26,17 +25,17 @@ except Exception as e:
 Icon = [
     'Icons/viewed.png',
     'Icons/continuation.ico',
-    'Icons/looking.ico',
+    'Icons/pause.ico',
+    'Icons/viewing.ico',
     '',
-    'Icons/not_finished.ico',
-    'Icons/pause.ico']
+    'Icons/not_finished.ico']
 Icons = {
-    'n': 3,
+    'n': 4,
     'viewed': 0,
-    'not_finished': 4,
+    'not_finished': 5,
     'con': 1,
-    'viewing': 2,
-    'pause': 5}
+    'viewing': 3,
+    'pause': 2}
 Color = {
     'n': '#D9D9D9',
     'edit': 'none',

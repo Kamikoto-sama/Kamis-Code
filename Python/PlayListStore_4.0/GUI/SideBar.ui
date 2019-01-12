@@ -69,7 +69,7 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="QPushButton" name="closeSide">
+       <widget class="QPushButton" name="close_side">
         <property name="enabled">
          <bool>false</bool>
         </property>
@@ -169,20 +169,43 @@
          </widget>
         </item>
         <item>
-         <widget class="ExLineEdit" name="link">
-          <property name="cursor">
-           <cursorShape>PointingHandCursor</cursorShape>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <property name="spacing">
+           <number>2</number>
           </property>
-          <property name="maxLength">
-           <number>2000</number>
-          </property>
-          <property name="readOnly">
-           <bool>true</bool>
-          </property>
-          <property name="placeholderText">
-           <string>Ссылка</string>
-          </property>
-         </widget>
+          <item alignment="Qt::AlignLeft">
+           <widget class="QPushButton" name="open">
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Открыть ссылку&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="text">
+             <string>Открыть</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="ExLineEdit" name="link">
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="maxLength">
+             <number>2000</number>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+            <property name="placeholderText">
+             <string>Ссылка</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item>
          <widget class="ExTextEdit" name="desc">

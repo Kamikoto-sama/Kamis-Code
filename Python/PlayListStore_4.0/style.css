@@ -8,10 +8,24 @@ QPushButton:pressed{
 	padding-top: 3px;
     padding-left: 4px;
 }
+QPushButton, QToolButton{font-weight: bold;}
+QWidget{font-family: "Comic Sans MS";}
+QMessageBox{font-size: 20px;}
+QFrame{border: none;}
+QToolTip{
+    border: 1px solid #6ebcd2;
+    background: qlineargradient(spread:pad, x1:0.461, y1:1, x2:0.477682, y2:0, stop:0 rgba(189, 189, 189, 255), stop:1 rgba(255, 255, 255, 255));
+    border-radius: 3px;
+}
 
 /* Top main bar*/
 	#main_bar{background: silver;}
-    #options{font-size: 16px;font-weight: bold;}
+    #pl_name{
+        font-size: 19px;
+        height: 25px;
+        font-weight: bold;
+    }
+    #options{font-size: 16px;}
     #con_info{border-radius: 15px;}
 	#close_pl_name{
 		border-radius: 15px;
@@ -21,14 +35,6 @@ QPushButton:pressed{
 	#close_pl_name:pressed{border: 3px solid #6ebcd2;}
 	#viewed_count{font-size: 20px;font-weight: bold;}
 
-QWidget{font-family: "Comic Sans MS";}
-QMessageBox{font-size: 20px;}
-QFrame{border: none;}
-QToolTip{	
-    border: 1px solid #6ebcd2;
-    background: qlineargradient(spread:pad, x1:0.461, y1:1, x2:0.477682, y2:0, stop:0 rgba(189, 189, 189, 255), stop:1 rgba(255, 255, 255, 255));
-    border-radius: 3px;
-}
 #row_count{font-size: 20px;font-weight: bold;}
 /* Side bar*/
 	#topBar,#add_form,#add_form #genre,
@@ -51,7 +57,7 @@ QToolTip{
 	}
 	#sideBar QCheckBox{padding-left: 5px;}
 	#desc{background: #F2F2F2;border-radius: 5px;}
-	#closeSide{font-size: 12px;font-weight: bold;}
+	#close_side{font-size: 12px}
 
 /*Top bar    */
     #topBar QLineEdit{height: 25px;font-size: 16px;}
@@ -59,8 +65,13 @@ QToolTip{
 /*Title row*/
 	#t_row{border:2px solid #F0F0F0;border-radius: 7px;}
 	#t_row:hover{border:2px solid #6ebcd2;}
-	#t_row QPushButton{font-size: 16px;font-weight: bold;}
-	
+	#t_row QPushButton, #t_row QToolButton{font-size: 16px;}
+    #episode_edit{
+        height: 25px;
+        font-size: 16px;
+        font-weight: 500;
+    }
+
 	#t_row #title_name,
 	#t_row #con_date,
 	#t_row #count{
@@ -69,7 +80,6 @@ QToolTip{
 	font-size: 20px;
 	}
 	#t_row #title_name{
-		/*padding-left: 5px;*/
 		border-left: 1px solid #8B8B8B;
 		border-top-right-radius: 5px;
 		border-bottom-right-radius: 5px;}
@@ -105,3 +115,15 @@ QToolTip{
 			border-bottom-left-radius: 5px;
 			background: #ebebeb;
 		}
+
+/*Search title form*/
+    #search_form QWidget{
+        font-weight: 400;
+        font-size: 16px;
+        background: #ebebeb;
+    }
+    #search_edit{font-size: 16px}
+    QTableWidget{
+        font-weight: 400;
+        font-size: 10px;
+    }

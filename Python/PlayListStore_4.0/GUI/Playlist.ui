@@ -92,7 +92,7 @@
           <string>Название тайтла</string>
          </property>
         </widget>
-        <widget class="QPushButton" name="addT">
+        <widget class="QPushButton" name="add_title_btn">
          <property name="geometry">
           <rect>
            <x>0</x>
@@ -144,7 +144,7 @@
         </widget>
         <zorder>search</zorder>
         <zorder>search_edit</zorder>
-        <zorder>addT</zorder>
+        <zorder>add_title_btn</zorder>
        </widget>
       </item>
       <item>
@@ -156,7 +156,7 @@
       </item>
       <item>
        <widget class="QFrame" name="frame_2">
-        <widget class="QPushButton" name="delP">
+        <widget class="QPushButton" name="del_pl">
          <property name="geometry">
           <rect>
            <x>210</x>
@@ -206,6 +206,43 @@
           <string>ПЕРЕИМЕНОВАТЬ</string>
          </property>
         </widget>
+        <widget class="QPushButton" name="paste_btn">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>12</x>
+           <y>6</y>
+           <width>81</width>
+           <height>25</height>
+          </rect>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Вставить тайтл в этот плейлист&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Вставить</string>
+         </property>
+        </widget>
        </widget>
       </item>
      </layout>
@@ -231,7 +268,7 @@
         <height>461</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="rowList">
+      <layout class="QVBoxLayout" name="row_list">
        <property name="spacing">
         <number>5</number>
        </property>

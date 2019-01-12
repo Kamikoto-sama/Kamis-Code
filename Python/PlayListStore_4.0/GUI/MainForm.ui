@@ -180,7 +180,7 @@
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
          </property>
-         <widget class="QToolButton" name="addP">
+         <widget class="QToolButton" name="add_pl">
           <property name="geometry">
            <rect>
             <x>290</x>
@@ -226,14 +226,6 @@
             <width>255</width>
             <height>30</height>
            </rect>
-          </property>
-          <property name="font">
-           <font>
-            <family>Consolas</family>
-            <pointsize>16</pointsize>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
           </property>
           <property name="toolTip">
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Введите название плейлиста&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -321,7 +313,7 @@
           </property>
          </widget>
          <zorder>viewed_count</zorder>
-         <zorder>addP</zorder>
+         <zorder>add_pl</zorder>
          <zorder>pl_name</zorder>
          <zorder>close_pl_name</zorder>
         </widget>
@@ -350,7 +342,7 @@
  </widget>
  <tabstops>
   <tabstop>pl_name</tabstop>
-  <tabstop>addP</tabstop>
+  <tabstop>add_pl</tabstop>
   <tabstop>close_pl_name</tabstop>
   <tabstop>tabWidget</tabstop>
  </tabstops>

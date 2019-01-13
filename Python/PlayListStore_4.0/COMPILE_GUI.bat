@@ -1,1 +1,0 @@
-python -m PyQt5.uic.pyuic -x GUI\\New_Title.ui -o TEST.py

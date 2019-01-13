@@ -1,6 +1,6 @@
 import sqlite3
 import os
-from Main import Icons
+from main import Icons
 from random import randint
 
 db_name = "Data.pls"

@@ -1,6 +1,6 @@
 import sqlite3
 
-db = sqlite3.connect('Data.pls')
+db = sqlite3.connect('data.pls')
 SQL = db.cursor().execute
 
 def sql(query):

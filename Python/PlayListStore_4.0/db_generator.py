@@ -3,7 +3,7 @@ import os
 from main import Icons
 from random import randint
 
-db_name = "Data.pls"
+db_name = "data.pls"
 alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 
 

@@ -36,7 +36,7 @@ from PyQt5.QtWidgets import QHeaderView
 # LOAD DB
 try:
     if __name__ == "__main__":
-        db = sqlite3.connect("Data.pls")
+        db = sqlite3.connect("data.pls")
         sql = db.cursor().execute
         data = [int(d[0]) for d in sql("SELECT value FROM Data")]
         ID = data[0]

@@ -1,5 +1,6 @@
-import sqlite3
 import os
+import sys
+import sqlite3
 from main import Icons
 from random import randint
 
@@ -68,13 +69,14 @@ def generate_data(sql, pl_count, title_count):
 
 def init():
     print("Exit - Enter\nGen data - 0\nFixed titles - 1\nMixed title - 2")
-    req = input()
+    req = input() if len(sys.argv) <= 1 else ''
     if os.path.exists(db_name):
         os.remove(db_name)
     db = sqlite3.connect(db_name)
     sql = db.cursor().execute
     create_db(sql)
     if req == '':
+        db.commit()
         return
     if req == '0':
         req = input("pl_count titles_count: ").split()

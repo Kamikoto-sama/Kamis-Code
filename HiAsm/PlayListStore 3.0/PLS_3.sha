@@ -1744,14 +1744,14 @@ Add(Hub,12937000,462,604)
  link(onEvent1,5693718:doData,[])
  link(onEvent2,11026930:doData,[(486,617)(486,674)])
 }
-Add(LineBreak,6601150,560,320)
+Add(LineBreak,11604188,560,320)
 {
  Caption="Vis"
  Color=16776960
  link(Out,3859674:doVisible,[])
  Primary=[3445455,617,-124]
 }
-Add(LineBreak,5845710,-49,420)
+Add(LineBreak,4636206,-49,420)
 {
  Caption="Vis"
  Color=16776960
@@ -1962,7 +1962,7 @@ Add(Hub,10325791,613,507)
  link(onEvent1,10788532:doWork3,[(865,513)])
  link(onEvent2,8550673:doWork2,[])
 }
-Add(LineBreak,13677456,588,585)
+Add(LineBreak,900303,588,585)
 {
  @Color=5635840
  Caption="Add"
@@ -3555,7 +3555,7 @@ Add(GetDataEx,16314538,1218,418)
 {
  link(Data,15047573:Var2,[])
 }
-Add(LineBreak,1623402,802,342)
+Add(LineBreak,188173,802,342)
 {
  Caption="Update"
  Color=65535
@@ -3567,7 +3567,7 @@ Add(Hub,7321965,1860,513)
  link(onEvent1,11871916:doWork1,[])
  link(onEvent2,14906478:doWork1,[(1969,526)])
 }
-Add(LineBreak,13320942,1993,440)
+Add(LineBreak,404681,1993,440)
 {
  Caption="Vied"
  Color=65280
@@ -3801,7 +3801,7 @@ Add(GetDataEx,11336753,1774,481)
  Angle=3
  link(Data,11204165:Var3,[(1584,486)(1584,502)(1479,502)])
 }
-Add(LineBreak,4828682,1906,532)
+Add(LineBreak,1034504,1906,532)
 {
  Caption="DelT"
  Color=16776960
@@ -5402,7 +5402,7 @@ Add(GetDataEx,6916240,1459,425)
  Angle=3
  link(Data,4238524:Var3,[])
 }
-Add(LineBreak,4064860,756,346)
+Add(LineBreak,13101091,756,346)
 {
  Caption="FindT"
  Type=1
@@ -5410,21 +5410,21 @@ Add(LineBreak,4064860,756,346)
  link(Data,6317184:Var2,[])
  Primary=[15343789,1320,242]
 }
-Add(LineBreak,10641584,1989,616)
+Add(LineBreak,1089568,1989,616)
 {
  Caption="ON"
  Color=16776960
  link(Out,2670315:doEvent1,[])
  Primary=[8846522,-1263,-687]
 }
-Add(LineBreak,16175210,599,293)
+Add(LineBreak,13528664,599,293)
 {
  Caption="FindT"
  Color=65535
  link(Out,6138279:doWork1,[(674,299)])
  Primary=[2529076,1599,369]
 }
-Add(LineBreak,13675376,926,391)
+Add(LineBreak,3773632,926,391)
 {
  Caption="FindT"
  Color=65535
@@ -5496,7 +5496,7 @@ Add(GetDataEx,4458253,1173,436)
  Angle=3
  link(Data,2150447:Var3,[])
 }
-Add(LineBreak,15425436,1217,552)
+Add(LineBreak,10342397,1217,552)
 {
  Caption="FindT"
  Type=1
@@ -6131,7 +6131,7 @@ Add(HubEx,4942821,2059,520)
 {
  link(onEvent,11641710:doWork2,[])
 }
-Add(LineBreak,13755456,1993,458)
+Add(LineBreak,13442919,1993,458)
 {
  Caption="DelP"
  Color=16776960
@@ -6759,14 +6759,15 @@ Add(ChildForm,4646058,1734,242)
 {
  link(Data1,403441:Var2,[])
  link(Data2,14636319:Var1,[(1747,207)(1581,207)])
+ link(Data3,937667:Var3,[(1754,46)])
 }
 BEGIN_SDK
   Add(EditMulti,7983638,21,21)
   {
    WorkCount=2
-   DataCount=2
-   Width=594
-   Height=480
+   DataCount=3
+   Width=608
+   Height=753
    link(doWork1,15893128:doData,[(87,27)(87,32)])
    link(doWork2,1897894:doSplit,[(49,34)(49,69)])
   }
@@ -6794,7 +6795,7 @@ BEGIN_SDK
   }
   Add(Button,9647118,36,156)
   {
-   Width=197
+   Width=142
    Height=25
    Font=[Consolas,11,1,0,204]
    Cursor=14
@@ -6833,8 +6834,8 @@ BEGIN_SDK
   }
   Add(Button,2996126,361,180)
   {
-   Left=198
-   Width=175
+   Left=143
+   Width=95
    Height=25
    Font=[Consolas,11,1,0,204]
    Cursor=14
@@ -6912,12 +6913,10 @@ BEGIN_SDK
   }
   Add(MT_MultiMem,12763707,170,156)
   {
-   Count=3
    link(onData,1782160:doString,[(212,162)(212,196)(160,196)(160,212)])
   }
   Add(FormatStr,1782160,170,206)
   {
-   DataCount=3
    Mask="%1\9%2"
    link(onFString,3190879:doWork2,[])
    link(Str1,12763707:Value1,[])
@@ -7207,6 +7206,461 @@ BEGIN_SDK
    Angle=3
    link(onEvent,13751258:doWork3,[])
   }
+  Add(Button,6478291,29,529)
+  {
+   Left=238
+   Width=135
+   Height=25
+   Font=[Consolas,11,1,0,204]
+   Cursor=14
+   Caption="EXPORT FOR 4.0"
+   Data=Integer(6)
+   Point(doEnabled)
+   MakeTrans(Caption)
+   link(onClick,9058492:doQuery,[])
+  }
+  Add(DSC_Query,9998621,269,536)
+  {
+   DSManager="parent.data"
+   link(onQuery,3053408:doValue,[])
+   link(onError,11493062:doWork3,[(313,556)])
+  }
+  Add(FormatStr,14913898,224,536)
+  {
+   DataCount=1
+   Mask="SELECT Titlename, Nam, ID, Ico, Color, Data, S FROM %1"
+   link(onFString,9998621:doQuery,[(259,542)(259,542)])
+  }
+  Add(FormatStr,11598542,324,716)
+  {
+   DataCount=11
+   Mask="%1|%2|%3|%4|%5|%6|%7|%8|%9|%10|%11"
+   link(onFString,2039578:doEvent1,[])
+   link(Str1,3053408:Value1,[])
+   link(Str2,3053408:Value2,[])
+   link(Str3,4830895:Var1,[(344,623)(174,623)])
+   link(Str4,3246514:Var2,[])
+   link(Str5,157339:Var1,[(358,702)(552,702)])
+   link(Str6,12406700:Var1,[(365,586)(459,586)])
+   link(Str7,12406700:Var3,[(372,586)(473,586)])
+   link(Str8,12406700:Var2,[(379,586)(466,586)])
+   link(Str9,8520666:Var1,[(386,614)(521,614)])
+   link(Str10,12406700:Var4,[(393,586)(480,586)])
+   link(Str11,14810872:Var1,[(400,710)(480,710)])
+  }
+  Add(StrList,1417527,457,716)
+  {
+   FileName="titles.txt"
+  }
+  Add(MT_MultiMem,3053408,324,536)
+  {
+   Count=7
+   link(onData,12406700:doWork1,[])
+  }
+  Add(GetDataEx,3246514,345,594)
+  {
+   link(Data,3053408:Value4,[])
+  }
+  Add(MultiElement,8520666,515,536)
+  {
+   link(onEvent1,157339:doWork1,[(564,542)(564,583)(509,583)(509,638)])
+   link(onEvent2,13093702:doWork3,[(555,549)])
+   link(Data1,3246514:Var3,[(521,518)(436,518)(436,599)])
+   link(Data2,3053408:Value3,[(528,524)(444,524)(444,607)(344,607)])
+  }
+  BEGIN_SDK
+    Add(EditMulti,2011314,28,35)
+    {
+     EventCount=2
+     WorkCount=1
+     DataCount=2
+     VarCount=1
+     Width=244
+     Height=123
+     link(doWork1,15635051:doCompare,[(51,41)(51,77)])
+     link(Var1,5483188:Value,[(34,148)(227,148)])
+    }
+    Add(If_else,15635051,63,71)
+    {
+     Op2=Integer(1)
+     link(onTrue,12130244:doString,[])
+     link(onFalse,13325464:doData,[(106,84)(106,118)])
+     link(Op1,2011314:Data1,[(69,49)(34,49)])
+    }
+    Add(DSC_Query,16616695,157,71)
+    {
+     DSManager="parent.parent.data"
+     link(onQuery,736916:doWork2,[])
+     link(onError,2011314:onEvent2,[(197,91)(197,48)])
+    }
+    Add(FormatStr,12130244,112,71)
+    {
+     DataCount=1
+     Mask="SELECT Date FROM CList WHERE ID=%1"
+     link(onFString,16616695:doQuery,[])
+     link(Str1,2011314:Data2,[(118,59)(41,59)])
+    }
+    Add(Memory,5483188,221,71)
+    {
+     Default=String()
+     link(onData,2011314:onEvent1,[(261,77)(261,41)])
+    }
+    Add(DoData,13325464,157,112)
+    {
+     Data=String()
+     link(onEventData,736916:doWork3,[(207,118)])
+    }
+    Add(HubEx,736916,203,71)
+    {
+     link(onEvent,5483188:doValue,[])
+    }
+  END_SDK
+  Add(MultiElement,10386856,583,506)
+  {
+   @Hint=#10:MESS ERROR|
+   @Color=5570560
+  }
+  BEGIN_SDK
+    Add(EditMulti,8893549,21,21)
+    {
+     WorkCount=1
+     Width=118
+     Height=74
+     link(doWork1,7807514:doValue,[(31,27)(31,48)])
+    }
+    Add(Message,6332176,91,42)
+    {
+     Message="EMPTY"
+     Caption="PLS: ERROR_CONVERTER"
+     Icon=3
+     link(Message,7807514:Value,[(97,32)(83,32)(83,86)(48,86)])
+    }
+    Add(Memory,7807514,42,42)
+    {
+     link(onData,6332176:doMessage,[])
+    }
+  END_SDK
+  Add(HubEx,11493062,309,506)
+  {
+   link(onEvent,13093702:doWork2,[])
+  }
+  Add(HubEx,13093702,551,506)
+  {
+   link(onEvent,10386856:doWork1,[])
+  }
+  Add(MultiElement,157339,546,632)
+  {
+   link(onEvent1,14810872:doWork1,[(588,638)(588,684)(454,684)(454,652)])
+   link(Data1,3053408:Value5,[(552,623)(358,623)])
+  }
+  BEGIN_SDK
+    Add(EditMulti,12171124,21,21)
+    {
+     EventCount=1
+     WorkCount=1
+     DataCount=1
+     VarCount=1
+     Width=321
+     Height=109
+     link(doWork1,514134:doData,[(35,27)(35,50)])
+     link(Var1,15456308:Value,[(27,120)(286,120)])
+    }
+    Add(DoData,514134,43,44)
+    {
+     link(onEventData,6715934:doCase,[])
+     link(Data,12171124:Data1,[(49,32)(27,32)])
+    }
+    Add(Memory,15456308,280,77)
+    {
+     link(onData,12171124:onEvent1,[(327,83)(327,27)])
+    }
+    Add(Case,6715934,85,44)
+    {
+     Value=String(0#1564078)
+     DataOnTrue=String(viewed)
+     link(onNextCase,12018009:doCase,[])
+     link(onTrue,7497609:doWork2,[(126,57)(126,83)])
+    }
+    Add(Case,12018009,134,44)
+    {
+     Value=String(0#13810798)
+     DataOnTrue=String(viewing)
+     link(onNextCase,7829363:doCase,[])
+     link(onTrue,7497609:doWork1,[(175,57)])
+    }
+    Add(Case,7829363,182,44)
+    {
+     Value=String(0#3137790)
+     DataOnTrue=String(is_con)
+     link(onNextCase,2022235:doData,[])
+     link(onTrue,3267989:doWork1,[(221,57)])
+    }
+    Add(HubEx,7497609,171,77)
+    {
+     link(onEvent,3267989:doWork2,[])
+    }
+    Add(HubEx,3267989,217,77)
+    {
+     link(onEvent,6672501:doWork2,[])
+    }
+    Add(DoData,2022235,231,44)
+    {
+     Data=String(n)
+     link(onEventData,6672501:doWork1,[(270,50)])
+    }
+    Add(HubEx,6672501,266,77)
+    {
+     link(onEvent,15456308:doValue,[])
+    }
+  END_SDK
+  Add(MultiElement,14810872,474,646)
+  {
+   link(onEvent1,11598542:doString,[(517,652)(517,694)(312,694)(312,722)])
+   link(Data1,3053408:Value7,[(480,634)(372,634)])
+   link(Data2,12406700:Var5,[])
+  }
+  BEGIN_SDK
+    Add(EditMulti,15060696,21,21)
+    {
+     EventCount=1
+     WorkCount=1
+     DataCount=2
+     VarCount=1
+     Width=244
+     Height=109
+     link(doWork1,11393824:doCompare,[(44,27)(44,69)])
+     link(Var1,118320:Value,[(27,117)(216,117)])
+    }
+    Add(If_else,11393824,56,63)
+    {
+     Type=2
+     Op2=Integer(0)
+     link(onTrue,11019329:doData,[(131,69)(131,53)])
+     link(onFalse,3406687:doData,[(96,76)(96,83)])
+     link(Op1,12026209:Var2,[])
+    }
+    Add(Memory,118320,210,63)
+    {
+     link(onData,15060696:onEvent1,[(254,69)(254,27)])
+    }
+    Add(DoData,3406687,105,77)
+    {
+     link(onEventData,16124920:doWork3,[(194,83)])
+     link(Data,15060696:Data2,[(111,49)(34,49)])
+    }
+    Add(DoData,11019329,147,47)
+    {
+     link(onEventData,16124920:doWork1,[(194,53)])
+     link(Data,12026209:Var3,[(153,37)])
+    }
+    Add(GetDataEx,12026209,56,32)
+    {
+     Angle=3
+     link(Data,15060696:Data1,[(27,37)])
+    }
+    Add(HubEx,16124920,190,63)
+    {
+     link(onEvent,118320:doValue,[])
+    }
+  END_SDK
+  Add(ChildForm,4830895,168,536)
+  {
+   link(onEvent1,14913898:doString,[(208,542)(208,542)])
+   link(onEvent2,7996498:doEvent1,[(215,549)(215,757)])
+   link(Data1,7983638:Data3,[(174,494)(41,494)])
+  }
+  BEGIN_SDK
+    Add(EditMulti,7995203,28,63)
+    {
+     EventCount=2
+     WorkCount=3
+     DataCount=1
+     VarCount=1
+     Width=356
+     Height=256
+     link(doWork1,11480417:doEvent1,[(148,69)(148,118)])
+     link(doWork2,13290619:doEvent1,[])
+     link(doWork3,712767:doNext,[(44,83)(44,139)])
+     link(Var1,2448923:Item,[(34,292)(335,292)])
+    }
+    Add(MainForm,5204268,231,70)
+    {
+     Left=35
+     Top=105
+     Height=56
+     Visible=1
+     Caption="PLS3 Converter"
+     BorderStyle=6
+     Position=1
+     Point(doVisible)
+    }
+    Add(FormatStr,10907673,203,201)
+    {
+     Mask="%1 / %2"
+     link(onFString,3823451:doText,[])
+     link(Str2,109936:Var2,[])
+    }
+    Add(Memory,12505524,210,151)
+    {
+     link(onData,1156247:doMax,[(258,157)(258,146)])
+    }
+    Add(Hub,665357,138,133)
+    {
+     OutCount=3
+     link(onEvent1,1156247:doPosition,[])
+     link(onEvent2,10907673:doString,[(164,146)(164,207)])
+     link(onEvent3,12793345:doCompare,[(164,153)(164,244)])
+    }
+    Add(ProgressBar,1156247,271,133)
+    {
+     Width=400
+     Height=25
+     Align=2
+     ProgressColor=50176
+     Point(doMax)
+    }
+    Add(Label,3823451,252,201)
+    {
+     Top=25
+     Width=400
+     Height=27
+     Align=2
+     Font=[Comic Sans MS,12,1,0,204]
+     Caption="0 / 0"
+     Alignment=2
+    }
+    Add(If_else,12793345,175,238)
+    {
+     Type=4
+     link(onTrue,14423927:doEvent1,[])
+     link(Op2,109936:Var1,[(188,192)])
+    }
+    Add(GetDataEx,109936,210,187)
+    {
+     link(Data,12505524:Value,[])
+    }
+    Add(Hub,11480417,196,112)
+    {
+     link(onEvent1,5204268:doVisible,[(220,118)(220,104)])
+     link(onEvent2,2448923:doEnum,[(273,125)(273,104)])
+    }
+    Add(Counter,712767,91,133)
+    {
+     Point(doMax)
+     link(onNext,665357:doEvent1,[])
+    }
+    Add(Hub,13290619,56,70)
+    {
+     link(onEvent1,12505524:doValue,[(175,76)(175,157)])
+     link(onEvent2,712767:doMax,[(79,83)(79,160)])
+    }
+    Add(Hub,14423927,224,238)
+    {
+     link(onEvent1,7995203:onEvent2,[(319,244)(319,76)])
+     link(onEvent2,11830803:doTimer,[])
+    }
+    Add(ArrayEnum,2448923,329,98)
+    {
+     Type=1
+     link(onItem,7995203:onEvent1,[(373,104)(373,69)])
+     link(Array,7995203:Data1,[(335,47)(34,47)])
+    }
+    Add(Timer,11830803,252,245)
+    {
+     Enable=1
+     AutoStop=1
+     link(onTimer,5204268:doClose,[(310,251)(310,57)(219,57)(219,97)])
+    }
+  END_SDK
+  Add(DSC_Query,9058492,73,529)
+  {
+   SQL="SELECT AD FROM Data"
+   DSManager="parent.data"
+   link(onQuery,3197343:doEvent1,[])
+   link(onError,11493062:doWork2,[(114,549)(114,512)])
+  }
+  Add(Hub,2039578,413,716)
+  {
+   link(onEvent1,1417527:doAdd,[])
+   link(onEvent2,4830895:doWork3,[(439,729)(439,665)(156,665)(156,556)])
+  }
+  Add(Hub,3197343,122,529)
+  {
+   OutCount=3
+   link(onEvent1,5500693:doWork1,[(146,535)(146,593)(65,593)])
+   link(onEvent2,4830895:doWork2,[(152,542)(152,549)])
+   link(onEvent3,4830895:doWork1,[(152,549)(152,542)])
+  }
+  Add(MultiElement,12406700,453,536)
+  {
+   link(onEvent1,8520666:doWork1,[])
+   link(Data1,3053408:Value6,[(459,505)(387,505)(387,576)(365,576)])
+  }
+  BEGIN_SDK
+    Add(EditMulti,495356,21,21)
+    {
+     EventCount=1
+     WorkCount=1
+     DataCount=1
+     VarCount=5
+     Width=244
+     Height=228
+     link(doWork1,3358372:doSplit,[(45,27)(45,48)])
+     link(Var1,10408719:Value,[(27,138)(139,138)])
+     link(Var2,14756274:Value,[(34,188)(223,188)])
+     link(Var3,3932703:Value,[(41,177)(174,177)])
+     link(Var4,9401541:Value,[(48,215)(188,215)])
+     link(Var5,2861909:Value,[(55,239)(202,239)])
+    }
+    Add(MultiStrData,3358372,63,42)
+    {
+     Count=5
+     link(Str,495356:Data1,[(69,35)(27,35)])
+     link(onPart1,10408719:doValue,[])
+     link(onPart2,2657436:doReplace,[(104,55)(104,85)])
+     link(onPart3,3932703:doValue,[(113,62)(113,118)])
+     link(onPart4,9401541:doValue,[(121,69)(121,153)])
+     link(onPart5,2861909:doValue,[(129,76)(129,202)])
+    }
+    Add(Memory,10408719,133,42)
+    {
+    }
+    Add(Memory,14756274,217,79)
+    {
+    }
+    Add(Memory,3932703,168,112)
+    {
+    }
+    Add(Memory,2861909,196,196)
+    {
+     link(onData,495356:onEvent1,[(257,202)(257,27)])
+    }
+    Add(Memory,9401541,182,147)
+    {
+    }
+    Add(Replace,2657436,152,79)
+    {
+     SubStr="\r\n"
+     DestStr=" "
+     link(onReplace,14756274:doValue,[])
+    }
+  END_SDK
+  Add(Hub,7996498,225,751)
+  {
+   link(onEvent1,1417527:doSave,[])
+   link(onEvent2,5500693:doWork3,[(251,764)(251,679)(65,679)])
+  }
+  Add(Switch,1862753,77,602)
+  {
+   DataOn=Integer(1)
+   DataOff=Integer(0)
+   Default=0
+   link(onSwitch,6478291:doEnabled,[(122,608)(122,577)(17,577)(17,535)])
+  }
+  Add(HubEx,5500693,61,602)
+  {
+   link(onEvent,1862753:doSwitch,[])
+  }
 END_SDK
 Add(BitBtn,9962919,1627,223)
 {
@@ -7284,7 +7738,7 @@ Add(GetDataEx,13214870,535,165)
  Angle=3
  link(Data,16536674:Var3,[(492,170)(492,170)])
 }
-Add(LineBreak,6060276,288,234)
+Add(LineBreak,1030706,288,234)
 {
  Caption="OpenP"
  Color=65535
@@ -7373,7 +7827,7 @@ BEGIN_SDK
    link(onEvent2,807475:doClear,[(187,90)(187,28)(109,28)(109,47)])
   }
 END_SDK
-Add(LineBreak,15786301,1669,344)
+Add(LineBreak,10692700,1669,344)
 {
  Caption="OpP"
  Color=16776960
@@ -7389,7 +7843,7 @@ Add(GetDataEx,4390914,493,392)
 {
  link(Data,16177219:Var1,[])
 }
-Add(LineBreak,9921887,518,413)
+Add(LineBreak,2571314,518,413)
 {
  Caption="OpP"
  Type=1
@@ -7397,7 +7851,7 @@ Add(LineBreak,9921887,518,413)
  link(Data,10100023:Var2,[])
  Primary=[7397204,1214,-122]
 }
-Add(LineBreak,7257915,386,351)
+Add(LineBreak,13439347,386,351)
 {
  Caption="OpP"
  Color=16776960
@@ -7547,7 +8001,7 @@ BEGIN_SDK
    Format="Y.M.D"
   }
 END_SDK
-Add(LineBreak,7095554,598,413)
+Add(LineBreak,14855600,598,413)
 {
  Caption="ID"
  Type=1
@@ -7568,7 +8022,7 @@ Add(InfoTip,7123853,1615,200)
  Width=242
  Height=171
 }
-Add(LineBreak,14686171,931,370)
+Add(LineBreak,13172184,931,370)
 {
  Caption="FL"
  Color=65535
@@ -7649,7 +8103,7 @@ Add(MultiElement,10979933,1120,58)
  link(onEvent2,10950747:doWork1,[(1172,71)(1172,29)(732,29)])
  link(onEvent3,11375153:doWork1,[(1180,78)(1180,-35)(718,-35)])
  link(onEvent4,11283745:doWork1,[(1188,85)(1188,-43)(606,-43)])
- link(Data1,6317184:Var3,[(1126,46)(926,46)(926,264)])
+ link(Data1,937667:Var2,[])
  link(Data2,10697657:Var3,[(1133,37)(912,37)(912,279)])
  link(Data3,8010565:Var3,[(1140,20)])
  link(Data4,2613996:Var2,[])
@@ -7803,7 +8257,7 @@ Add(HubEx,11375153,714,26)
  Angle=1
  link(onEvent,4661319:doWork1,[])
 }
-Add(LineBreak,7464185,1997,698)
+Add(LineBreak,7251560,1997,698)
 {
  Caption="CList"
  Color=16776960
@@ -7960,7 +8414,7 @@ Add(GetDataEx,4238524,1274,425)
  Angle=3
  link(Data,14936585:Var3,[])
 }
-Add(LineBreak,8133475,1899,224)
+Add(LineBreak,16196126,1899,224)
 {
  Caption="Lang"
  Color=65280
@@ -7968,7 +8422,7 @@ Add(LineBreak,8133475,1899,224)
  link(Out,10686572:doWork1,[])
  Primary=[6484029,-1222,-120]
 }
-Add(LineBreak,13651015,-53,441)
+Add(LineBreak,3708230,-53,441)
 {
  Caption="AdT"
  Color=33023
@@ -8284,7 +8738,7 @@ Add(HubEx,8404904,105,485)
  Angle=1
  link(onEvent,8083924:doNext,[(109,512)])
 }
-Add(LineBreak,2587541,2083,700)
+Add(LineBreak,15174582,2083,700)
 {
  Caption="SetV"
  Color=16776960
@@ -8313,7 +8767,7 @@ Add(HubEx,7173464,168,657)
 {
  link(onEvent,10641799:doEvent1,[])
 }
-Add(LineBreak,14843401,266,-18)
+Add(LineBreak,3303626,266,-18)
 {
  Caption="Update"
  Color=16776960
@@ -8341,7 +8795,7 @@ Add(DSC_Query,9004277,426,-43)
  link(onQuery,14773068:doVisible,[])
  link(onError,8919347:doWork1,[(466,-23)(466,-95)])
 }
-Add(LineBreak,7762769,497,106)
+Add(LineBreak,551822,497,106)
 {
  Caption="INFO"
  Color=65535
@@ -8861,9 +9315,9 @@ BEGIN_SDK
   {
    Count=4
    link(onPart1,192205:doText2,[])
-   link(onPart2,9760133:doText,[(207,69)(207,98)])
-   link(onPart3,10754290:doText,[(212,76)(212,114)(83,114)(83,129)])
-   link(onPart4,6243258:doValue,[(201,83)(201,123)])
+   link(onPart2,9760133:doText,[(208,69)(208,98)])
+   link(onPart3,10754290:doText,[(201,76)(201,114)(79,114)(79,129)])
+   link(onPart4,6243258:doValue,[(276,83)(276,123)])
   }
   Add(Memory,10042663,308,124)
   {
@@ -8990,7 +9444,7 @@ BEGIN_SDK
   {
   }
 END_SDK
-Add(LineBreak,3142483,1275,343)
+Add(LineBreak,12593931,1275,343)
 {
  Caption="TabVi"
  Color=65535
@@ -9006,7 +9460,7 @@ Add(Hub,6553047,1449,595)
  link(onEvent1,11464812:doWork2,[])
  link(onEvent2,1936124:In,[(1471,608)(1471,613)])
 }
-Add(LineBreak,14240078,1750,777)
+Add(LineBreak,9811743,1750,777)
 {
  @Color=5636095
  Caption="Move"
@@ -9029,7 +9483,7 @@ Add(Hub,11590624,688,-64)
  link(onEvent1,8846522:In,[(714,-58)(714,-65)])
  link(onEvent2,10765293:doWork1,[(993,-51)])
 }
-Add(LineBreak,12509802,1036,196)
+Add(LineBreak,12491668,1036,196)
 {
  Caption="VIS"
  Color=65535
@@ -9048,7 +9502,7 @@ Add(IndexToChanel,10912741,2660,1050)
  link(onEvent2,3218692:doLoad,[(2706,1063)(2706,1056)])
  link(Index,15486197:Var,[])
 }
-Add(LineBreak,1329146,2604,1050)
+Add(LineBreak,13052481,2604,1050)
 {
  @Color=5636095
  Caption="Img"
@@ -9066,7 +9520,7 @@ Add(PopupMenu,998819,1652,112)
  Menu=#15:Add to favorite|1:-|18:Show favorite list|
  link(onClick,5385078:doWork1,[])
 }
-Add(LineBreak,12606427,1546,105)
+Add(LineBreak,13761941,1546,105)
 {
  Caption="AdFav"
  Color=65535
@@ -10060,7 +10514,7 @@ Add(GetDataEx,403441,1734,211)
 }
 Add(hcVisualText,12706445,2044,21)
 {
- Lines=#2:40|
+ Lines=#2:46|
 }
 Add(hcKeyHandler,10580050,1988,21)
 {
@@ -10544,7 +10998,7 @@ BEGIN_SDK
   {
    link(onEvent,7776193:doWrite,[])
   }
-  Add(LineBreak,7701979,455,-63)
+  Add(LineBreak,12669852,455,-63)
   {
    link(Out,7776193:doRead,[(562,-57)(562,-43)])
    Primary=[15472165,-284,309]
@@ -11019,7 +11473,7 @@ BEGIN_SDK
    link(onEvent,7784258:doString,[])
   }
 END_SDK
-Add(LineBreak,5785331,791,315)
+Add(LineBreak,4915680,791,315)
 {
  Caption="SaveSel"
  Color=16776960
@@ -11030,7 +11484,7 @@ Add(HubEx,10788532,861,342)
 {
  link(onEvent,11994160:doWork3,[])
 }
-Add(LineBreak,6497855,2083,714)
+Add(LineBreak,5924760,2083,714)
 {
  Caption="SetV"
  Color=16776960
@@ -11065,4 +11519,9 @@ Add(GlobalVar,5856103,161,-78)
  @Color=255
  Name="C_Pause"
  Data=String(0#0)
+}
+Add(GetDataEx,937667,1120,41)
+{
+ Angle=3
+ link(Data,6317184:Var3,[(926,46)(926,264)])
 }

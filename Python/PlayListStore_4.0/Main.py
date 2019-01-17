@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import sys
 import sqlite3
+import converter
 import webbrowser
 from datetime import datetime
 
@@ -33,17 +34,7 @@ from PyQt5.QtWidgets import QInputDialog
 from PyQt5.QtWidgets import QTableWidgetItem
 from PyQt5.QtWidgets import QHeaderView
 
-# LOAD DB
-try:
-    if __name__ == "__main__":
-        db = sqlite3.connect("data.pls")
-        sql = db.cursor().execute
-        data = [int(d[0]) for d in sql("SELECT value FROM Data")]
-        ID = data[0]
-        TotalViewed = data[1]
-        TotalAdded = data[2]
-except Exception as e:
-    print('Load db:', e.args)
+db = sql = data = ID = TotalViewed = TotalAdded = None
 # CONSTANTS
 RowIcons = [
     'Icons/viewed.png',
@@ -60,7 +51,8 @@ Icons = {
     'viewing': 3,
     'pause': 2,
     'cancel_mark': 'Icons/cancel_mark.png',
-    'search_title': 'Icons/search_title.png'}
+    'search_title': 'Icons/search_title.png',
+    'import': 'Icons/import.png'}
 Color = {
     'n': '#D9D9D9',
     'edit': 'none',
@@ -68,7 +60,6 @@ Color = {
     'viewing': '#6EBCD2',
     'pause': '#DC143C',
     'is_con': '#FEE02F'}
-# Skin = 'Skins/dark_orange.css'
 Skin = open('style.css').read()
 SideWidth = 300
 SideAnimDur = 500
@@ -145,10 +136,12 @@ class SearchTitleForm(QWidget):
         except Exception as e:
             show_exception("SearchTitleForm__init", e, self)
 
+    # todo: искать просмотр брошен
     def do_search(self):
         try:
             text = self.search_edit.text()
             self.result.clear()
+            self.selected_row = -1
             self.result.setHorizontalHeaderLabels(["Кол-во",
                                                    "Название тайтла",
                                                    "Плейлист"])
@@ -162,6 +155,7 @@ class SearchTitleForm(QWidget):
                 query = "SELECT count, title_name, playlist, id FROM Titles " \
                         "WHERE %s" % query
                 self.rows = list(sql(query))
+                self.found.setText("Найдено:" + str(len(self.rows)))
                 self.show_result(self.rows)
         except Exception as e:
             show_exception("search_title_do_search", e, self)
@@ -388,7 +382,11 @@ class SideBar(QWidget):
             self.switch_edit(False)
 
             query = "SELECT genre, link, desc, date, count, icon, color FROM Titles"
-            data = list(sql(query + " WHERE id=%s" % t_id))[0]
+            data = list(sql(query + " WHERE id=%s" % t_id))
+            if len(data) == 0:
+                self.p.current_row.message_if_deleted()
+                return
+            data = data[0]
             self.genre.setText(data[0])
             self.link.setText(data[1])
             self.desc.setText(data[2])
@@ -627,7 +625,11 @@ class RowButtons(QWidget):
     def find_title(self):
         try:
             pl_name = list(sql("SELECT playlist FROM Titles WHERE id=%s" % self.p.id))
-            MainP.find_select_title(pl_name[0][0], self.p.id)
+            if len(pl_name) > 0:
+                MainP.find_select_title(pl_name[0][0], self.p.id)
+            else:
+                self.p.message_if_deleted()
+
         except Exception as e:
             show_exception("find_title", e)
 
@@ -709,19 +711,22 @@ class Title(QWidget):
 
             if req == QMessageBox.Yes:
                 if self.p.con:
-                    # Delete title from con list
                     query = "update Titles set con_date='',icon=%s" % Icons['viewed']
                     sql(query + " WHERE id=%s" % self.id)
                     pl = list(sql("SELECT playlist FROM Titles WHERE id=%s" % self.id))
-                    if pl[0][0] in MainP.tab_map:
+                    if len(pl) > 0 and pl[0][0] in MainP.tab_map:
                         index = MainP.tab_map.index(pl[0][0])
                         MainP.close_tab(index)
                         MainP.add_tab(pl[0][0], index)
+                    elif len(pl) == 0:
+                        self.message_if_deleted()
+                        return
                 else:
                     sql('DELETE FROM Titles WHERE id=%s' % self.id)
 
                 self.min_height = 0
                 self.animOff.start(1)
+                self.p.row_map.remove(self.id)
 
                 if not self.p.side_hidden:
                     self.p.side_bar.switch_visible()
@@ -733,9 +738,19 @@ class Title(QWidget):
         except Exception as e:
             show_exception("delete_title", e)
 
+    def message_if_deleted(self):
+        message = "Похоже, данный тайтл уже был удален"
+        QMessageBox.information(self, "PLS4", message)
+        self.min_height = 0
+        self.animOff.start(1)
+        if self.p.side_bar.isVisible:
+            self.p.side_bar.switch_visible()
+            self.p.side_bar.close_side.setEnabled(False)
+
     def set_icon(self, ico):
         try:
-            icon = QPixmap(RowIcons[ico]).scaled(IconSize, IconSize)
+            icon = QPixmap(RowIcons[ico])
+            icon = icon if ico == Icons['n'] else icon.scaled(IconSize, IconSize)
             self.status.setPixmap(icon)
             if ico != self.icon:
                 self.icon = ico
@@ -1240,15 +1255,22 @@ class MainForm(QMainWindow):
             ico = QIcon(Icons['search_title'])
             search_title = menu.addAction(ico, 'Найти тайтл')
 
+            on_import = 0
+            if ID == 0:
+                ico = QIcon(Icons['import'])
+                on_import = menu.addAction(ico, 'Импортировать')
+
             cursor = QPoint(self.options.x() + 5, self.options.y() + 10)
             selected = menu.exec_(self.mapToGlobal(cursor))
 
             if selected == con_list:
                 self.open_con_list()
-            if selected == search_title:
+            elif selected == search_title:
                 self.search_form.show()
                 self.search_form.search_edit.setFocus()
                 self.search_form.search_edit.selectAll()
+            elif selected == on_import:
+                convert()
 
         except Exception as e:
             show_exception('open_options', e)
@@ -1421,8 +1443,8 @@ class MainForm(QMainWindow):
                 date = datetime.strptime('.'.join(date), '.'.join(pattern[:len(date)]))
                 if today > date:
                     count += 1
-                    query = "UPDATE Titles SET "
-                    sql(query + "con_date'%s' WHERE id=%s" % (title[0] + '!', title[1]))
+                    query = "UPDATE Titles SET con_date='%s' WHERE id=%s"
+                    sql(query % (title[0] + '!', title[1]))
 
             if count > 0:
                 text = 'Количество тайтлов получивших продолжение: '
@@ -1459,10 +1481,29 @@ class MainForm(QMainWindow):
         except Exception as e:
             show_exception('launch', e)
 
+def init():
+    try:
+        global db, sql, data, ID, TotalAdded, TotalViewed
+        db = sqlite3.connect("data.pls")
+        sql = db.cursor().execute
+        data = [int(d[0]) for d in sql("SELECT value FROM Data")]
+        ID = data[0]
+        TotalViewed = data[1]
+        TotalAdded = data[2]
+
+        app = QApplication(sys.argv)
+        app.setStyle(SelfStyledIcon('Fusion'))
+        form = MainForm()
+        form.show()
+        sys.exit(app.exec_())
+    except Exception as e:
+        print("Init", e)
+
+
+def convert():
+    MainP.close()
+    db.close()
+    converter.convert()
 
 if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    app.setStyle(SelfStyledIcon('Fusion'))
-    exe = MainForm()
-    exe.show()
-    sys.exit(app.exec_())
+    init()

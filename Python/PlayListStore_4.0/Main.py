@@ -77,7 +77,8 @@ MainP = None
 EpisodeTime = 20
 ConTabName = '|Список продолжений|'
 SortTitlesBy = "count"
-
+Convert = False
+Update = False
 
 def show_exception(name_from, error, parent=MainP):
     QMessageBox.critical(parent, "PLS4_ERROR: %s" % name_from, str(error))
@@ -833,7 +834,7 @@ class Title(QWidget):
                 query = "UPDATE Titles SET title_name='%s', count=%s" % (name, count)
                 if self.p.con:
                     self.color = 'n'
-                    query += ", con_date'%s'" % self.con_date.text()
+                    query += ", con_date='%s'" % self.con_date.text()
                 sql(query + " WHERE id='%s'" % self.id)
 
                 self.p.side_bar.load_side_data(self.id)
@@ -841,7 +842,7 @@ class Title(QWidget):
             else:
                 QMessageBox.warning(self, "PLS4", "Имя тайтла не может быть пустым!")
         except Exception as e:
-            show_exception("on_line_edited", e)
+            show_exception("end_line_edit", e)
 
     def switch_edit(self, edit=True):
         self.title_name.setReadOnly(not edit)
@@ -927,6 +928,7 @@ class Title(QWidget):
 
 
 # todo: снять метку со всех...
+# todo: автобуфер обмена
 class Playlist(QWidget):
     def __init__(self, parent, name, new):
         super(Playlist, self).__init__(parent)
@@ -1207,7 +1209,7 @@ class MainForm(QMainWindow):
         super(MainForm, self).__init__()
         loadUi('GUI/MainForm.ui', self)
 
-        global MainP
+        global MainP, Convert
         MainP = self
         self.setStyleSheet(Skin)
         self.selected_tab = ""
@@ -1238,9 +1240,10 @@ class MainForm(QMainWindow):
         self.add_pl_anim.setEasingCurve(QEasingCurve.OutExpo)
         self.add_pl_anim.setDuration(AddPlDur)
 
-        QTimer.singleShot(1, self.launch)
+        QTimer().singleShot(1, self.launch)
         self.launching = True
         self.set_viewing = -1
+        Convert = False
 
     # todo: settings
     def open_options(self):
@@ -1270,7 +1273,9 @@ class MainForm(QMainWindow):
                 self.search_form.search_edit.setFocus()
                 self.search_form.search_edit.selectAll()
             elif selected == on_import:
-                convert()
+                global Convert
+                Convert = True
+                self.close()
 
         except Exception as e:
             show_exception('open_options', e)
@@ -1481,7 +1486,25 @@ class MainForm(QMainWindow):
         except Exception as e:
             show_exception('launch', e)
 
+
+App = QApplication(sys.argv)
+App.setStyle(SelfStyledIcon('Fusion'))
 def init():
+    try:
+        load_db()
+        form = MainForm()
+        form.show()
+        App.exec_()
+
+        if Convert:
+            db.close()
+            converter.convert()
+            del form
+            init()
+    except Exception as e:
+        show_exception("Init", e)
+
+def load_db():
     try:
         global db, sql, data, ID, TotalAdded, TotalViewed
         db = sqlite3.connect("data.pls")
@@ -1490,20 +1513,9 @@ def init():
         ID = data[0]
         TotalViewed = data[1]
         TotalAdded = data[2]
-
-        app = QApplication(sys.argv)
-        app.setStyle(SelfStyledIcon('Fusion'))
-        form = MainForm()
-        form.show()
-        sys.exit(app.exec_())
     except Exception as e:
-        print("Init", e)
+        print("Load db", e)
 
-
-def convert():
-    MainP.close()
-    db.close()
-    converter.convert()
 
 if __name__ == "__main__":
     init()

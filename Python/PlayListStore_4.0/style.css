@@ -65,7 +65,7 @@ QToolTip{
 /*Title row*/
 	#t_row{border:2px solid #F0F0F0;border-radius: 7px;}
 	#t_row:hover{border:2px solid #6ebcd2;}
-	#t_row QPushButton, #t_row QToolButton{font-size: 16px;}
+	#t_row QPushButton{font-size: 16px;}
     #episode_edit{
         height: 25px;
         font-size: 16px;

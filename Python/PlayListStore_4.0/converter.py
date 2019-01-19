@@ -29,12 +29,13 @@ def convert():
                         "('%s',%s,%s,'%s','%s','%s','%s','%s','%s','%s','%s',%s,0)"
                 sql(query % (t[0], int(t[1]), index, pl, t[3], t[4],
                              t[5], t[6], t[7], t[8], '.'.join(t[9]), t[10]))
-            sql("UPDATE Data SET value='%s' WHERE name='id'" % str(index + 1))
+            index = str(index + 1)
+            sql("UPDATE Data SET value='%s' WHERE name='id'" % index)
             sql("UPDATE Data SET value='%s' WHERE name='viewed'" % str(viewed))
-            sql("UPDATE Data SET value='%s' WHERE name='added'" % str(index + 1))
+            sql("UPDATE Data SET value='%s' WHERE name='added'" % index)
             sql('INSERT INTO Data VALUES("cur_pl","0")')
             db.commit()
-            print("Done / Готово")
+            print("Converted %s titles" % index)
     except FileNotFoundError:
         raise FileNotFoundError("Файл '%s' не найден" % file_name)
     except Exception as e:

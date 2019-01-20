@@ -7,4 +7,6 @@ copy style.css dist
 copy data.pls dist
 copy gui dist\gui
 copy icons dist\icons
+rename dist\main.exe "PlayListStore 4.0.exe"
 rename dist build
+start winrar a -r ..\..\Release\PLS4 build

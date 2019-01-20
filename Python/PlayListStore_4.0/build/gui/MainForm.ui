@@ -22,7 +22,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>PlayListStore 4.0 alpha</string>
+   <string>PlayListStore 4.0</string>
   </property>
   <property name="windowIcon">
    <iconset>
@@ -202,7 +202,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt; font-weight:600; color:#000000;white-space: nowrap;&quot;&gt;Создать новый плейлист&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="statusTip">
-           <string>Создать плейлист</string>
+           <string/>
           </property>
           <property name="text">
            <string/>

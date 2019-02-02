@@ -22,7 +22,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>PlayListStore 4.0</string>
+   <string>PlayListStore 4</string>
   </property>
   <property name="windowIcon">
    <iconset>
@@ -140,14 +140,6 @@
            <width>240</width>
            <height>30</height>
           </size>
-         </property>
-         <property name="font">
-          <font>
-           <family>Consolas</family>
-           <pointsize>16</pointsize>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
          </property>
          <property name="cursor">
           <cursorShape>PointingHandCursor</cursorShape>

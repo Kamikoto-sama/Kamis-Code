@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>NewTab</class>
- <widget class="QWidget" name="NewTab">
+ <class>Playlist</class>
+ <widget class="QWidget" name="Playlist">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -114,7 +114,7 @@
           <enum>Qt::NoFocus</enum>
          </property>
          <property name="text">
-          <string>ДОБАВИТЬ</string>
+          <string>Добавить</string>
          </property>
         </widget>
         <widget class="QPushButton" name="search">
@@ -139,7 +139,7 @@
           <enum>Qt::NoFocus</enum>
          </property>
          <property name="text">
-          <string>ИСКАТЬ</string>
+          <string>Искать</string>
          </property>
         </widget>
         <zorder>search</zorder>
@@ -177,16 +177,19 @@
          <property name="focusPolicy">
           <enum>Qt::NoFocus</enum>
          </property>
+         <property name="toolTip">
+          <string>Удалить выбранный плейлист</string>
+         </property>
          <property name="text">
-          <string>УДАЛИТЬ</string>
+          <string>Удалить</string>
          </property>
         </widget>
         <widget class="QPushButton" name="rename">
          <property name="geometry">
           <rect>
-           <x>96</x>
+           <x>92</x>
            <y>6</y>
-           <width>111</width>
+           <width>115</width>
            <height>25</height>
           </rect>
          </property>
@@ -203,7 +206,7 @@
           <enum>Qt::NoFocus</enum>
          </property>
          <property name="text">
-          <string>ПЕРЕИМЕНОВАТЬ</string>
+          <string>Переименовать</string>
          </property>
         </widget>
         <widget class="QPushButton" name="paste_btn">
@@ -212,7 +215,7 @@
          </property>
          <property name="geometry">
           <rect>
-           <x>12</x>
+           <x>8</x>
            <y>6</y>
            <width>81</width>
            <height>25</height>

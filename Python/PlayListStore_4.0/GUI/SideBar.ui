@@ -157,6 +157,9 @@
           <property name="cursor">
            <cursorShape>PointingHandCursor</cursorShape>
           </property>
+          <property name="toolTip">
+           <string>Жанр</string>
+          </property>
           <property name="maxLength">
            <number>60</number>
           </property>
@@ -194,6 +197,9 @@
             <property name="cursor">
              <cursorShape>PointingHandCursor</cursorShape>
             </property>
+            <property name="toolTip">
+             <string>Ссылка</string>
+            </property>
             <property name="maxLength">
              <number>2000</number>
             </property>
@@ -209,6 +215,9 @@
         </item>
         <item>
          <widget class="ExTextEdit" name="desc">
+          <property name="toolTip">
+           <string>Описание</string>
+          </property>
           <property name="horizontalScrollBarPolicy">
            <enum>Qt::ScrollBarAlwaysOff</enum>
           </property>

@@ -7,7 +7,7 @@ class RandomEvent:
         self.__max = max_value
         assert log(max_value).is_integer() and log(max_value) > 0, \
             "'max' must be a degree of 10"
-        assert len(events) >= 2, "There must be more than 2 events"
+        # assert len(events) >= 2, "There must be more than 2 events"
         assert len(events) <= max_value, "The event count must be less than max value"
         assert sum(events) == max_value, "The sum of values must be %s" % max_value
 

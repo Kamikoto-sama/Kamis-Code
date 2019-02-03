@@ -14,6 +14,7 @@ t.*
 *.jpg
 *.png
 *.exe
+*.pyc
 
 !Python/PlayListStore_4.0/Icons/*.*
 !PLS/PLS_3.exe

@@ -7,7 +7,8 @@ from PyQt5.QtCore import QPoint
 from PyQt5.QtCore import QTimer
 from PyQt5.QtCore import QEasingCurve
 from PyQt5.QtCore import QPropertyAnimation
-from PyQt5.QtWidgets import QWidget, QMessageBox
+from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QMessageBox
 from PyQt5.QtWidgets import QPushButton
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtWidgets import QApplication
@@ -37,7 +38,7 @@ class Window(QWidget):
             self.client_in.clicked.connect(self.on_client_in)
             self.client_clear.clicked.connect(self.on_client_clear)
 
-            self.client_event = RandomEvent(100, 100 - ClientCameProb, ClientCameProb)
+            self.client_event = RandomEvent(100 - ClientCameProb, ClientCameProb)
         except Exception as e:
             print("Window", e)
 
@@ -55,10 +56,7 @@ class Window(QWidget):
             self.client_clear.setEnabled(True)
 
             if Emulation:
-                QTimer.singleShot(WaitClientDur, self.emulate)
-            # talk = pyttsx3.init()
-            # talk.say("Client number. %s. go to. %s" % (client, self.title))
-            # talk.runAndWait()
+                QTimer().singleShot(WaitClientDur, self.emulate)
         except Exception as e:
             print("order", e)
 
@@ -69,14 +67,13 @@ class Window(QWidget):
                 event = self.client_event.event()
                 events[event]()
                 if event:
-                    QTimer.singleShot(ClientInDur, self.on_client_clear)
+                    QTimer().singleShot(ClientInDur, self.on_client_clear)
         except Exception as e:
             print("emulate_window", e)
 
     def on_client_in(self):
         try:
             self.client_in.setEnabled(False)
-            self.client_clear.setEnabled(True)
             self.setStyleSheet("QGroupBox{background: lightgreen}")
             self.is_free = False
             if self.p.display.currentItem() == self.display_item:
@@ -104,9 +101,8 @@ class Window(QWidget):
             print("on_client_clear", e)
 
     def check_orders(self):
-        queue = self.p.queue
-        if len(queue[self.service]) > 0:
-            client = queue[self.service].pop(0)
+        if len(self.p.queue[self.service]) > 0:
+            client = self.p.queue[self.service].pop(0)
             self.order(client)
 
 
@@ -152,7 +148,7 @@ class Place(QWidget):
         self.emulation = QTimer(self)
         self.emulation.timeout.connect(self.emulate)
         self.emulation_events = None
-        self.client_event = RandomEvent(100, 100 - ClientProb, ClientProb)
+        self.client_event = RandomEvent(100 - ClientProb, ClientProb)
 
         self.switch_emul.hide()
         self.switch_emul.clicked.connect(self.switch_emulation)
@@ -183,22 +179,25 @@ class Place(QWidget):
         except Exception as e:
             print("init", e)
 
-    def init_emulation(self, services, emulation):
+    def init_emulation(self, services, delay):
         global Emulation
         Emulation = True
         self.bottom_area.setEnabled(False)
         self.ticket.setEnabled(False)
 
         self.switch_emul.show()
-        self.emulation.setInterval(1000 * emulation)
+        self.emulation.setInterval(1000 * delay)
         self.emulation.start()
-        events = [100 // len(services) for _ in range(len(services) - 1)]
-        events.append(100 - sum(events))
-        self.emulation_events = RandomEvent(100, *events)
+        events = [100 // len(services) for _ in range(len(services))]
+        if not (100 / len(services)).is_integer():
+            events.append(100 - sum(events))
+        self.emulation_events = RandomEvent(*events, shuffle=True)
 
     def emulate(self):
         if self.client_event.event() and Emulation:
             index = self.emulation_events.event()
+            if index == len(self.windows):
+                return self.emulate()
             self.select_service(index)
             print("\rTime for client %s!" % self.client_count, end='')
         else:
@@ -231,6 +230,7 @@ class Place(QWidget):
             if not self.queue.get(service, False):
                 self.queue[service] = list()
             self.queue[service].append(client)
+
             self.print_ticket(client)
             self.check_windows(client)
         except Exception as e:
@@ -239,12 +239,13 @@ class Place(QWidget):
     def print_ticket(self, client):
         try:
             if self.groupBox.height() > 0 and self.groupBox.width() > 0:
-                self.ticket.text.setText("Your number\n" + client)
-                self.ticket.show()
                 y = self.groupBox.height() // 2 - self.ticket.height() // 2 + 10
                 x = self.groupBox.width() // 2 - self.ticket.width() // 2
+
                 self.ticket_anim.setStartValue(QPoint(-self.ticket.width(), y))
                 self.ticket_anim.setEndValue(QPoint(x, y))
+                self.ticket.text.setText("Your number\n" + client)
+                self.ticket.show()
                 self.ticket_anim.start()
                 self.ticket_time.start()
         except Exception as e:
@@ -259,15 +260,6 @@ class Place(QWidget):
                     return
         except Exception as e:
             print("check_windows", e)
-
-    def order_window(self, window, client):
-        try:
-            item = QListWidgetItem("%s --> %s" % (client, window.title))
-            window.order(client)
-            item.setTextAlignment(Qt.AlignHCenter)
-            self.display.addItem(item)
-        except Exception as e:
-            print("order_window", e)
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Escape:
@@ -288,10 +280,12 @@ class PlaceConstructor(QMainWindow):
         self.services.itemDoubleClicked.connect(self.delete_service)
         self.emulate.stateChanged.connect(self.set_emulation)
         self.rate.returnPressed.connect(self.load_services)
+        self.add.clicked.connect(self.add_service)
 
     def add_service(self):
         try:
-            name, count = self.name.text().strip(), self.count.text().strip()
+            name = self.name.text().strip()
+            count = self.count.text().strip()
             if '' not in [name, count]:
                 item = "%s|%s" % (name, count)
                 self.services.addItem(item)

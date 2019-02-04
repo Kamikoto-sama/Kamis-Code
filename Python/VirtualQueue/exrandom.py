@@ -3,17 +3,21 @@ from math import log10 as log
 
 
 class RandomEvent:
-    def __init__(self, max_value, *events):
-        self.__max = max_value
-        assert log(max_value).is_integer() and log(max_value) > 0, \
-            "'max' must be a degree of 10"
-        # assert len(events) >= 2, "There must be more than 2 events"
-        assert len(events) <= max_value, "The event count must be less than max value"
-        assert sum(events) == max_value, "The sum of values must be %s" % max_value
+    def __init__(self, *events, **kwargs):
+        self.__max = 100
+        if kwargs.get("max", False):
+            self.__max = kwargs["max"]
 
-        self.grade = [0 for _ in range(max_value)]
+        assert log(self.__max).is_integer() and log(self.__max) > 0, \
+            "'max' must be a degree of 10"
+        assert len(events) <= self.__max, "The event count must be less than max value"
+        assert sum(events) == self.__max, "The sum of values must be %s" % self.__max
+
+        self.grade = [0 for _ in range(self.__max)]
         self.events = events
         self.make_grade()
+        if kwargs.get("shuffle", False):
+            random.shuffle(self.grade)
 
     def make_grade(self):
         event_index = 0

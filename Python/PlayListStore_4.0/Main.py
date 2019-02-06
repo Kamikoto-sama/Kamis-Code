@@ -4,7 +4,6 @@ import sqlite3
 import converter
 import webbrowser
 from datetime import datetime
-
 from PyQt5.uic import loadUi
 from PyQt5.QtGui import QIcon
 from PyQt5.QtGui import QFont
@@ -21,7 +20,7 @@ from PyQt5.QtCore import QRegExp
 from PyQt5.QtCore import QEventLoop
 from PyQt5.QtCore import QEasingCurve
 from PyQt5.QtCore import QPropertyAnimation
-from PyQt5.QtWidgets import QMenu
+from PyQt5.QtWidgets import QMenu, QAction
 from PyQt5.QtWidgets import QStyle
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtWidgets import QTabBar
@@ -53,7 +52,8 @@ Icons = {
     'cancel_mark': 'icons/cancel_mark.png',
     'search_title': 'icons/search_title.png',
     'import': 'icons/import.png',
-    'favorite': 'icons/favorite.png'}
+    'favorite': 'icons/favorite.png',
+    'unfavorite': 'icons/unfavorite.png'}
 Color = {
     'n': '#D9D9D9',
     'edit': 'none',
@@ -111,8 +111,9 @@ class SelfStyledIcon(QProxyStyle):
             return QProxyStyle.pixelMetric(self, q_style_pixel_metric, option, widget)
 
 class FavoriteTitlesForm(QWidget):
-    def __init__(self):
-        super().__init__(None, Qt.WindowStaysOnTopHint | Qt.WindowCloseButtonHint)
+    def __init__(self, parent, rows=None):
+        flags = Qt.WindowCloseButtonHint | Qt.Window
+        super().__init__(parent, flags)
         try:
             loadUi("gui/FavoriteTitlesForm.ui", self)
             self.setStyleSheet(Skin)
@@ -121,40 +122,57 @@ class FavoriteTitlesForm(QWidget):
             self.table.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
             self.table.horizontalHeader().resizeSection(2, 90)
             self.table.cellDoubleClicked.connect(self.select_item)
-            self.table.cellChanged.connect(self.move_row)
+            self.table.cellChanged.connect(self.move_changed_rows)
 
-            self.rows = list()
+            self.up.clicked.connect(self.move_row_once)
+            self.down.clicked.connect(self.move_row_once)
+            self.del_title.clicked.connect(self.delete_title)
+
+            self.rows = rows
             self.selected_row = -1
             self.loaded = False
-
-            self.up.clicked.connect(self.move_row_up)
-            self.down.clicked.connect(self.move_row_down)
         except Exception as e:
             show_exception("FavoriteTitlesForm__init", e)
+
+    def set_loaded(self, state):
+        self.loaded = state
+        self.setWindowTitle("Избранные тайтлы: %s" % self.table.rowCount())
 
     def showEvent(self, event):
         try:
             if self.table.rowCount() == 0:
-                self.load_favorites()
+                if self.rows is None:
+                    query = "SELECT favorite, title_name, playlist, id FROM " \
+                            "Titles WHERE favorite != '' ORDER  BY favorite"
+                    self.rows = list(map(list, sql(query)))
+                self.table.setRowCount(len(self.rows))
+                for i, row in enumerate(self.rows):
+                    top = QTableWidgetItem(str(row[0]))
+                    top.setTextAlignment(4)
+                    self.table.setItem(i, 0, top)
+                    self.table.setItem(i, 1, QTableWidgetItem(row[1]))
+                    self.table.setItem(i, 2, QTableWidgetItem(row[2]))
+                self.set_loaded(True)
             event.accept()
         except Exception as e:
             show_exception("show fav", e)
 
-    def load_favorites(self):
+    def add_title(self, title_name, pl_name, title_id):
         try:
-            self.rows = list(sql("SELECT favorite, title_name, playlist, id "
-                                 "FROM Titles WHERE favorite != ''"))
-
-            self.table.setRowCount(len(self.rows))
-            for i, row in enumerate(self.rows):
-                top = QTableWidgetItem(str(i+1))
-                top.setTextAlignment(i)
-                self.table.setItem(i, 0, top)
-                self.table.setItem(i, 1, QTableWidgetItem(row[1]))
-                self.table.setItem(i, 2, QTableWidgetItem(row[2]))
-            self.loaded = True
+            self.show()
+            self.loaded = False
+            index = self.table.rowCount()
+            self.table.insertRow(index)
+            top = QTableWidgetItem(str(index + 1))
+            top.setTextAlignment(4)
+            self.table.setItem(index, 0, top)
+            self.table.setItem(index, 1, QTableWidgetItem(title_name))
+            self.table.setItem(index, 2, QTableWidgetItem(pl_name))
+            self.rows.append([index + 1, title_name, pl_name, title_id])
+            self.table.setCurrentCell(index, 1)
+            self.set_loaded(True)
         except Exception as e:
-            show_exception("load_favorites", e)
+            show_exception("add_title_favTitles", e)
 
     def select_item(self, index, col):
         if index != self.selected_row and col > 0:
@@ -162,38 +180,108 @@ class FavoriteTitlesForm(QWidget):
             self.selected_row = index
             self.close()
 
-    def move_row(self, row, col):
+    def move_changed_rows(self, row):
         try:
-            if self.loaded:
-                print(self.table.item(row, 0).text())
+            if self.loaded and row > -1:
+                self.loaded = False
+                text = self.table.item(row, 0).text()
+                if not text.isdigit():
+                    text = "Введите место в топе"
+                    self.table.item(row, 0).setText(str(self.rows[row][0]))
+                    self.loaded = True
+                    return QMessageBox.warning(self, "PLS4: Favorite titles", text)
+
+                top = int(text)
+                if top > row + 1:
+                    if top > self.table.rowCount():
+                        top = self.table.rowCount()
+                        self.table.item(row, 0).setText(str(top))
+                    for index in range(row + 1, top):
+                        value = int(self.table.item(index, 0).text()) - 1
+                        self.table.item(index, 0).setText(str(value))
+                    self.move_row(row, top, False)
+                else:
+                    if top <= 0:
+                        top = 1
+                        self.table.item(row, 0).setText(str(top))
+                    for index in range(top - 1, row):
+                        value = int(self.table.item(index, 0).text()) + 1
+                        self.table.item(index, 0).setText(str(value))
+                    self.move_row(row, top, True)
+
+                self.rows[row][0] = top
+                self.rows.insert(top - 1, self.rows.pop(row))
+                self.loaded = True
         except Exception as e:
-            show_exception("move_row", e)
+            show_exception("move_row", e, MainP)
 
-    def move_row_up(self):
-        row = self.table.currentRow()
-        if row > 0:
-            self.table.insertRow(row - 1)
+    def move_row(self, row, top, move_up):
+        shift = (top - 1, row) if move_up else (row + 1, top)
+        if len(range(*shift)) > 0:
+            self.table.insertRow(top - 1 if move_up else top)
             for col in range(3):
-                self.table.setItem(row - 1, col, self.table.takeItem(row + 1, col))
-            self.table.removeRow(row + 1)
-            self.table.setCurrentCell(row - 1, 1)
+                item = self.table.takeItem(row + 1 if move_up else row, col)
+                self.table.setItem(top - 1 if move_up else top, col, item)
+            self.table.removeRow(row + 1 if move_up else row)
+            self.table.setCurrentCell(top - 1, 1)
 
-    def move_row_down(self):
+    def move_row_once(self):
         row = self.table.currentRow()
-        if self.sender() == self.down and -1 < row < self.table.rowCount() - 1:
-            self.table.insertRow(row + 2)
-            for col in range(3):
-                self.table.setItem(row + 2, col, self.table.takeItem(row, col))
-            self.table.removeRow(row)
-            self.table.setCurrentCell(row + 1, 1)
+        if row > -1:
+            if self.sender() == self.up and row > 0:
+                value = int(self.table.item(row, 0).text()) - 1
+                self.table.item(row, 0).setText(str(value))
+            elif self.sender() == self.down and row < self.table.rowCount() - 1:
+                value = int(self.table.item(row, 0).text()) + 1
+                self.table.item(row, 0).setText(str(value))
+
+    def delete_title(self):
+        try:
+            index = self.table.currentRow()
+            if index > -1:
+                text = "Вы уверены что хотите удалить '%s' " \
+                       "из избранных ?" % self.rows[index][1]
+                title = "PLS4: Favorite titles"
+                buttons = QMessageBox.Yes | QMessageBox.No
+                answer = QMessageBox().question(self, title, text, buttons)
+
+                if answer == QMessageBox.Yes:
+                    end = self.table.rowCount()
+                    self.table.item(index, 0).setText(str(end))
+                    self.table.removeRow(end - 1)
+                    row = self.rows.pop(index)
+                    sql("UPDATE Titles SET favorite='' WHERE id=%s" % row[3])
+
+                    if row[2] in MainP.tab_map:
+                        tab = MainP.tabWidget.widget(MainP.tab_map.index(row[2]))
+                        tab.select_row(row[3], select=False).is_fav = False
+
+                    self.table.setCurrentCell(index, 1)
+                    self.set_loaded(True)
+                    if end - 1 == 0:
+                        self.close()
+        except Exception as e:
+            show_exception("delete_title_favTitles", e)
+
+    def closeEvent(self, event):
+        try:
+            rows = self.rows
+            for i in range(self.table.rowCount()):
+                value = self.table.item(i, 0).text()
+                if value != rows[i][0]:
+                    query = "UPDATE Titles SET favorite=%s WHERE id=%s"
+                    sql(query % (value, rows[i][3]))
+        except Exception as e:
+            show_exception("save_changes_favTitlesForm", e)
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Escape:
             self.close()
 
 class SearchTitleForm(QWidget):
-    def __init__(self):
-        super().__init__(None, Qt.WindowStaysOnTopHint | Qt.WindowCloseButtonHint)
+    def __init__(self, parent):
+        flags = Qt.WindowCloseButtonHint | Qt.Window
+        super().__init__(parent, flags)
         try:
             loadUi("GUI/SearchTitleForm.ui", self)
             self.setStyleSheet(Skin)
@@ -256,6 +344,11 @@ class SearchTitleForm(QWidget):
             MainP.find_select_title(self.rows[index][2], self.rows[index][3])
             self.selected_row = index
 
+    def showEvent(self, event):
+        self.search_edit.setFocus()
+        self.search_edit.selectAll()
+        event.accept()
+
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Escape:
             self.close()
@@ -266,7 +359,7 @@ class AddTitleForm(QWidget):
         try:
             super(AddTitleForm, self).__init__(parent)
             loadUi('GUI/AddTitleForm.ui', self)
-            self.parent = parent
+            self.p = parent
             self.hide()
 
             self.anim = QPropertyAnimation(self, b"size")
@@ -331,7 +424,7 @@ class AddTitleForm(QWidget):
             else:
                 icon = Icons['n']
 
-            self.parent.add_title(name, count, genre, link, desc, icon, color)
+            self.p.add_title(name, count, genre, link, desc, icon, color)
             query = "SELECT id FROM Titles WHERE title_name='%s'" \
                     " and con_date!=''" % name
             check = list(sql(query))
@@ -347,10 +440,10 @@ class AddTitleForm(QWidget):
 
     def check_title(self, t_name):
         query = "SELECT id FROM Titles WHERE title_name='%s' " \
-                "and playlist='%s'" % (t_name, self.parent.name)
+                "and playlist='%s'" % (t_name, self.p.name)
         check = list(sql(query))
         if len(check) > 0:
-            self.parent.select_row(check[0][0])
+            self.p.select_row(check[0][0])
             message = "Похоже тайтл '%s' уже добавлен в данный плейлист." \
                       "\nХотите сделать дубликат?" % t_name
             btns = QMessageBox.Yes | QMessageBox.No
@@ -366,6 +459,7 @@ class TabBar(QTabBar):
         self.setMovable(True)
         self.setTabsClosable(True)
         self.setExpanding(True)
+        self.setFocusPolicy(Qt.NoFocus)
 
 
 class SideBar(QWidget):
@@ -378,16 +472,16 @@ class SideBar(QWidget):
 
             self.close_side.clicked.connect(self.switch_visible)
 
-            self.genre.doubleClicked.connect(self.switch_edit)
+            self.genre.doubleClicked.connect(self.set_edit)
             self.genre.setCursor(QCursor(Qt.PointingHandCursor))
             self.genre.returnPressed.connect(self.save_desc)
 
-            self.desc.doubleClicked.connect(self.switch_edit)
+            self.desc.doubleClicked.connect(self.set_edit)
             self.desc.setCursor(QCursor(Qt.PointingHandCursor))
 
-            self.link.doubleClicked.connect(self.switch_edit)
-            self.link.setCursor(QCursor(Qt.PointingHandCursor))
+            self.link.doubleClicked.connect(self.set_edit)
             self.link.returnPressed.connect(self.save_desc)
+            self.link.setCursor(QCursor(Qt.PointingHandCursor))
 
             self.open.clicked.connect(self.open_link)
             self.save.clicked.connect(self.save_desc)
@@ -403,7 +497,7 @@ class SideBar(QWidget):
 
     def save_desc(self):
         try:
-            self.switch_edit(False)
+            self.set_edit(False)
             genre = self.genre.text()
             link = self.link.text()
             desc = self.desc.toPlainText()
@@ -417,7 +511,7 @@ class SideBar(QWidget):
                 QMessageBox.warning(self, "PLS4: Warning", message)
             else:
                 show_exception("save_desc", e)
-                self.keyPressEvent('')
+                self.escape_edit()
         except Exception as e:
             show_exception("save_desc", e)
 
@@ -440,7 +534,7 @@ class SideBar(QWidget):
             webbrowser.open(self.link.text())
 
     # On doubleclick
-    def switch_edit(self, edit=True):
+    def set_edit(self, edit=True):
         self.genre.setReadOnly(not edit)
         self.link.setReadOnly(not edit)
         self.desc.setReadOnly(not edit)
@@ -449,22 +543,27 @@ class SideBar(QWidget):
         self.genre.setCursor(QCursor(cursor))
         self.link.setCursor(QCursor(cursor))
         self.desc.setCursor(QCursor(cursor))
+        focus = Qt.StrongFocus if edit else Qt.NoFocus
+        self.genre.setFocusPolicy(focus)
+        self.link.setFocusPolicy(focus)
+        self.desc.setFocusPolicy(focus)
+        if edit and self.sender() is not None:
+            self.sender().setFocus()
 
     # On esc at side bar
-    def keyPressEvent(self, event):
+    def escape_edit(self):
         try:
-            if event == '' or event.key() == Qt.Key_Escape:
-                self.genre.undo()
-                self.link.undo()
-                self.desc.undo()
-                self.switch_edit(False)
+            self.genre.undo()
+            self.link.undo()
+            self.desc.undo()
+            self.set_edit(False)
         except Exception as e:
             show_exception("sideBar_esc", e)
 
     # Load and set title-data into side bar
     def load_side_data(self, t_id):
         try:
-            self.switch_edit(False)
+            self.set_edit(False)
 
             query = "SELECT genre, link, desc, date, count, icon, color FROM Titles"
             data = list(sql(query + " WHERE id=%s" % t_id))
@@ -515,6 +614,10 @@ class SideBar(QWidget):
         except Exception as e:
             show_exception("hide_show_sidebar", e)
 
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_Escape:
+            self.escape_edit()
+            self.open.setFocus()
 
 class RowButtons(QWidget):
     def __init__(self, con=False):
@@ -523,22 +626,23 @@ class RowButtons(QWidget):
             loadUi("GUI/RowButtons.ui", self)
             self.p = None
 
-            self.del_title.clicked.connect(self.delete_title)
             self.viewing.clicked.connect(self.viewing_now)
             self.viewed.clicked.connect(self.select_mark)
             self.find_btn.clicked.connect(self.find_title)
-            self.move_btn.clicked.connect(self.move_title)
-
             self.plus.clicked.connect(self.change_episode)
             self.episode_edit.setValidator(QIntValidator(1, 9999))
             self.minus.clicked.connect(self.change_episode)
-            self.plus.hide()
-            self.minus.hide()
-            self.episode_edit.hide()
+            self.move_btn.clicked.connect(self.move_title)
+            self.del_title.clicked.connect(self.delete_title)
+            self.favorite_btn.clicked.connect(self.set_favorite)
+
             if con:
                 self.left_frame.hide()
                 self.move_btn.hide()
             else:
+                self.plus.hide()
+                self.episode_edit.hide()
+                self.minus.hide()
                 self.find_btn.hide()
                 self.date = QLineEdit(self)
                 self.date.setAlignment(Qt.AlignCenter)
@@ -569,16 +673,29 @@ class RowButtons(QWidget):
             self.viewing.setText(text)
             state = parent.icon in [Icons['viewing'], Icons['pause'], Icons['n']]
             self.viewing.setEnabled(state)
+            icon = 'unfavorite' if parent.is_fav else 'favorite'
+            self.favorite_btn.setIcon(QIcon(Icons[icon]))
             if parent.icon in [Icons['viewing'], Icons['pause']]:
                 self.switch_episode_edit(True)
         elif not self.plus.isHidden():
             self.switch_episode_edit(False)
 
-    def make_favorite(self):
-        try:
-            sql("UPDATE Titles SET favorite='0' WHERE id=%s" % self.p.id)
-        except Exception as e:
-            show_exception("make_favorite", e)
+    def set_favorite(self):
+        if self.p.is_fav:
+            text = "Вы уверены что хотите удалить '%s' " \
+                   "из избранных ?" % self.p.name
+            title = "PLS4: Delete title from favorites"
+            buttons = QMessageBox.Yes | QMessageBox.No
+            answer = QMessageBox().question(self, title, text, buttons)
+
+            if answer == QMessageBox.Yes:
+                self.p.is_fav = False
+                self.favorite_btn.setIcon(QIcon(Icons['favorite']))
+                sql("UPDATE Titles SET favorite='' WHERE id=%s" % self.p.id)
+        else:
+            self.p.is_fav = True
+            self.favorite_btn.setIcon(QIcon(Icons['unfavorite']))
+            FavoriteTitlesForm(MainP).add_title(self.p.name, self.p.p.name, self.p.id)
 
     def switch_episode_edit(self, show):
         if show:
@@ -727,8 +844,9 @@ class RowButtons(QWidget):
     def move_title(self):
         try:
             self.p.p.paste_btn.show()
-            MainP.paste_row = [self.p.name, self.p.count.text(), self.p.id, self.p.icon,
-                               self.p.color, self.p.p.name, self.p.ep]
+            MainP.paste_row = [self.p.name, self.p.count.text(), self.p.id,
+                               self.p.icon, self.p.color, self.p.p.name, self.p.ep,
+                               self.p.is_fav]
             self.p.min_height = 0
             self.p.animOff.start(1)
         except Exception as e:
@@ -736,7 +854,7 @@ class RowButtons(QWidget):
 
 
 class Title(QWidget):
-    def __init__(self, parent, name, count, id_, icon, color, episode):
+    def __init__(self, parent, name, count, id_, icon, color, episode, favorite):
         try:
             super(Title, self).__init__(parent)
             loadUi('GUI/Title.ui', self)
@@ -746,9 +864,10 @@ class Title(QWidget):
             self.name = name
             self.ep = episode
             self.color = color
+            self.is_fav = favorite != ''
+            self.show_side = False
             self.border_color = "blue"
             self.hover_color = "#6ebcd2"
-            self.show_side = False
 
             self.row_layout.setAlignment(Qt.AlignTop)
 
@@ -805,10 +924,11 @@ class Title(QWidget):
                     query = "update Titles set con_date='',icon=%s" % Icons['viewed']
                     sql(query + " WHERE id=%s" % self.id)
                     pl = list(sql("SELECT playlist FROM Titles WHERE id=%s" % self.id))
+                    # todo: исправить обновление при удалении
                     if len(pl) > 0 and pl[0][0] in MainP.tab_map:
                         index = MainP.tab_map.index(pl[0][0])
-                        MainP.close_tab(index)
-                        MainP.add_tab(pl[0][0], index)
+                        tab = MainP.tabWidget.widget(index)
+                        tab.select_row(self.id, select=False).set_icon(Icons['viewed'])
                     elif len(pl) == 0:
                         self.message_if_deleted()
                         return
@@ -901,8 +1021,9 @@ class Title(QWidget):
     # ON doubleclick row
     def set_line_edit(self):
         try:
-            self.switch_edit()
+            self.set_edit()
             self.set_color('edit')
+            self.sender().setFocus()
             if self.p.con:
                 self.con_date.setText(self.con_date.text().rstrip("!"))
 
@@ -934,7 +1055,7 @@ class Title(QWidget):
         except Exception as e:
             show_exception("end_line_edit", e)
 
-    def switch_edit(self, edit=True):
+    def set_edit(self, edit=True):
         self.title_name.setReadOnly(not edit)
         self.count.setReadOnly(not edit)
         self.con_date.setReadOnly(not edit)
@@ -942,11 +1063,15 @@ class Title(QWidget):
         self.title_name.setCursor(QCursor(cursor))
         self.count.setCursor(QCursor(cursor))
         self.con_date.setCursor(QCursor(cursor))
+        focus = Qt.StrongFocus if edit else Qt.NoFocus
+        self.title_name.setFocusPolicy(focus)
+        self.count.setFocusPolicy(focus)
+        self.con_date.setFocusPolicy(focus)
 
     # ON edit ecs
-    def keyPressEvent(self, event=None, esc=False):
+    def escape_edit(self):
         try:
-            if esc or event.key() == Qt.Key_Escape:
+            if self.color != Color['edit']:
                 self.title_name.clearFocus()
                 self.title_name.undo()
                 self.count.clearFocus()
@@ -958,7 +1083,6 @@ class Title(QWidget):
                     self.p.row_btns.date.hide()
                 elif self.color == "is_con" and self.con_date.text()[-1] != '!':
                     self.con_date.setText(self.con_date.text() + '!')
-
         except Exception as e:
             show_exception("row_edit_esc", e)
 
@@ -999,7 +1123,7 @@ class Title(QWidget):
             self.animOn.stop()
             if change:
                 self.p.row_btns.setParent(None)
-                self.keyPressEvent(esc=True)
+                self.escape_edit()
                 self.animOff.start(RowAnimDur)
                 self.setStyleSheet('''
                     #t_row{border-color: #F0F0F0}
@@ -1012,9 +1136,13 @@ class Title(QWidget):
                     self.p.side_bar.switch_visible()
                     self.show_side = False
 
-            self.switch_edit(False)
+            self.set_edit(False)
         except Exception as e:
             show_exception("leave", e)
+
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_Escape:
+            self.escape_edit()
 
 
 # todo: снять метку со всех...
@@ -1156,10 +1284,13 @@ class Playlist(QWidget):
                     row.select()
                     break
 
-    def select_row(self, index):
+    def select_row(self, title_id, select=True):
         try:
-            row = self.row_list.itemAt(self.row_map.index(index)).widget()
-            row.select()
+            row = self.row_list.itemAt(self.row_map.index(title_id)).widget()
+            if select:
+                row.select()
+            else:
+                return row
         except Exception as e:
             show_exception("select_row", e)
 
@@ -1246,15 +1377,17 @@ class Playlist(QWidget):
                 break
         return row_id
 
-    def add_row(self, name, count, t_id, icon_date, color, ep, index, delay=0):
+    # name0, count1, t_id2, icon_date3, color4, ep5, fav6, index7, delay8
+    def add_row(self, *args):
         try:
-            row = Title(self, name, count, t_id, icon_date, color, ep)
-            index = self.row_list.count() if index == -1 else index
+            row = Title(self, *args[:7])
+            index = self.row_list.count() if args[7] == -1 else args[7]
             loop = QEventLoop()
+            delay = args[8] if len(args) > 8 else 0
             QTimer.singleShot(delay, loop.quit)
             loop.exec_()
             self.row_list.insertWidget(index, row)
-            self.row_map.insert(index, t_id)
+            self.row_map.insert(index, args[2])
             return row
         except Exception as e:
             show_exception('add_row', e)
@@ -1262,27 +1395,25 @@ class Playlist(QWidget):
     # todo: разбить по методам
     def load_titles(self):
         try:
-            index = 0
-
             if self.con:
                 query = "select title_name,count,id,con_date"
                 titles = list(sql(query + " from titles WHERE con_date!=''"))
                 delay = AddRowDur // len(titles)
-                for t in titles:
+                for index, t in enumerate(titles):
                     color = 'is_con' if t[3][-1] == '!' else 'n'
-                    self.add_row(t[0], t[1], t[2], t[3], color, 0, index, delay)
+                    self.add_row(t[0], t[1], t[2], t[3], color, 0, 0, index, delay)
                     index += 1
 
             else:
-                query = "SELECT title_name,count,id,icon,color, episode FROM Titles" \
-                        " WHERE playlist='%s' ORDER BY " % self.name
+                query = "SELECT title_name,count,id,icon,color,episode,favorite " \
+                        "FROM Titles WHERE playlist='%s' ORDER BY " % self.name
                 titles = list(sql(query + "count desc, icon desc, id desc"))
                 if not len(titles):
                     return
                 delay = AddRowDur // len(titles)
-                for t in titles:
-                    self.add_row(t[0], t[1], t[2], t[3], t[4], t[5], index, delay)
-                    index += 1
+                for index, t in enumerate(titles):
+                    self.add_row(t[0], t[1], t[2], t[3], t[4],
+                                 t[5], t[6], index, delay)
 
                 if self.p.set_viewing >= 0:
                     self.select_row(self.p.set_viewing)
@@ -1294,6 +1425,7 @@ class Playlist(QWidget):
 
 
 # todo: save pos
+# todo: tab to next tab
 class MainForm(QMainWindow):
 
     def __init__(self):
@@ -1310,9 +1442,14 @@ class MainForm(QMainWindow):
         self.add_pl.clicked.connect(self.switch_add_playlist)
         self.pl_list.activated.connect(self.select_playlist)
 
+        close = QAction(self)
+        close.triggered.connect(lambda: self.anim_add_pl(False))
+        close.setShortcut('Esc')
+        self.pl_name.addAction(close)
         self.pl_name.returnPressed.connect(self.add_pl.click)
         self.pl_name.hide()
-        self.close_pl_name.clicked.connect(self.keyPressEvent)
+
+        self.close_pl_name.clicked.connect(self.anim_add_pl)
         self.close_pl_name.hide()
 
         self.tabBar = TabBar(self)
@@ -1326,8 +1463,6 @@ class MainForm(QMainWindow):
         self.con_info.hide()
 
         self.paste_row = None
-        self.search_form = SearchTitleForm()
-        self.favorites = FavoriteTitlesForm()
 
         self.add_pl_anim = QPropertyAnimation(self.pl_name, b"geometry")
         self.add_pl_anim.setEasingCurve(QEasingCurve.OutExpo)
@@ -1343,7 +1478,9 @@ class MainForm(QMainWindow):
         try:
             menu = QMenu(self)
             cons = list(sql("SELECT con_date, id FROM Titles WHERE con_date != ''"))
-            favors = list(sql("SELECT id FROM Titles WHERE favorite != ''"))
+            query = "SELECT favorite, title_name, playlist, id FROM " \
+                    "Titles WHERE favorite != '' ORDER  BY favorite"
+            favorites = list(map(list, sql(query)))
 
             ico = QIcon(RowIcons[Icons['con']])
             con_list = menu.addAction(ico, 'Список продолжений')
@@ -1354,7 +1491,7 @@ class MainForm(QMainWindow):
 
             ico = QIcon(Icons['favorite'])
             favorite = menu.addAction(ico, 'Избранные')
-            favorite.setEnabled(len(favors) > 0)
+            favorite.setEnabled(len(favorites) > 0)
 
             on_import = 0
             if ID == 0:
@@ -1367,11 +1504,11 @@ class MainForm(QMainWindow):
             if selected == con_list:
                 self.open_con_list()
             elif selected == search_title:
-                self.search_form.show()
-                self.search_form.search_edit.setFocus()
-                self.search_form.search_edit.selectAll()
+                search_form = SearchTitleForm(self)
+                search_form.show()
             elif selected == favorite:
-                self.favorites.show()
+                favorites = FavoriteTitlesForm(self, favorites)
+                favorites.show()
             elif selected == on_import:
                 global Convert
                 Convert = True
@@ -1488,14 +1625,6 @@ class MainForm(QMainWindow):
         except Exception as e:
             show_exception('close_tab', e)
 
-    # pl name esc
-    def keyPressEvent(self, event):
-        try:
-            if not event or (event.key() == Qt.Key_Escape and self.pl_name.isVisible()):
-                self.anim_add_pl(False)
-        except Exception as e:
-            show_exception('MainForm_on_esc', e)
-
     def find_select_title(self, pl_name, index):
         try:
             self.pl_list.setCurrentIndex(self.pl_list.findText(pl_name))
@@ -1567,8 +1696,6 @@ class MainForm(QMainWindow):
     def closeEvent(self, event):
         try:
             db.commit()
-            self.search_form.close()
-            self.favorites.close()
             event.accept()
         except Exception as e:
             show_exception("closeEvent", e)

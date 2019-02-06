@@ -13,7 +13,7 @@ def create_db(sql):
     sql("CREATE TABLE Data (name varchar(10), value varchar(40))")
     sql("""
             CREATE TABLE Titles (
-            title_name varchar(60) NOT NULL,
+            title_name varchar(80) NOT NULL,
             count int(4),
             id integer PRIMARY KEY AUTOINCREMENT,
             playlist varchar(100),
@@ -33,7 +33,7 @@ def create_db(sql):
     sql('INSERT INTO Data VALUES("added","0")')
     sql('INSERT INTO Data VALUES("cur_pl","-1")')
 
-def add_titles(sql, pl_name, t_count, id_, fix_count=0, perms=False):
+def add_titles(sql, pl_name, t_count, id_, fix_count=0, perms=False, **kwargs):
     if perms:
         perms = list(Icons.values())
         t_count = len(perms)
@@ -44,9 +44,14 @@ def add_titles(sql, pl_name, t_count, id_, fix_count=0, perms=False):
         color = 'viewed' if perms in ['con', 'viewed'] else 'n'
         genre = alpha[:randint(1, 20)]
         desc = alpha[:randint(1, 52)]
-        title = (name, count, id_, pl_name, icon, color, genre, '', desc, '04.01.2019')
+        fav = ''
+        if kwargs.get("fav", False):
+            fav = i + 1
+
+        title = (name, count, id_, pl_name, icon, color, genre,
+                 '', desc, '04.01.2019', fav)
         query = "INSERT INTO Titles VALUES "
-        sql(query + "('%s',%s,%s,'%s','%s','%s','%s','%s','%s','', '%s', 0, 0)" % title)
+        sql(query + "('%s',%s,%s,'%s','%s','%s','%s','%s','%s','', '%s', 0, %s)" % title)
         id_ += 1
 
     sql("UPDATE Data SET value='%s' WHERE name='id'" % id_)
@@ -68,29 +73,72 @@ def generate_data(sql, pl_count, title_count):
 
 
 def init():
-    print("Exit - Enter\nGen data - 0\nFixed titles - 1\nMixed title - 2")
+    print("Exit: Enter\n"
+          "Load conf: -\n"
+          "Save configuration: +\n"
+          "Gen data: 0\n"
+          "Fixed titles: 1\n"
+          "Mixed title: 2\n"
+          "Start with params: 3")
+
     req = input() if len(sys.argv) <= 1 else ''
     if os.path.exists(db_name):
         os.remove(db_name)
     db = sqlite3.connect(db_name)
     sql = db.cursor().execute
     create_db(sql)
+
+    set_conf = 0
+    configurations = None
+    if req == '+':
+        set_conf = 1
+        configurations = list()
+        req = input()
+        configurations.append(req)
+    elif req == '-':
+        set_conf = -1
+        with open("db_gen_config.txt", 'r') as file:
+            configurations = file.readline().split('|')
+            req = configurations[0]
+
     if req == '':
         db.commit()
         return
     if req == '0':
-        req = input("pl_count titles_count: ").split()
+        if set_conf == 1:
+            req = input("pl_count titles_count: ")
+            configurations.append(req)
+        elif set_conf == -1:
+            req = configurations[1]
+        req = req.split()
+
         generate_data(sql, int(req[0]), int(req[1]))
         db.commit()
         return
 
     add_playlist(sql, "PL1")
     if req == '1':
-        req = input("title_count count: ").split()
+        if set_conf == 1:
+            req = input("title_count count: ")
+            configurations.append(req)
+        elif set_conf == -1:
+            req = configurations[1]
+        req = req.split()
         add_titles(sql, "PL1", int(req[0]), 0, fix_count=int(req[1]))
     if req == '2':
         add_titles(sql, "PL1", 0, 0, fix_count=12, perms=True)
+    if req == '3':
+        if set_conf == 1:
+            req = input("option t_count: ")
+            configurations.append(req)
+        elif set_conf == -1:
+            req = configurations[1]
+        req = req.split()
+        add_titles(sql, "PL1", int(req[1]), 0, **{req[0]: True})
 
+    if set_conf == 1:
+        with open("db_gen_config.txt", 'w') as file:
+            file.write('|'.join(configurations))
     print("Done...\n")
     db.commit()
 

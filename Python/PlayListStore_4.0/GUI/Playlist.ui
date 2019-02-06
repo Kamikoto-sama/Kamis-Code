@@ -83,7 +83,7 @@
           </size>
          </property>
          <property name="maxLength">
-          <number>60</number>
+          <number>80</number>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>

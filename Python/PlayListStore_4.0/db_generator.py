@@ -44,7 +44,7 @@ def add_titles(sql, pl_name, t_count, id_, fix_count=0, perms=False, **kwargs):
         color = 'viewed' if perms in ['con', 'viewed'] else 'n'
         genre = alpha[:randint(1, 20)]
         desc = alpha[:randint(1, 52)]
-        fav = ''
+        fav = -1
         if kwargs.get("fav", False):
             fav = i + 1
 
@@ -105,8 +105,9 @@ def init():
         db.commit()
         return
     if req == '0':
-        if set_conf == 1:
+        if set_conf >= 0:
             req = input("pl_count titles_count: ")
+        if set_conf == 1:
             configurations.append(req)
         elif set_conf == -1:
             req = configurations[1]
@@ -118,8 +119,9 @@ def init():
 
     add_playlist(sql, "PL1")
     if req == '1':
-        if set_conf == 1:
+        if set_conf >= 0:
             req = input("title_count count: ")
+        if set_conf == 1:
             configurations.append(req)
         elif set_conf == -1:
             req = configurations[1]
@@ -128,8 +130,9 @@ def init():
     if req == '2':
         add_titles(sql, "PL1", 0, 0, fix_count=12, perms=True)
     if req == '3':
-        if set_conf == 1:
+        if set_conf >= 0:
             req = input("option t_count: ")
+        if set_conf == 1:
             configurations.append(req)
         elif set_conf == -1:
             req = configurations[1]
@@ -139,8 +142,8 @@ def init():
     if set_conf == 1:
         with open("db_gen_config.txt", 'w') as file:
             file.write('|'.join(configurations))
-    print("Done...\n")
     db.commit()
 
 if __name__ == "__main__":
     init()
+    print("Done...\n")

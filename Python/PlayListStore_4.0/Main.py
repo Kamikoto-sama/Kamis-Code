@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 import sys
-import sqlite3
+import updater
 import converter
 import webbrowser
+from sqlite3 import connect as db_connect
 from datetime import datetime
+from requests import post as download
 from PyQt5.uic import loadUi
 from PyQt5.QtGui import QIcon
 from PyQt5.QtGui import QFont
@@ -11,6 +13,7 @@ from PyQt5.QtGui import QPixmap
 from PyQt5.QtGui import QCursor
 from PyQt5.QtGui import QIntValidator
 from PyQt5.QtGui import QRegExpValidator
+# todo: Qt fix
 from PyQt5.QtCore import Qt
 from PyQt5.QtCore import QRect
 from PyQt5.QtCore import QSize
@@ -26,7 +29,6 @@ from PyQt5.QtWidgets import QWidget
 from PyQt5.QtWidgets import QTabBar
 from PyQt5.QtWidgets import QLineEdit
 from PyQt5.QtWidgets import QMessageBox
-from PyQt5.QtWidgets import QPushButton
 from PyQt5.QtWidgets import QHeaderView
 from PyQt5.QtWidgets import QProxyStyle
 from PyQt5.QtWidgets import QMainWindow
@@ -78,9 +80,10 @@ MainP = None
 EpisodeTime = 20
 ConTabName = '|Список продолжений|'
 SortTitlesBy = "count"
-Convert = False
-Update = False
+Import = False
 
+Update = False
+UpdateInfo = "Update krch"
 Version = "4.0"
 
 def show_exception(name_from, error, parent=MainP):
@@ -143,7 +146,7 @@ class FavoriteTitlesForm(QWidget):
             if self.table.rowCount() == 0:
                 if self.rows is None:
                     query = "SELECT favorite, title_name, playlist, id FROM " \
-                            "Titles WHERE favorite != '' ORDER  BY favorite"
+                            "Titles WHERE favorite != -1 ORDER  BY favorite"
                     self.rows = list(map(list, sql(query)))
                 self.table.setRowCount(len(self.rows))
                 for i, row in enumerate(self.rows):
@@ -250,7 +253,7 @@ class FavoriteTitlesForm(QWidget):
                     self.table.item(index, 0).setText(str(end))
                     self.table.removeRow(end - 1)
                     row = self.rows.pop(index)
-                    sql("UPDATE Titles SET favorite='' WHERE id=%s" % row[3])
+                    sql("UPDATE Titles SET favorite=-1 WHERE id=%s" % row[3])
 
                     if row[2] in MainP.tab_map:
                         tab = MainP.tabWidget.widget(MainP.tab_map.index(row[2]))
@@ -399,7 +402,6 @@ class AddTitleForm(QWidget):
             if not self.check_title(name):
                 return
 
-            self.switch_visible()
             count = self.count.text()
             genre = self.genre.text()
             link = self.link.text()
@@ -415,6 +417,7 @@ class AddTitleForm(QWidget):
                 self.count.setFocus()
                 return
 
+            self.switch_visible()
             if self.is_con.checkState() == 2:
                 color = 'is_con'
             else:
@@ -505,15 +508,13 @@ class SideBar(QWidget):
                     % (genre, link, desc, self.p.current_row.id)
             sql(query)
             db.commit()
-        except sqlite3.Error as e:
+        except Exception as e:
             if str(e).split()[0] in ["unrecognized", "near"]:
                 message = "Похоже, вы использовали недопустимый cимвол!"
                 QMessageBox.warning(self, "PLS4: Warning", message)
             else:
                 show_exception("save_desc", e)
                 self.escape_edit()
-        except Exception as e:
-            show_exception("save_desc", e)
 
     def set_is_finished(self, state):
         if self.change_check:
@@ -684,14 +685,14 @@ class RowButtons(QWidget):
         if self.p.is_fav:
             text = "Вы уверены что хотите удалить '%s' " \
                    "из избранных ?" % self.p.name
-            title = "PLS4: Delete title from favorites"
+            title = "PLS4: Favorite titles"
             buttons = QMessageBox.Yes | QMessageBox.No
             answer = QMessageBox().question(self, title, text, buttons)
 
             if answer == QMessageBox.Yes:
                 self.p.is_fav = False
                 self.favorite_btn.setIcon(QIcon(Icons['favorite']))
-                sql("UPDATE Titles SET favorite='' WHERE id=%s" % self.p.id)
+                sql("UPDATE Titles SET favorite=-1 WHERE id=%s" % self.p.id)
         else:
             self.p.is_fav = True
             self.favorite_btn.setIcon(QIcon(Icons['unfavorite']))
@@ -751,6 +752,9 @@ class RowButtons(QWidget):
         try:
             if self.p.color not in ['is_con', 'viewed']:
                 save_data('viewed')
+
+            date = datetime.today().strftime('%d.%m.%Y')
+            sql("UPDATE Titles SET date='%s' WHERE id=%s" % (date, self.p.id))
             self.p.set_icon(Icons['con'])
             self.p.set_color('viewed')
             self.date.hide()
@@ -761,6 +765,7 @@ class RowButtons(QWidget):
 
             text = self.date.text()
             sql('update titles set con_date="%s" where id=%s' % (text, self.p.id))
+            self.p.p.side_bar.load_side_data(self.p.id)
 
             if ConTabName in MainP.tab_map:
                 tab = MainP.tabWidget.widget(MainP.tab_map.index(ConTabName))
@@ -768,7 +773,7 @@ class RowButtons(QWidget):
                 count = self.p.count.text()
                 id_ = self.p.id
                 date = self.date.text()
-                tab.add_row(name, count, id_, date, 'n', 0, -1)
+                tab.add_row(name, count, id_, date, 'n', 0)
         except Exception as e:
             show_exception("set_con_date", e)
 
@@ -799,6 +804,8 @@ class RowButtons(QWidget):
 
             if selected == on_viewed:
                 if self.p.color not in ['is_con', 'viewed']:
+                    date = datetime.today().strftime('%d.%m.%Y')
+                    sql("UPDATE Titles SET date='%s' WHERE id=%s" % (date, self.p.id))
                     save_data('viewed')
                 if self.p.icon == Icons['con']:
                     query = "update Titles set con_date='' WHERE id=%s" % self.p.id
@@ -856,7 +863,7 @@ class RowButtons(QWidget):
 class Title(QWidget):
     def __init__(self, parent, name, count, id_, icon, color, episode, favorite):
         try:
-            super(Title, self).__init__(parent)
+            super().__init__(parent)
             loadUi('GUI/Title.ui', self)
             self.id = id_
             self.p = parent
@@ -864,7 +871,7 @@ class Title(QWidget):
             self.name = name
             self.ep = episode
             self.color = color
-            self.is_fav = favorite != ''
+            self.is_fav = favorite != -1
             self.show_side = False
             self.border_color = "blue"
             self.hover_color = "#6ebcd2"
@@ -910,21 +917,21 @@ class Title(QWidget):
 
     def delete_title(self):
         try:
-            if not self.p.con:
-                title = "PLS4: Delete title"
-                ask = "Вы уверены, что хотите удалить '%s' из данного плейлиста?" \
-                      % self.name
-                btns = QMessageBox.Yes | QMessageBox.No
-                req = QMessageBox.question(self, title, ask, btns, QMessageBox.No)
+            if self.p.con:
+                ask = "Отменить отслеживание продолжения для '%s'?" % self.name
             else:
-                req = QMessageBox.Yes
+                ask = "Вы уверены, что хотите удалить '%s'" \
+                      " из данного плейлиста?" % self.name
+
+            title = "PLS4: Delete title"
+            btns = QMessageBox.Yes | QMessageBox.No
+            req = QMessageBox.question(self, title, ask, btns, QMessageBox.No)
 
             if req == QMessageBox.Yes:
                 if self.p.con:
                     query = "update Titles set con_date='',icon=%s" % Icons['viewed']
                     sql(query + " WHERE id=%s" % self.id)
                     pl = list(sql("SELECT playlist FROM Titles WHERE id=%s" % self.id))
-                    # todo: исправить обновление при удалении
                     if len(pl) > 0 and pl[0][0] in MainP.tab_map:
                         index = MainP.tab_map.index(pl[0][0])
                         tab = MainP.tabWidget.widget(index)
@@ -975,13 +982,13 @@ class Title(QWidget):
                     self.color == 'is_con' and color == 'n' and
                     self.icon in [Icons['n'], Icons['not_finished']]):
                 if load:
-                    self.setStyleSheet('''
-                    #title_name,#count,#con_date{background: %s}''' % Color[color])
+                    self.setStyleSheet("#title_name,#count,"
+                                       "#con_date{background: %s}" % Color[color])
                 else:
-                    self.setStyleSheet('''
-                        #title_name,#count,#con_date{background: %s}
-                        #t_row{border-color: %s}
-                        ''' % (Color[color], self.border_color))
+                    self.setStyleSheet("#title_name,#count,"
+                                       "#con_date{background: %s}"
+                                       "#t_row{border-color: %s}" % (Color[color],
+                                                                     self.border_color))
 
                 if color not in ['edit', self.color]:
                     self.color = color
@@ -1171,11 +1178,13 @@ class Playlist(QWidget):
             self.side_hidden = True
 
             self.search.clicked.connect(self.open_search)
+            close = QAction(self)
+            close.triggered.connect(self.open_search)
+            close.setShortcut('Esc')
             self.search_edit.resize(0, 25)
             self.search_edit.hide()
-            self.search_edit.focusOutEvent = lambda: self.open_search(True)
+            self.search_edit.addAction(close)
             self.search_edit.returnPressed.connect(self.open_search)
-
             self.search_timer = QTimer(self)
             self.search_timer.timeout.connect(self.do_search)
             self.search_timer.setSingleShot(True)
@@ -1248,16 +1257,16 @@ class Playlist(QWidget):
                 sql(query)
                 del self.p.paste_row[-1]
                 index = self.get_rowid(self.p.paste_row[2])
-                self.add_row(*self.p.paste_row, index).select()
+                self.add_row(*self.p.paste_row, index=index).select()
                 self.p.paste_row = None
                 self.paste_btn.hide()
         except Exception as e:
             show_exception("paste_title", e)
 
-    def open_search(self, defocused=False):
+    def open_search(self):
         try:
             hidden = self.search_edit.isHidden()
-            if hidden and not defocused:
+            if hidden:
                 self.search_edit.show()
                 self.search_anim.setEndValue(QSize(182, 25))
             else:
@@ -1333,10 +1342,14 @@ class Playlist(QWidget):
 
     def delete_playlist(self):
         try:
-            title = "PLS4: Delete playlist"
-            ask = "Вы действительно хотите удалить весь плейлист '%s' ?" % self.name
-            btns = QMessageBox.Yes | QMessageBox.No
-            response = QMessageBox.warning(self, title, ask, btns, QMessageBox.No)
+            if self.row_list.count() > 0:
+                title = "PLS4: Delete playlist"
+                ask = "Вы действительно хотите удалить весь плейлист '%s' ?" % self.name
+                btns = QMessageBox.Yes | QMessageBox.No
+                response = QMessageBox.warning(self, title, ask, btns, QMessageBox.No)
+            else:
+                response = QMessageBox.Yes
+
             if response == QMessageBox.Yes:
                 sql("DELETE FROM Playlists WHERE Name=?", [self.name])
                 sql('DELETE FROM Titles WHERE playlist="%s"' % self.name)
@@ -1357,11 +1370,11 @@ class Playlist(QWidget):
             query = "INSERT INTO Titles VALUES "
             date = datetime.today().strftime("%d.%m.%Y")
 
-            sql(query + "('%s',%s,%s,'%s','%s','%s','%s','%s','%s','', '%s', 0, 0)"
+            sql(query + "('%s',%s,%s,'%s','%s','%s','%s','%s','%s','', '%s', 0, -1)"
                 % (t_name, count, ID, self.name, icon, color, genre, link, desc, date))
 
             row_id = self.get_rowid(ID)
-            self.add_row(t_name, count, ID, icon, color, 0, row_id).select()
+            self.add_row(t_name, count, ID, icon, color, 0, -1, index=row_id).select()
             self.row_count.setText('Тайтлов в плейлисте:' + str(self.row_list.count()))
             save_data('id')
             save_data('added')
@@ -1377,17 +1390,19 @@ class Playlist(QWidget):
                 break
         return row_id
 
-    # name0, count1, t_id2, icon_date3, color4, ep5, fav6, index7, delay8
-    def add_row(self, *args):
+    def add_row(self, name, count, t_id, icon_date, color, ep, fav, **kwargs):
         try:
-            row = Title(self, *args[:7])
-            index = self.row_list.count() if args[7] == -1 else args[7]
+            row = Title(self, name, count, t_id, icon_date, color, ep, fav)
+            if kwargs.get("index", False):
+                index = kwargs['index']
+            else:
+                index = self.row_list.count()
             loop = QEventLoop()
-            delay = args[8] if len(args) > 8 else 0
+            delay = kwargs["delay"] if kwargs.get("delay", False) else 0
             QTimer.singleShot(delay, loop.quit)
             loop.exec_()
             self.row_list.insertWidget(index, row)
-            self.row_map.insert(index, args[2])
+            self.row_map.insert(index, t_id)
             return row
         except Exception as e:
             show_exception('add_row', e)
@@ -1401,7 +1416,8 @@ class Playlist(QWidget):
                 delay = AddRowDur // len(titles)
                 for index, t in enumerate(titles):
                     color = 'is_con' if t[3][-1] == '!' else 'n'
-                    self.add_row(t[0], t[1], t[2], t[3], color, 0, 0, index, delay)
+                    self.add_row(t[0], t[1], t[2], t[3], color, 0, 0,
+                                 index=index, delay=delay)
                     index += 1
 
             else:
@@ -1413,7 +1429,7 @@ class Playlist(QWidget):
                 delay = AddRowDur // len(titles)
                 for index, t in enumerate(titles):
                     self.add_row(t[0], t[1], t[2], t[3], t[4],
-                                 t[5], t[6], index, delay)
+                                 t[5], t[6], index=index, delay=delay)
 
                 if self.p.set_viewing >= 0:
                     self.select_row(self.p.set_viewing)
@@ -1432,7 +1448,7 @@ class MainForm(QMainWindow):
         super(MainForm, self).__init__()
         loadUi('GUI/MainForm.ui', self)
 
-        global MainP, Convert
+        global MainP, Import
         MainP = self
         self.setWindowTitle("PlayListStore " + Version)
         self.setStyleSheet(Skin)
@@ -1471,7 +1487,38 @@ class MainForm(QMainWindow):
         QTimer().singleShot(1, self.launch)
         self.launching = True
         self.set_viewing = -1
-        Convert = False
+        Import = False
+
+    def launch(self):
+        try:
+            playlists = list(sql("SELECT * FROM Playlists ORDER BY rowid desc"))
+            self.pl_list.addItems([row[0] for row in playlists])
+
+            self.select_last_playlist()
+
+            self.viewed_count.setText('Всего просмотрено:' + str(TotalViewed))
+            QTimer.singleShot(500, self.check_updates)
+            QTimer.singleShot(1000, self.check_continuations)
+            print("Launched")
+            self.launching = False
+        except Exception as e:
+            show_exception('launch', e)
+
+    def check_updates(self):
+        url = "https://github.com/Kamikoto-sama/Kamis-Code/raw/master/Release/pls4.txt"
+        global Update
+        if Update:
+            Update = False
+            QMessageBox.information(self, "PLS4: Update", UpdateInfo)
+        else:
+            manifest = download(url).text.split()
+            if manifest[0] != Version:
+                text = "Доступно новое обновление.\nОбновить сейчас?"
+                buttons = QMessageBox.Yes | QMessageBox.No
+                answer = QMessageBox.information(self, "PLS4: Update", text, buttons)
+                if answer == QMessageBox.Yes:
+                    Update = True
+                    self.close()
 
     # todo: settings
     def open_options(self):
@@ -1479,7 +1526,7 @@ class MainForm(QMainWindow):
             menu = QMenu(self)
             cons = list(sql("SELECT con_date, id FROM Titles WHERE con_date != ''"))
             query = "SELECT favorite, title_name, playlist, id FROM " \
-                    "Titles WHERE favorite != '' ORDER  BY favorite"
+                    "Titles WHERE favorite != -1 ORDER  BY favorite"
             favorites = list(map(list, sql(query)))
 
             ico = QIcon(RowIcons[Icons['con']])
@@ -1510,8 +1557,8 @@ class MainForm(QMainWindow):
                 favorites = FavoriteTitlesForm(self, favorites)
                 favorites.show()
             elif selected == on_import:
-                global Convert
-                Convert = True
+                global Import
+                Import = True
                 self.close()
 
         except Exception as e:
@@ -1549,27 +1596,30 @@ class MainForm(QMainWindow):
         return True
 
     def anim_add_pl(self, open):
-        if open:
-            self.pl_name.show()
-            self.add_pl_anim.setStartValue(QRect(34 + 255, 11, 0, 30))
-            self.add_pl_anim.setEndValue(QRect(34, 11, 255, 30))
-        else:
-            self.close_pl_name.hide()
-            self.add_pl_anim.setStartValue(QRect(34, 11, 255, 30))
-            self.add_pl_anim.setEndValue(QRect(34 + 255, 11, 0, 30))
-            self.viewed_count.show()
+        try:
+            if open:
+                self.pl_name.show()
+                self.add_pl_anim.setStartValue(QRect(34 + 255, 11, 0, 30))
+                self.add_pl_anim.setEndValue(QRect(34, 11, 255, 30))
+            else:
+                self.close_pl_name.hide()
+                self.add_pl_anim.setStartValue(QRect(34, 11, 255, 30))
+                self.add_pl_anim.setEndValue(QRect(34 + 255, 11, 0, 30))
+                self.viewed_count.show()
 
-        self.add_pl_anim.start()
-        loop = QEventLoop()
-        QTimer.singleShot(AddPlDur - 200, loop.quit)
-        loop.exec_()
-        if open:
-            self.close_pl_name.show()
-            self.viewed_count.hide()
-            self.pl_name.setFocus()
-            self.pl_name.selectAll()
-        else:
-            self.pl_name.hide()
+            self.add_pl_anim.start()
+            loop = QEventLoop()
+            QTimer.singleShot(AddPlDur - 200, loop.quit)
+            loop.exec_()
+            if open and self.pl_name.isVisible():
+                self.close_pl_name.show()
+                self.viewed_count.hide()
+                self.pl_name.setFocus()
+                self.pl_name.selectAll()
+            else:
+                self.pl_name.hide()
+        except Exception as e:
+            show_exception("anim_add_pl", e)
 
     def select_playlist(self):
         if self.selected_tab != self.pl_list.currentText():
@@ -1700,20 +1750,6 @@ class MainForm(QMainWindow):
         except Exception as e:
             show_exception("closeEvent", e)
 
-    def launch(self):
-        try:
-            playlists = list(sql("SELECT * FROM Playlists ORDER BY rowid desc"))
-            self.pl_list.addItems([row[0] for row in playlists])
-
-            self.select_last_playlist()
-
-            self.viewed_count.setText('Всего просмотрено:' + str(TotalViewed))
-            QTimer.singleShot(1000, self.check_continuations)
-            print("Launched")
-            self.launching = False
-        except Exception as e:
-            show_exception('launch', e)
-
 
 App = QApplication(sys.argv)
 App.setStyle(SelfStyledIcon('Fusion'))
@@ -1723,11 +1759,14 @@ def init():
         form = MainForm()
         form.show()
         App.exec_()
+        del form
 
-        if Convert:
-            db.close()
+        db.close()
+        if Import:
             converter.convert()
-            del form
+            init()
+        if Update:
+            updater
             init()
     except Exception as e:
         show_exception("Init", e)
@@ -1735,7 +1774,7 @@ def init():
 def load_db():
     try:
         global db, sql, data, ID, TotalAdded, TotalViewed
-        db = sqlite3.connect("data.pls")
+        db = db_connect("data.pls")
         sql = db.cursor().execute
         data = [int(d[0]) for d in sql("SELECT value FROM Data")]
         ID = data[0]

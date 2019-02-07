@@ -139,6 +139,12 @@
               <bold>true</bold>
              </font>
             </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Добавлено\Просмотрено&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="toolTipDuration">
+             <number>-1</number>
+            </property>
             <property name="text">
              <string>0000.00.00</string>
             </property>

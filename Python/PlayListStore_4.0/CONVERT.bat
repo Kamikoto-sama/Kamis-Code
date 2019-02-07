@@ -1,1 +1,1 @@
-python -m PyQt5.uic.pyuic -x gui\SideBar.ui -o gui\gui.py
+python -m PyQt5.uic.pyuic -x gui\updater.ui -o gui\gui.py

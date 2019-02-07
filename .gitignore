@@ -12,9 +12,9 @@ Python/PyQt5_Examples/*
 *test.*
 t.*
 *.jpg
-*.png
 *.exe
 *.pyc
 
 !Python/PlayListStore_4.0/Icons/*.*
+!Python/PlayListStore_4.0/build/*.*
 !PLS/PLS_3.exe

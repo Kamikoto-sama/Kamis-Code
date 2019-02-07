@@ -1,5 +1,4 @@
 from sqlite3 import connect as db_connect
-from os import remove as remove_file
 
 file_name = "titles.txt"
 
@@ -37,7 +36,6 @@ def convert():
             sql('INSERT INTO Data VALUES("cur_pl","0")')
             db.commit()
             print("Converted %s titles" % index)
-        remove_file(file_name)
     except FileNotFoundError:
         raise FileNotFoundError("Файл '%s' не найден" % file_name)
     except Exception as e:

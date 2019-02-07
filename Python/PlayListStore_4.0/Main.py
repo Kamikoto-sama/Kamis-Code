@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import sys
-import updater
 import converter
 import webbrowser
+from os import remove as remove_file
 from sqlite3 import connect as db_connect
 from datetime import datetime
 from requests import post as download
@@ -1518,6 +1518,7 @@ class MainForm(QMainWindow):
                 answer = QMessageBox.information(self, "PLS4: Update", text, buttons)
                 if answer == QMessageBox.Yes:
                     Update = True
+                    open("update_manifest.pls", "w").write("\n".join(manifest))
                     self.close()
 
     # todo: settings
@@ -1764,10 +1765,10 @@ def init():
         db.close()
         if Import:
             converter.convert()
+            remove_file(converter.file_name)
             init()
         if Update:
-            updater
-            init()
+            pass
     except Exception as e:
         show_exception("Init", e)
 

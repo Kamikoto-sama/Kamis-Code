@@ -1,88 +1,48 @@
-from sqlite3 import connect as db_connect
-from sqlite3 import OperationalError as SQLError
-
-def delete_column(db_name, table_name, *columns):
+def change_columns(db, table_name, change_type, *column_names, **column_changes):
+    """db: sqlite3.connect\n
+     change_type: enum(name, type, delete)\n
+     if change_type="delete" column_names: *column_names
+                        or column_changes: **(column_name: Any)
+     if change_type="name" column_changes: **(column_name: new_name)\n
+     if change_type="type" column_changes: **(column_name: new_type)"""
     try:
-        db = db_connect(db_name)
-        sql = db.cursor()
-        query = sql.execute("PRAGMA table_info(%s)" % table_name)
-        query = list(query)
+        sql = db.cursor().execute
+        query = list(sql("PRAGMA table_info(%s)" % table_name))
+        old_cols = dict()
+        for col in query:
+            null = "NOT NULL" if col[3] else ''
+            default = '' if col[4] is None else "DEFAULT %s" % col[4]
+            primary = "PRIMARY KEY" if col[5] else ''
+            params = ' '.join((col[2], null, default, primary)).rstrip()
+            old_cols[col[1]] = [col[1], params]
 
-        if len(query) != 0:
-            cols = {}
-            for col in query:
-                cols.setdefault(col[1], col[2])
-            for col in columns:
-                cols.pop(col)
-            if len(cols) == 0:
-                raise NameError
-
-            query = ','.join(cols.keys())
-            data = list(sql.execute("SELECT %s FROM " % query + table_name))
-            sql.execute("DROP TABLE " + table_name)
-
-            new_cols = ''
-            for col in cols.items():
-                new_cols += ' '.join(col) + ','
-
-            query = "CREATE TABLE {0} ({1})".format(table_name, new_cols.strip(','))
-            sql.execute(query)
-
-            cols = ["?" for _ in range(len(cols))]
-            query = "INSERT INTO " + table_name + " VALUES (%s)" % ','.join(cols)
-            sql.executemany(query, data)
-            db.commit()
-            print("Columns successfully deleted")
+        if change_type == "name":
+            for col in column_changes:
+                old_cols[col][0] = column_changes[col]
+        elif change_type == "delete":
+            for col in (column_names if len(column_changes) == 0 else column_changes):
+                old_cols.pop(col)
+        elif change_type == "type":
+            for col in column_changes:
+                old_cols[col][1] = column_changes[col]
         else:
-            print("NO SUCH TABLE")
-    except SQLError as e:
-        print("Wrong arguments! ", e)
-    except NameError:
-        print("Count of columns IS LESS THEN 1 !")
-    except (KeyError, TypeError):
-        print("No such column!")
+            raise ValueError
+
+        new_columns = ','.join([' '.join(col) for col in old_cols.values()])
+        new_data = (table_name, ','.join([c[0] for c in old_cols.values()]),
+                    ','.join(old_cols.keys()), table_name + "_old_")
+
+        sql("ALTER TABLE {0} RENAME TO {0}_old_".format(table_name))
+        sql("CREATE TABLE %s (%s)" % (table_name, new_columns))
+        sql("INSERT INTO %s (%s) SELECT %s FROM %s" % new_data)
+        sql("DROP TABLE %s" % table_name + "_old_")
+        db.commit()
+        print("Done")
+        if len(column_names) == len(column_changes) == 0:
+            print("But nothing has changed :|")
+    except ValueError:
+        raise ValueError("Unknown change type")
+    except KeyError:
+        raise ValueError("No such column")
     except Exception as e:
-        print("Something went wrong :(", e)
-
-def rename_column(db_name, table_name, column_name, new_name):
-    try:
-        db = db_connect(db_name)
-        sql = db.cursor()
-
-        query = sql.execute("PRAGMA table_info(%s)" % table_name)
-        query = list(query)
-
-        if len(query) != 0 and column_name != new_name:
-            cols = {}
-            for col in query:
-                cols.setdefault(col[1], col[2])
-
-            query = ','.join(cols.keys())
-            data = list(sql.execute("SELECT %s FROM " % query + table_name))
-
-            sql.execute("ALTER TABLE " + table_name + " RENAME TO __TMP__")
-
-            new_cols = ''
-            for col in cols.items():
-                new_cols += ' '.join(col) + ','
-            new_cols = new_cols.replace(column_name, new_name)
-            query = "CREATE TABLE {0} ({1})".format(table_name, new_cols.strip(','))
-            sql.execute(query)
-
-            cols = ["?" for _ in range(len(cols))]
-            query = "INSERT INTO " + table_name + " VALUES (%s)" % ','.join(cols)
-            sql.executemany(query, data)
-            sql.execute("DROP TABLE __TMP__")
-            db.commit()
-            print("Something has done...")
-        elif column_name == new_name:
-            print("Wrong arguments!")
-        else:
-            print("No such table!")
-
-    except SQLError as e:
-        sql.execute("ALTER TABLE __TMP__ RENAME TO " + table_name)
-        print("Wrong arguments:", e)
-    except Exception as e:
-        sql.execute("ALTER TABLE __TMP__ RENAME TO " + table_name)
-        print("Something went wrong :(", e)
+        raise Exception("You fucked because %s" % str(e))

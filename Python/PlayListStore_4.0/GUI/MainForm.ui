@@ -26,7 +26,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>../Icons/pls.ico</normaloff>../Icons/pls.ico</iconset>
+    <normaloff>../icons/pls.png</normaloff>../icons/pls.png</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true"/>
@@ -85,7 +85,7 @@
            <rect>
             <x>10</x>
             <y>0</y>
-            <width>68</width>
+            <width>74</width>
             <height>30</height>
            </rect>
           </property>
@@ -102,7 +102,7 @@
          <widget class="QToolButton" name="con_info">
           <property name="geometry">
            <rect>
-            <x>82</x>
+            <x>87</x>
             <y>0</y>
             <width>32</width>
             <height>30</height>

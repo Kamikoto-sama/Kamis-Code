@@ -1,4 +1,16 @@
-1
+12
 gui/MainForm.ui
-change 1
+gui/AddTitleForm.ui
+gui/FavoriteTitlesForm.ui
+gui/Playlist.ui
+gui/RowButtons.ui
+gui/SearchTitleForm.ui
+gui/Settings.ui
+gui/SideBar.ui
+gui/Title.ui
+style.css
+PlayListStore4.exe
+icons/settings.png
+change 2
 type|titles|title_name=varchar(80)
+type|data|name=varchar(20)

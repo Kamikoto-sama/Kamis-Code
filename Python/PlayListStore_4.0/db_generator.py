@@ -10,12 +10,12 @@ alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 
 def create_db(sql):
     sql('CREATE TABLE Playlists (name varchar(30))')
-    sql("CREATE TABLE Data (name varchar(10), value varchar(40))")
+    sql("CREATE TABLE Data (name varchar(20), value varchar(40))")
     sql("""
             CREATE TABLE Titles (
-            title_name varchar(80) NOT NULL,
+            title_name varchar(80),
             count int(4),
-            id integer PRIMARY KEY AUTOINCREMENT,
+            id integer PRIMARY KEY,
             playlist varchar(100),
             icon int(10),
             color varchar(15),
@@ -32,6 +32,7 @@ def create_db(sql):
     sql('INSERT INTO Data VALUES("viewed","0")')
     sql('INSERT INTO Data VALUES("added","0")')
     sql('INSERT INTO Data VALUES("cur_pl","-1")')
+    sql('INSERT INTO Data VALUES("auto_update","0")')
 
 def add_titles(sql, pl_name, t_count, id_, fix_count=0, perms=False, **kwargs):
     if perms:
@@ -109,6 +110,8 @@ def init():
             req = input("pl_count titles_count: ")
         if set_conf == 1:
             configurations.append(req)
+            with open("db_gen_config.txt", 'w') as file:
+                file.write('|'.join(configurations))
         elif set_conf == -1:
             req = configurations[1]
         req = req.split()

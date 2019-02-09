@@ -10,9 +10,9 @@ def change_columns(db, table_name, change_type, *column_names, **column_changes)
         query = list(sql("PRAGMA table_info(%s)" % table_name))
         old_cols = dict()
         for col in query:
-            null = "NOT NULL" if col[3] else ''
+            null = "NOT NULL" if col[3] == 1 else ''
             default = '' if col[4] is None else "DEFAULT %s" % col[4]
-            primary = "PRIMARY KEY" if col[5] else ''
+            primary = "PRIMARY KEY" if col[5] == 1 else ''
             params = ' '.join((col[2], null, default, primary)).rstrip()
             old_cols[col[1]] = [col[1], params]
 
@@ -45,4 +45,8 @@ def change_columns(db, table_name, change_type, *column_names, **column_changes)
     except KeyError:
         raise ValueError("No such column")
     except Exception as e:
+        sql = db.cursor().execute
+        sql("DROP TABLE %s" % table_name)
+        sql("ALTER TABLE {0}_old_ RENAME TO {0}".format(table_name))
+        db.commit()
         raise Exception("You fucked because %s" % str(e))

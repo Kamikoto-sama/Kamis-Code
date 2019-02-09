@@ -1,0 +1,6 @@
+files_count
+*file_name
+change count
+*[name,delete,type]|table_name|col_name1=value,col_name2=value
+sql count
+*query

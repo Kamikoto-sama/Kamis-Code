@@ -159,9 +159,9 @@
         <widget class="QPushButton" name="del_pl">
          <property name="geometry">
           <rect>
-           <x>210</x>
+           <x>205</x>
            <y>6</y>
-           <width>75</width>
+           <width>80</width>
            <height>25</height>
           </rect>
          </property>
@@ -187,9 +187,9 @@
         <widget class="QPushButton" name="rename">
          <property name="geometry">
           <rect>
-           <x>92</x>
+           <x>82</x>
            <y>6</y>
-           <width>115</width>
+           <width>121</width>
            <height>25</height>
           </rect>
          </property>
@@ -215,7 +215,7 @@
          </property>
          <property name="geometry">
           <rect>
-           <x>8</x>
+           <x>0</x>
            <y>6</y>
            <width>81</width>
            <height>25</height>

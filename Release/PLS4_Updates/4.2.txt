@@ -1,4 +1,0 @@
-1
-gui/MainForm.ui
-change 1
-type|titles|title_name=varchar(80)

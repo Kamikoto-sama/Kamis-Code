@@ -1,3 +1,4 @@
+QWidget{font-family: 'Comic Sans MS'}
 /*todo: задизайнить кнопки*/
 
 QPushButton:hover{
@@ -9,8 +10,6 @@ QPushButton:pressed{
     padding-left: 4px;
 }
 QPushButton, QToolButton{font-weight: bold;}
-QWidget{
-    font-family: "Comic Sans MS", sans-serif;}
 QMessageBox{font-size: 20px;}
 QFrame{border: none;}
 QToolTip{
@@ -146,3 +145,9 @@ QToolTip{
 		font-weight: 400;
 		font-size: 10px;
 	}
+
+/*Settings*/
+	#total_added{font-size: 18px;font-weight: 400}
+	#select_font{font-size: 16px;}
+	#info{font-size: 16px;}
+	#auto_update{font-size: 16px;}

@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
-import sys
 import converter
-import webbrowser
 from os import remove as remove_file
+from sys import argv
 from sqlite3 import connect as db_connect
 from datetime import datetime
 from requests import post as download
 from PyQt5.uic import loadUi
+from subprocess import run as run_app
+from webbrowser import open as open_site
 from PyQt5.QtGui import QIcon
 from PyQt5.QtGui import QFont
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtGui import QCursor
 from PyQt5.QtGui import QIntValidator
 from PyQt5.QtGui import QRegExpValidator
-# todo: Qt fix
 from PyQt5.QtCore import Qt
 from PyQt5.QtCore import QRect
 from PyQt5.QtCore import QSize
@@ -23,11 +23,13 @@ from PyQt5.QtCore import QRegExp
 from PyQt5.QtCore import QEventLoop
 from PyQt5.QtCore import QEasingCurve
 from PyQt5.QtCore import QPropertyAnimation
-from PyQt5.QtWidgets import QMenu, QAction
+from PyQt5.QtWidgets import QMenu
 from PyQt5.QtWidgets import QStyle
+from PyQt5.QtWidgets import QAction
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtWidgets import QTabBar
 from PyQt5.QtWidgets import QLineEdit
+from PyQt5.QtWidgets import QFontDialog
 from PyQt5.QtWidgets import QMessageBox
 from PyQt5.QtWidgets import QHeaderView
 from PyQt5.QtWidgets import QProxyStyle
@@ -55,7 +57,8 @@ Icons = {
     'search_title': 'icons/search_title.png',
     'import': 'icons/import.png',
     'favorite': 'icons/favorite.png',
-    'unfavorite': 'icons/unfavorite.png'}
+    'unfavorite': 'icons/unfavorite.png',
+    'settings': 'icons/settings.png'}
 Color = {
     'n': '#D9D9D9',
     'edit': 'none',
@@ -63,7 +66,7 @@ Color = {
     'viewing': '#6EBCD2',
     'pause': '#DC143C',
     'is_con': '#FEE02F'}
-Skin = open('style.css').read()
+Skin = open("style.css").read()
 SideWidth = 300
 SideAnimDur = 500
 AddFormDur = 500  # Add title form anim
@@ -82,12 +85,23 @@ ConTabName = '|Список продолжений|'
 SortTitlesBy = "count"
 Import = False
 
+Version = "4.1"
 Update = False
-UpdateInfo = "Update krch"
-Version = "4.0"
+UpdateInfo = None
+Info = """Версия %s
+1) Добавлено автобновление.
+2) Добавлена возможность добавлять тайтлы в избарнное.
+3) Исправленно несколько багов.
+
+|Группа ВК|
+https://vk.com/playliststore_project
+|Техподдержка|
+update.pls@yandex.ru""" % Version
+
 
 def show_exception(name_from, error, parent=MainP):
     QMessageBox.critical(parent, "PLS4_ERROR: %s" % name_from, str(error))
+
 
 def save_data(save: str, value=1):
     try:
@@ -112,6 +126,54 @@ class SelfStyledIcon(QProxyStyle):
             return IconSize
         else:
             return QProxyStyle.pixelMetric(self, q_style_pixel_metric, option, widget)
+
+
+class Settings(QWidget):
+    def __init__(self, parent):
+        super().__init__(parent, Qt.Window | Qt.WindowCloseButtonHint)
+        try:
+            loadUi("gui/Settings.ui", self)
+            self.setWindowModality(Qt.WindowModal)
+            self.total_added.setText("Всего тайтлов: %s" % TotalAdded)
+
+            update = list(sql("SELECT value FROM Data WHERE name='auto_update'"))
+            self.auto_update.setCheckState(0 if update[0][0] == '0' else 2)
+            self.auto_update.stateChanged.connect(self.set_auto_update)
+            self.info.clicked.connect(self.show_info)
+            self.select_font.clicked.connect(self.change_font)
+        except Exception as e:
+            show_exception("Settings", e)
+
+    def change_font(self):
+        try:
+            font, ok = QFontDialog.getFont(self)
+            if ok:
+                file = open("style.css", 'r')
+                style = file.readlines()
+                file.close()
+                style[0] = "QWidget{font-family: '%s'}\n" % font.family()
+                file = open("style.css", 'w')
+                file.write(''.join(style))
+                file.close()
+                text = "Необходимо перезапустить приложение"
+                QMessageBox.information(self, "PLS4: Settings", text)
+                self.close()
+        except Exception as e:
+            show_exception("change_font", e)
+
+    def set_auto_update(self, state):
+        if state:
+            text = "Проверка обновлений..."
+            QMessageBox.information(self, "PLS4: Settings", "%s" % text)
+            MainP.check_updates(True)
+
+    def show_info(self):
+        QMessageBox.information(self, "PLS4: Info", Info)
+
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_Escape:
+            self.close()
+
 
 class FavoriteTitlesForm(QWidget):
     def __init__(self, parent, rows=None):
@@ -150,7 +212,7 @@ class FavoriteTitlesForm(QWidget):
                     self.rows = list(map(list, sql(query)))
                 self.table.setRowCount(len(self.rows))
                 for i, row in enumerate(self.rows):
-                    top = QTableWidgetItem(str(row[0]))
+                    top = QTableWidgetItem(str(i + 1))
                     top.setTextAlignment(4)
                     self.table.setItem(i, 0, top)
                     self.table.setItem(i, 1, QTableWidgetItem(row[1]))
@@ -281,6 +343,7 @@ class FavoriteTitlesForm(QWidget):
         if event.key() == Qt.Key_Escape:
             self.close()
 
+
 class SearchTitleForm(QWidget):
     def __init__(self, parent):
         flags = Qt.WindowCloseButtonHint | Qt.Window
@@ -355,6 +418,7 @@ class SearchTitleForm(QWidget):
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Escape:
             self.close()
+
 
 # todo: формат: кол-во серий \ время тайтла
 class AddTitleForm(QWidget):
@@ -532,7 +596,7 @@ class SideBar(QWidget):
 
     def open_link(self):
         if self.link.text() != '':
-            webbrowser.open(self.link.text())
+            open_site(self.link.text())
 
     # On doubleclick
     def set_edit(self, edit=True):
@@ -619,6 +683,7 @@ class SideBar(QWidget):
         if event.key() == Qt.Key_Escape:
             self.escape_edit()
             self.open.setFocus()
+
 
 class RowButtons(QWidget):
     def __init__(self, con=False):
@@ -1497,31 +1562,35 @@ class MainForm(QMainWindow):
             self.select_last_playlist()
 
             self.viewed_count.setText('Всего просмотрено:' + str(TotalViewed))
-            QTimer.singleShot(500, self.check_updates)
             QTimer.singleShot(1000, self.check_continuations)
+            global Update
+            if Update:
+                Update = False
+                remove_file("update_manifest.pls")
+                QMessageBox.information(self, "PLS4: Update", Info)
+            else:
+                self.check_updates()
             print("Launched")
             self.launching = False
         except Exception as e:
             show_exception('launch', e)
 
-    def check_updates(self):
+    def check_updates(self, check=False):
         url = "https://github.com/Kamikoto-sama/Kamis-Code/raw/master/Release/pls4.txt"
-        global Update
-        if Update:
-            Update = False
-            QMessageBox.information(self, "PLS4: Update", UpdateInfo)
-        else:
-            manifest = download(url).text.split()
+        update = list(sql("SELECT value FROM Data WHERE name='auto_update'"))[0][0]
+        date = datetime.today().strftime("%w")
+        if update != '0' and update < date or check:
+            manifest = download(url).text.split('\n')
+            sql("UPDATE Data SET value='%s' WHERE name='auto_update'" % date)
             if manifest[0] != Version:
                 text = "Доступно новое обновление.\nОбновить сейчас?"
                 buttons = QMessageBox.Yes | QMessageBox.No
                 answer = QMessageBox.information(self, "PLS4: Update", text, buttons)
                 if answer == QMessageBox.Yes:
-                    Update = True
-                    open("update_manifest.pls", "w").write("\n".join(manifest))
+                    global UpdateInfo
+                    UpdateInfo = manifest[0]
                     self.close()
 
-    # todo: settings
     def open_options(self):
         try:
             menu = QMenu(self)
@@ -1541,8 +1610,11 @@ class MainForm(QMainWindow):
             favorite = menu.addAction(ico, 'Избранные')
             favorite.setEnabled(len(favorites) > 0)
 
+            ico = QIcon(Icons['settings'])
+            settings = menu.addAction(ico, 'Настройки')
+
             on_import = 0
-            if ID == 0:
+            if self.pl_list.count() == 0:
                 ico = QIcon(Icons['import'])
                 on_import = menu.addAction(ico, 'Импортировать')
 
@@ -1557,6 +1629,8 @@ class MainForm(QMainWindow):
             elif selected == favorite:
                 favorites = FavoriteTitlesForm(self, favorites)
                 favorites.show()
+            elif selected == settings:
+                Settings(self).show()
             elif selected == on_import:
                 global Import
                 Import = True
@@ -1752,8 +1826,12 @@ class MainForm(QMainWindow):
             show_exception("closeEvent", e)
 
 
-App = QApplication(sys.argv)
+App = QApplication(argv)
 App.setStyle(SelfStyledIcon('Fusion'))
+if "update" in argv:
+    Update = True
+
+
 def init():
     try:
         load_db()
@@ -1768,9 +1846,11 @@ def init():
             remove_file(converter.file_name)
             init()
         if Update:
-            pass
+            cmd = 'updater.exe update %s' % Version
+            run_app(cmd)
     except Exception as e:
         show_exception("Init", e)
+
 
 def load_db():
     try:
@@ -1783,6 +1863,7 @@ def load_db():
         TotalAdded = data[2]
     except Exception as e:
         print("Load db", e)
+
 
 if __name__ == "__main__":
     init()

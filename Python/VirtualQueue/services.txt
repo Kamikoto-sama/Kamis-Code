@@ -2,5 +2,3 @@ Service one|2
 Service two|2
 Service three|1
 Service four|1
-s5|1
-s6|1

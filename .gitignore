@@ -18,3 +18,4 @@ t.*
 !Python/PlayListStore_4.0/Icons/*.*
 !Python/PlayListStore_4.0/build/*.*
 !PLS/PLS_3.exe
+!C#/Solution/CoolLinkedList

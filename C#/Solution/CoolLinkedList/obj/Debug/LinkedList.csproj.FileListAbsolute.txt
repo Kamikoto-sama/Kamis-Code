@@ -1,0 +1,6 @@
+D:\My_Programms\C#\Solution\LinkedList\bin\Debug\LinkedList.exe
+D:\My_Programms\C#\Solution\LinkedList\bin\Debug\LinkedList.pdb
+D:\My_Programms\C#\Solution\LinkedList\obj\Debug\LinkedList.csprojAssemblyReference.cache
+D:\My_Programms\C#\Solution\LinkedList\obj\Debug\LinkedList.csproj.CoreCompileInputs.cache
+D:\My_Programms\C#\Solution\LinkedList\obj\Debug\LinkedList.exe
+D:\My_Programms\C#\Solution\LinkedList\obj\Debug\LinkedList.pdb

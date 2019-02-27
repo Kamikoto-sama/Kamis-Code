@@ -1,0 +1,10 @@
+D:\My_Programms\C#\Solution\CoolLinkedList\obj\Debug\CoolLinkedList.csprojAssemblyReference.cache
+D:\My_Programms\C#\Solution\CoolLinkedList\obj\Debug\CoolLinkedList.csproj.CoreCompileInputs.cache
+D:\My_Programms\C#\Solution\CoolLinkedList\bin\Debug\CoolLinkedList.exe
+D:\My_Programms\C#\Solution\CoolLinkedList\bin\Debug\CoolLinkedList.pdb
+D:\My_Programms\C#\Solution\CoolLinkedList\bin\Debug\nunit.framework.dll
+D:\My_Programms\C#\Solution\CoolLinkedList\bin\Debug\nunit.framework.pdb
+D:\My_Programms\C#\Solution\CoolLinkedList\bin\Debug\nunit.framework.xml
+D:\My_Programms\C#\Solution\CoolLinkedList\obj\Debug\CoolLinkedList.csproj.CopyComplete
+D:\My_Programms\C#\Solution\CoolLinkedList\obj\Debug\CoolLinkedList.exe
+D:\My_Programms\C#\Solution\CoolLinkedList\obj\Debug\CoolLinkedList.pdb

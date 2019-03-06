@@ -1,0 +1,1 @@
+python -m PyQt5.uic.pyuic -x gui\button.ui -o gui\gui.py

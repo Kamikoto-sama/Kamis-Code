@@ -3,6 +3,7 @@ from PyQt5.uic import loadUi
 from PyQt5.QtGui import QIcon
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import QSize
+# from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtWidgets import QSizePolicy
 from PyQt5.QtWidgets import QPushButton
@@ -18,6 +19,9 @@ Icons = {
 }
 IconSize = 0.7
 
+class Qt:
+    Key_Escape = 16777216
+
 class Cell(QPushButton):
     def __init__(self, parent, index):
         super().__init__(parent)
@@ -27,13 +31,13 @@ class Cell(QPushButton):
         self.state = index
 
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.clicked.connect(self.action)
+        self.clicked.connect(self.select)
 
         icon = QIcon()
         icon.addPixmap(QPixmap(Icons["empty"]), QIcon.Normal)
         self.setIcon(icon)
 
-    def action(self):
+    def select(self):
         try:
             if self.is_empty:
                 self.is_empty = False
@@ -107,6 +111,15 @@ class Main(QWidget):
         except Exception as e:
             print(e)
 
+    def keyPressEvent(self, event):
+        key = event.key() - 49
+        if 0 <= key <= 8:
+            indexes = [6, 7, 8, 3, 4, 5, 0, 1, 2]
+            self.cells[indexes[key]].select()
+        elif key == -1:
+            self.restart_game()
+        elif event.key() == Qt.Key_Escape:
+            self.close()
 
 if __name__ == "__main__":
     app = QApplication(sys_args)

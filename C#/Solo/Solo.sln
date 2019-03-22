@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConturZipper", "ConturZipper\ConturZipper.csproj", "{A68D1FFF-065C-438A-A8DE-558B99865374}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExMath", "ExMath\ExMath.csproj", "{D1304601-3D55-4E38-B749-6F3E5AC2105D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{A68D1FFF-065C-438A-A8DE-558B99865374}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A68D1FFF-065C-438A-A8DE-558B99865374}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A68D1FFF-065C-438A-A8DE-558B99865374}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1304601-3D55-4E38-B749-6F3E5AC2105D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1304601-3D55-4E38-B749-6F3E5AC2105D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1304601-3D55-4E38-B749-6F3E5AC2105D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1304601-3D55-4E38-B749-6F3E5AC2105D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

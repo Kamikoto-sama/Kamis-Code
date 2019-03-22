@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConturZipper", "ConturZipper\ConturZipper.csproj", "{A68D1FFF-065C-438A-A8DE-558B99865374}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A68D1FFF-065C-438A-A8DE-558B99865374}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A68D1FFF-065C-438A-A8DE-558B99865374}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A68D1FFF-065C-438A-A8DE-558B99865374}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A68D1FFF-065C-438A-A8DE-558B99865374}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

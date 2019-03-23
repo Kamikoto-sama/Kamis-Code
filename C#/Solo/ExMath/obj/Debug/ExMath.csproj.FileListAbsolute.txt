@@ -1,0 +1,6 @@
+D:\My_Programms\C#\Solo\ExMath\bin\Debug\ExMath.exe
+D:\My_Programms\C#\Solo\ExMath\bin\Debug\ExMath.pdb
+D:\My_Programms\C#\Solo\ExMath\obj\Debug\ExMath.csprojAssemblyReference.cache
+D:\My_Programms\C#\Solo\ExMath\obj\Debug\ExMath.csproj.CoreCompileInputs.cache
+D:\My_Programms\C#\Solo\ExMath\obj\Debug\ExMath.exe
+D:\My_Programms\C#\Solo\ExMath\obj\Debug\ExMath.pdb

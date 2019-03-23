@@ -4,3 +4,6 @@ D:\My_Programms\C#\Solo\ExMath\obj\Debug\ExMath.csprojAssemblyReference.cache
 D:\My_Programms\C#\Solo\ExMath\obj\Debug\ExMath.csproj.CoreCompileInputs.cache
 D:\My_Programms\C#\Solo\ExMath\obj\Debug\ExMath.exe
 D:\My_Programms\C#\Solo\ExMath\obj\Debug\ExMath.pdb
+D:\My_Programms\C#\Solo\ExMath\bin\Debug\System.Drawing.dll
+D:\My_Programms\C#\Solo\ExMath\bin\Debug\ru\System.Drawing.resources.dll
+D:\My_Programms\C#\Solo\ExMath\obj\Debug\ExMath.csproj.CopyComplete

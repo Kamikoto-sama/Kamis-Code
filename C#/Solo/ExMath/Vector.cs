@@ -13,8 +13,8 @@ namespace func_rocket
 
 		public readonly double X;
 		public readonly double Y;
-		public double Length { get { return Math.Sqrt(X * X + Y * Y); } }
-		public double Angle { get { return Math.Atan2(Y, X); } }
+		public double Length => Math.Sqrt(X * X + Y * Y);
+		public double Angle => Math.Atan2(Y, X);
 		public static Vector Zero = new Vector(0, 0);
 
 		public override string ToString()

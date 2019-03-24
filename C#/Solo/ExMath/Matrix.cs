@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using func_rocket;
 
 namespace ExMath
 {
@@ -12,6 +11,25 @@ namespace ExMath
         public double[,] Values { get; }
         public int RowCount => Values.GetLength(0);
         public int ColumnCount => Values.GetLength(1);
+        public int Count => Values.Length;
+        public double Determinant
+        {
+            get
+            {
+                if(RowCount != ColumnCount)
+                    throw new Exception("Matrix must be square");
+                return GetDeterminant(this);
+            }
+        }
+        public Matrix Inverse
+        {
+            get
+            {
+                if(Math.Abs(Determinant) <= float.Epsilon)
+                    throw new Exception("Determinant is 0");
+                return GetInverseMatrix();
+            }
+        }
 
         public double this[int i, int j]
         {
@@ -19,8 +37,24 @@ namespace ExMath
             set => Values[i, j] = value;
         }
 
-        public Matrix(double[,] values) => Values = values;
-        
+        public Matrix(double[,] values)
+        {
+            if(values == null || values.Length == 0)
+                throw new Exception("Matrix can't be empty or null");
+            Values = values;
+        }
+
+        public Matrix(double[] values, int columnCount)
+        {
+            if(values.Length % columnCount != 0)
+                throw new Exception("Value count must be a multiple " +
+                                    "of the number of columns");
+            var newValues = new double[values.Length / columnCount, columnCount];
+            for (var i = 0; i < values.Length; i++)
+                newValues[i / columnCount, i % columnCount] = values[i];
+            Values = newValues;
+        }    
+
         public Matrix(Matrix matrix) => Values = (double[,])matrix.Values.Clone();
 
         public Matrix(Vector vector) => Values = new[,] {{vector.X, vector.Y}};
@@ -28,10 +62,33 @@ namespace ExMath
         public Matrix(int rowCount, int columnCount, double value=0)
         {
             var values = new double[rowCount, columnCount];
-            Values = GetNewValues(values, (i, j) => value);
+            Values = ParseValues(rowCount, columnCount, (i, j) => value);
         }
         
         public Matrix Clone() => new Matrix((double[,])Values.Clone());
+
+        public static Matrix UnitMatrix(int size)
+        {
+            var values = new double[size, size];
+            return new Matrix(ParseValues(size, size, (i, j) => i == j ? 1 : 0));
+        }
+
+        public static Matrix RandomMatrix(int rowMax=5, int columnMax=5,
+             double valueMax=100, double valueMin=-100, int rowMin=1, int columnMin=1)
+        {
+            if(rowMax < 1 || rowMin < 1 || columnMax < 1 || columnMin < 1)
+                throw new Exception("Column and row count must be" +
+                                    "grater than 1");
+            if(rowMax < rowMin || columnMax < columnMin || valueMax < valueMin)
+                throw new Exception("Max value must be grater than min");
+            
+            var random = new Random();
+            var rowCount = random.Next(rowMin, rowMax);
+            var columnCount = random.Next(columnMin, columnMax);
+            var newValues = ParseValues(rowCount, columnCount,
+                (i, j) => Math.Round(random.NextDouble(valueMin, valueMax), 2));
+            return new Matrix(newValues);
+        }
 
         public void PrintInLine()
         {
@@ -44,11 +101,6 @@ namespace ExMath
                 Console.Write("} ");
             }
             Console.Write(")");
-        }
-
-        public static Matrix RandomMatrix()
-        {
-            throw new NotImplementedException();
         }
 
         public Matrix Rotate2D(double angle)
@@ -65,6 +117,8 @@ namespace ExMath
 
         public Matrix Rotate3D(double angle)
         {
+            if(ColumnCount != 3)
+                throw new Exception("This matrix must have 3 columns");
             var rotateMatrix = new[,]
             {
                 {1 , 0 , 0},
@@ -76,24 +130,111 @@ namespace ExMath
         
         public Matrix Transpose()
         {
-            var newValues = GetNewValues(Values, (i, j) => this[j, i]);
+            var newValues = ParseValues(RowCount, ColumnCount, (i, j) => this[j, i]);
             return new Matrix(newValues);
         }
 
-        public Vector ToVector() => new Vector(this[0, 0], this[0, 1]);
+        public Vector ToVector()
+        {
+            if(RowCount != 1 && ColumnCount != 2)
+                throw new Exception("Vector must have values at [0, 0] and [0, 1]");
+            return new Vector(this[0, 0], this[0, 1]);
+        }
 
-        private static double[,] GetNewValues(double[,] values, 
+        public double[,] ToArray() => (double[,]) Values.Clone();
+        
+        public double[] ToArray1D() => Values.Cast<double>().ToArray();
+
+        public bool Contains(double value) => Values.Cast<double>().Contains(value);
+
+        public double[] GetRow(int rowNumber) => ParseLine(ColumnCount, 
+            i => this[rowNumber, i]);
+        
+        public double[] GetColumn(int columnNumber) => ParseLine(RowCount, 
+            i => this[i, columnNumber]);
+
+        public Matrix SwapRows(int row1, int row2)
+        {
+            var newValues = (double[,]) Values.Clone();
+            for (var i = 0; i < ColumnCount; i++)
+            {
+                var temp = newValues[row2, i];
+                newValues[row2, i] = newValues[row1, i];
+                newValues[row1, i] = temp;
+            }
+            return new Matrix(newValues);
+        }
+        
+        public Matrix SwapColumns(int column1, int column2)
+        {
+            var newValues = (double[,]) Values.Clone();
+            for (var i = 0; i < RowCount; i++)
+            {
+                var temp = newValues[i, column2];
+                newValues[i, column2] = newValues[i, column1];
+                newValues[i, column1] = temp;
+            }
+            return new Matrix(newValues);
+        }
+        
+        public Matrix RemoveRow(int row)
+        {
+            var newValues = Values
+                .Cast<double>()
+                .Where((d, i) => i / ColumnCount != row)
+                .ToArray();
+            return new Matrix(newValues, ColumnCount);
+        }
+        
+        public Matrix RemoveColumn(int column)
+        {
+            var newValues = this
+                .Where((d, i) => i % ColumnCount != column)
+                .ToArray();
+            return new Matrix(newValues, ColumnCount);
+        }
+
+        public Matrix GetInverseMatrix()
+        {
+            throw new NotImplementedException();
+        }
+        
+        private static double GetDeterminant(Matrix matrix, double result=0)
+        {
+            if (matrix.RowCount == 1)
+                return matrix[0, 0];
+            var rowLength = matrix.ColumnCount;
+            for (var i = 0; i < rowLength; i++)
+            {
+                var minor = matrix.RemoveColumn(i).Skip(rowLength - 1).ToArray();
+                result += GetDeterminant(new Matrix(minor, rowLength - 1))
+                          * matrix[0, i] * (i % 2 == 0 ? 1 : -1);
+            }
+            return result;
+        }
+        
+        private static double[] ParseLine(int count, Func<int, double> parse)
+        {
+            var newValues = new double[count];
+            for (var i = 0; i < count; i++)
+                newValues[i] = parse(i);
+            return newValues;
+        }
+        
+        private static double[,] ParseValues(int rowCount, int columnCount,  
             Func<int, int, double> operation)
         {
-            var newValues = new double[values.GetLength(0), values.GetLength(1)];
-            for (var i = 0; i < values.GetLength(0); i++)
-            for (var j = 0; j < values.GetLength(1); j++)
+            var newValues = new double[rowCount, columnCount];
+            for (var i = 0; i < rowCount; i++)
+            for (var j = 0; j < columnCount; j++)
                 newValues[i, j] = operation(i, j);
             return newValues;
         }
 
         public static Matrix operator ^(Matrix matrix, int power)
         {
+            if(power < 1 && power != -1)
+                throw new Exception("Power must be natural or -1");
             var result = matrix.Clone();
             for (var i = 1; i < power; i++) result *= matrix;
             return result;
@@ -106,7 +247,7 @@ namespace ExMath
             if(rows != right.RowCount || columns != right.ColumnCount)
                 throw new Exception("Matrix sizes aren't equal");
             
-            var newValues = GetNewValues(left.Values, 
+            var newValues = ParseValues(left.RowCount, left.ColumnCount,
                 (i, j) => left[i, j] + right[i, j]);
             return new Matrix(newValues);
         }
@@ -115,7 +256,7 @@ namespace ExMath
         
         public static Matrix operator *(Matrix matrix, double value)
         {
-            var newValues = GetNewValues(matrix.Values, 
+            var newValues = ParseValues(matrix.RowCount, matrix.ColumnCount,
                 (i, j) => matrix[i, j] * value);
             return new Matrix(newValues);
         }
@@ -124,20 +265,18 @@ namespace ExMath
 
         public static Matrix operator *(Matrix left, Matrix right)
         {
-            var rowCount = right.RowCount;
-            if(left.ColumnCount != rowCount)
+            if(left.ColumnCount != right.RowCount)
                 throw new Exception("left.ColumnCount must " +
                                     "be equal to right.RowCount");
 
-            var newValues = new double[rowCount, left.ColumnCount];
-            var columnCount = right.ColumnCount;
-            for (int i = 0, j; i < left.RowCount * right.ColumnCount; i++)
+            var rColCount = right.ColumnCount;
+            var newValues = new double[left.RowCount, rColCount];
+            for (int i = 0, j; i < left.RowCount * rColCount; i++)
             {
                 var cellValue = 0.0;
-                for (j = 0; j < columnCount; j++)
-                    cellValue += left[i / columnCount, j] * right[j, i % rowCount];
-
-                newValues[i / columnCount, i % columnCount] = cellValue;
+                for (j = 0; j < rColCount; j++)
+                    cellValue += left[i / rColCount, j] * right[j, i % right.RowCount];
+                newValues[i / rColCount, i % rColCount] = cellValue;
             }
             
             return new Matrix(newValues);

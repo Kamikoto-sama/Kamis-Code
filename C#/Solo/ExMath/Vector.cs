@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-namespace func_rocket
+namespace ExMath
 {
 	public class Vector
 	{

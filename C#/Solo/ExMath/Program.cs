@@ -12,18 +12,25 @@ namespace ExMath
         {
             var values1 = new double[,]
             {
-                {2, 3, 5, 7, 2}, 
-                {2, 4, 3, 8, 5},
-                {9 , 11, -13, 15, 1},
-                {10, 1, 9, 16, 7},
-                {4, 2, 3, 1, 11}
+                {1, 3, 1}, 
+                {3, 1, -4},
+                {-1 , 4, 1}
             };
             var values2 = new double[,]
             {
                 {2}
             };
-            var matrix = new Matrix(values2);
-            Console.WriteLine(matrix.Determinant);
+            var matrix = new Matrix(values1);
+            Console.WriteLine(matrix
+                .Inverse
+                .Clone()
+                .Round(1)
+                .Transpose()
+                .GetMinor(0, 0)
+                .Rotate2D(Math.PI)
+                .SwapRows(0 ,1)
+                .RemoveRow(0)
+            );
         }
 
         public static bool Method(Matrix matrix)

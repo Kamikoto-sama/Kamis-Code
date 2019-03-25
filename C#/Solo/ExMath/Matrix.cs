@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Odbc;
 using System.Linq;
 using System.Text;
 
@@ -21,16 +23,13 @@ namespace ExMath
                 return GetDeterminant(this);
             }
         }
-        public Matrix Inverse
-        {
-            get
-            {
-                if(Math.Abs(Determinant) <= float.Epsilon)
-                    throw new Exception("Determinant is 0");
-                return GetInverseMatrix();
-            }
-        }
+        public Matrix Inverse => GetInverseMatrix(this);
 
+        public double this[int i]
+        {
+            get => this[i / ColumnCount, i % ColumnCount];
+            set => this[i / ColumnCount, i % ColumnCount] = value;
+        }
         public double this[int i, int j]
         {
             get => Values[i, j];
@@ -41,11 +40,12 @@ namespace ExMath
         {
             if(values == null || values.Length == 0)
                 throw new Exception("Matrix can't be empty or null");
-            Values = values;
+            Values = (double[,]) values.Clone();
         }
 
-        public Matrix(double[] values, int columnCount)
+        public Matrix(IEnumerable<double> array, int columnCount)
         {
+            var values = array.ToArray();
             if(values.Length % columnCount != 0)
                 throw new Exception("Value count must be a multiple " +
                                     "of the number of columns");
@@ -78,7 +78,7 @@ namespace ExMath
         {
             if(rowMax < 1 || rowMin < 1 || columnMax < 1 || columnMin < 1)
                 throw new Exception("Column and row count must be" +
-                                    "grater than 1");
+                                    "grater than 0");
             if(rowMax < rowMin || columnMax < columnMin || valueMax < valueMin)
                 throw new Exception("Max value must be grater than min");
             
@@ -90,6 +90,22 @@ namespace ExMath
             return new Matrix(newValues);
         }
 
+        public static Matrix RandomMatrix(double maxValue, int size, 
+            double minValue = -100)
+        {
+            return RandomMatrix(size, size, maxValue, 
+                minValue, size, size);
+        }
+
+        public static Matrix RandomIntMatrix(int size, int maxValue, 
+            int minValue = -100)
+        {
+            var rnd = new Random();
+            var newValues = ParseValues(size, size, 
+                (i, j) => rnd.Next(minValue, maxValue));
+            return new Matrix(newValues);
+        }
+        
         public void PrintInLine()
         {
             Console.Write("( ");
@@ -134,17 +150,15 @@ namespace ExMath
             return new Matrix(newValues);
         }
 
-        public Vector ToVector()
+        public Vector ToVector2D()
         {
             if(RowCount != 1 && ColumnCount != 2)
                 throw new Exception("Vector must have values at [0, 0] and [0, 1]");
             return new Vector(this[0, 0], this[0, 1]);
         }
 
-        public double[,] ToArray() => (double[,]) Values.Clone();
+        public double[,] ToArray2D() => (double[,]) Values.Clone();
         
-        public double[] ToArray1D() => Values.Cast<double>().ToArray();
-
         public bool Contains(double value) => Values.Cast<double>().Contains(value);
 
         public double[] GetRow(int rowNumber) => ParseLine(ColumnCount, 
@@ -194,33 +208,47 @@ namespace ExMath
             return new Matrix(newValues, ColumnCount);
         }
 
-        public Matrix GetInverseMatrix()
+//        public void Invert() => Values = Inverse.ToArray2D();
+
+        public Matrix GetMinor(int row, int column) 
+            => GetMinor(this, row, column);
+
+        public Matrix GetRange(int rowStart, int columnStart, 
+            int rowEnd, int columnEnd)
         {
+//            var newValues = new double[columnEnd - columnStart, rowEnd - rowStart];
+//            for (var i = columnStart; i <= columnEnd; i++)
+//                for (var j = rowStart; j <= rowEnd; j++)
+//                    newValues[i, j] = 
             throw new NotImplementedException();
         }
-        
-        private static double GetDeterminant(Matrix matrix, double result=0)
+
+        public Matrix Round(int decimals)
         {
-            if (matrix.RowCount == 1)
-                return matrix[0, 0];
-            var rowLength = matrix.ColumnCount;
-            for (var i = 0; i < rowLength; i++)
+            var newValues = ParseValues(RowCount, ColumnCount,
+                (i, j) => Math.Round(this[i, j], decimals));
+            return new Matrix(newValues);
+        }
+        
+        private static Matrix GetInverseMatrix(Matrix matrix)
+        {
+            var determinant = matrix.Determinant;
+            if(Math.Abs(determinant) <= float.Epsilon)
+                throw new Exception("Determinant is 0");
+            
+            var colCount = matrix.ColumnCount;
+            var minors = matrix.Select((d, i) =>
             {
-                var minor = matrix.RemoveColumn(i).Skip(rowLength - 1).ToArray();
-                result += GetDeterminant(new Matrix(minor, rowLength - 1))
-                          * matrix[0, i] * (i % 2 == 0 ? 1 : -1);
-            }
-            return result;
+                var row = i / colCount;
+                var column = i % colCount;
+                return matrix.GetMinor(row,column).Determinant;
+            }).ToMatrix(colCount);
+            minors = ParseValues(colCount, colCount,
+                (i, j) => i - j == 1 || j - i == 1 ? -minors[i, j] : minors[i, j])
+                .ToMatrix();
+            return new Matrix(minors.Transpose() / determinant);
         }
-        
-        private static double[] ParseLine(int count, Func<int, double> parse)
-        {
-            var newValues = new double[count];
-            for (var i = 0; i < count; i++)
-                newValues[i] = parse(i);
-            return newValues;
-        }
-        
+
         private static double[,] ParseValues(int rowCount, int columnCount,  
             Func<int, int, double> operation)
         {
@@ -231,10 +259,47 @@ namespace ExMath
             return newValues;
         }
 
+        private static double[] ParseLine(int count, Func<int, double> parse)
+        {
+            var newValues = new double[count];
+            for (var i = 0; i < count; i++)
+                newValues[i] = parse(i);
+            return newValues;
+        }
+
+        private static double GetDeterminant(Matrix matrix, double result=0)
+        {
+            if (matrix.RowCount == 1)
+                return matrix[0, 0];
+            var rowLength = matrix.ColumnCount;
+            for (var i = 0; i < rowLength; i++)
+            {
+                var minor = matrix.GetMinor(0, i);
+                result += GetDeterminant(new Matrix(minor, rowLength - 1))
+                          * matrix[0, i] * (i % 2 == 0 ? 1 : -1);
+            }
+            return result;
+        }
+
+        private static Matrix GetMinor(Matrix matrix, int row, int column)
+        {
+            if(matrix.RowCount != matrix.ColumnCount)
+                throw new Exception("Matrix must be square");
+            if (matrix.RowCount == 1)
+                return matrix;
+            var newValues = matrix
+                .Where((d, i) => i / matrix.ColumnCount != row
+                                 && i % matrix.ColumnCount != column);
+            return new Matrix(newValues, matrix.ColumnCount -1);
+        }
+
         public static Matrix operator ^(Matrix matrix, int power)
         {
             if(power < 1 && power != -1)
                 throw new Exception("Power must be natural or -1");
+            
+            if (power == -1)
+                return matrix.Inverse;
             var result = matrix.Clone();
             for (var i = 1; i < power; i++) result *= matrix;
             return result;
@@ -288,6 +353,9 @@ namespace ExMath
         }
 
         public static Matrix operator /(double value, Matrix matrix) => matrix / value;
+
+        public static Matrix operator /(Matrix left, Matrix right)
+            => left * right.Inverse;
 
         public static bool operator ==(Matrix left, Matrix right)
         {
@@ -357,5 +425,15 @@ namespace ExMath
                     .Append(new string(' ', maxLength - line.Length) + "|"));
             return string.Join("\n", result);
         }
+    }
+
+    public static class MatrixExtension
+    {
+        public static Matrix ToMatrix(this double[,] values) => new Matrix(values);
+
+        public static Matrix ToMatrix(this IEnumerable<double> values, int columnCount)
+            => new Matrix(values, columnCount);
+        
+        public static Matrix ToMatrix(this Vector vector) => new Matrix(vector);
     }
 }

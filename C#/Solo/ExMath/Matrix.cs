@@ -208,19 +208,32 @@ namespace ExMath
             return new Matrix(newValues, ColumnCount);
         }
 
-//        public void Invert() => Values = Inverse.ToArray2D();
-
         public Matrix GetMinor(int row, int column) 
             => GetMinor(this, row, column);
+
+        public double GetMainMinor(int number)
+        {
+            if(RowCount != ColumnCount)
+                throw new Exception("Matrix must be square");
+            if(number > RowCount)
+                throw new Exception("Minor number is grater " +
+                                    "than matrix order");
+            return GetRange(0, 0, 
+                number - 1, number - 1).Determinant;
+        }
 
         public Matrix GetRange(int rowStart, int columnStart, 
             int rowEnd, int columnEnd)
         {
-//            var newValues = new double[columnEnd - columnStart, rowEnd - rowStart];
-//            for (var i = columnStart; i <= columnEnd; i++)
-//                for (var j = rowStart; j <= rowEnd; j++)
-//                    newValues[i, j] = 
-            throw new NotImplementedException();
+            if(rowEnd < rowStart || columnEnd < columnStart)
+                throw new Exception("End values must be grater than start");
+
+            var newValues = new double[columnEnd - columnStart + 1, 
+                rowEnd - rowStart + 1];
+            for (var i = rowStart; i <= rowEnd; i++)
+            for (var j = columnStart; j <= columnEnd; j++)
+                newValues[i - rowStart, j - columnStart] = this[i, j];
+            return newValues.ToMatrix();
         }
 
         public Matrix Round(int decimals)
@@ -228,6 +241,13 @@ namespace ExMath
             var newValues = ParseValues(RowCount, ColumnCount,
                 (i, j) => Math.Round(this[i, j], decimals));
             return new Matrix(newValues);
+        }
+
+        public Matrix Reset()
+        {
+            if(RowCount != ColumnCount)
+                throw new Exception("Matrix must be square");
+            return UnitMatrix(RowCount);
         }
         
         private static Matrix GetInverseMatrix(Matrix matrix)

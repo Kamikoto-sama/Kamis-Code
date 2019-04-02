@@ -66,6 +66,7 @@ Color = {
     'viewing': '#6EBCD2',
     'pause': '#DC143C',
     'is_con': '#FEE02F'}
+
 Skin = open("style.css").read()
 SideWidth = 300
 SideAnimDur = 500
@@ -916,9 +917,7 @@ class RowButtons(QWidget):
     def move_title(self):
         try:
             self.p.p.paste_btn.show()
-            MainP.paste_row = [self.p.name, self.p.count.text(), self.p.id,
-                               self.p.icon, self.p.color, self.p.p.name, self.p.ep,
-                               self.p.is_fav]
+            MainP.paste_row = self.p
             self.p.min_height = 0
             self.p.animOff.start(1)
         except Exception as e:
@@ -936,7 +935,7 @@ class Title(QWidget):
             self.name = name
             self.ep = episode
             self.color = color
-            self.is_fav = favorite != -1
+            self.is_fav = favorite
             self.show_side = False
             self.border_color = "blue"
             self.hover_color = "#6ebcd2"
@@ -1315,14 +1314,15 @@ class Playlist(QWidget):
 
     def paste_title(self):
         try:
-            if self.p.paste_row[-1] == self.name \
-                    or self.add_form.check_title(self.p.paste_row[0]):
+            title = self.p.paste_row
+            if title.p.name == self.name \
+                    or self.add_form.check_title(title.name):
                 query = "UPDATE Titles SET playlist='%s' " \
-                        "WHERE id='%s'" % (self.name, self.p.paste_row[2])
+                        "WHERE id='%s'" % (self.name, title.id)
                 sql(query)
-                del self.p.paste_row[-1]
-                index = self.get_rowid(self.p.paste_row[2])
-                self.add_row(*self.p.paste_row, index=index).select()
+                index = self.get_rowid(title.id)
+                self.add_row(title.name, title.count.text(), title.id, title.icon,
+                             title.color, title.ep, int(title.is_fav)-1, index=index)
                 self.p.paste_row = None
                 self.paste_btn.hide()
         except Exception as e:
@@ -1457,7 +1457,7 @@ class Playlist(QWidget):
 
     def add_row(self, name, count, t_id, icon_date, color, ep, fav, **kwargs):
         try:
-            row = Title(self, name, count, t_id, icon_date, color, ep, fav)
+            row = Title(self, name, count, t_id, icon_date, color, ep, fav != -1)
             if kwargs.get("index", False):
                 index = kwargs['index']
             else:
@@ -1520,6 +1520,16 @@ class MainForm(QMainWindow):
         self.selected_tab = ""
         self.tab_map = []
 
+        close_tab = QAction(self)
+        close_tab.triggered.connect(self.shortcut_event)
+        close_tab.setShortcut("Ctrl+Tab")
+        self.addAction(close_tab)
+
+        close_tab = QAction(self)
+        close_tab.triggered.connect(self.shortcut_event)
+        close_tab.setShortcut("Ctrl+W")
+        self.addAction(close_tab)
+
         self.add_pl.clicked.connect(self.switch_add_playlist)
         self.pl_list.activated.connect(self.select_playlist)
 
@@ -1544,6 +1554,8 @@ class MainForm(QMainWindow):
         self.con_info.hide()
 
         self.paste_row = None
+        self.favorite_titles = FavoriteTitlesForm(self)
+        self.search_form = SearchTitleForm(self)
 
         self.add_pl_anim = QPropertyAnimation(self.pl_name, b"geometry")
         self.add_pl_anim.setEasingCurve(QEasingCurve.OutExpo)
@@ -1624,11 +1636,9 @@ class MainForm(QMainWindow):
             if selected == con_list:
                 self.open_con_list()
             elif selected == search_title:
-                search_form = SearchTitleForm(self)
-                search_form.show()
+                self.search_form.show()
             elif selected == favorite:
-                favorites = FavoriteTitlesForm(self, favorites)
-                favorites.show()
+                self.favorite_titles.show()
             elif selected == settings:
                 Settings(self).show()
             elif selected == on_import:
@@ -1749,6 +1759,17 @@ class MainForm(QMainWindow):
             self.tabWidget.removeTab(index)
         except Exception as e:
             show_exception('close_tab', e)
+
+    def shortcut_event(self):
+        try:
+            event = self.sender().shortcut()
+            if event == "Ctrl+W" and len(self.tab_map) > 0:
+                self.close_tab(self.tabWidget.currentIndex())
+            elif event == "Ctrl+Tab":
+                index = (self.tabWidget.currentIndex() + 1) % len(self.tab_map)
+                self.tabWidget.setCurrentIndex(index)
+        except Exception as e:
+            show_exception("shortcut_event", e)
 
     def find_select_title(self, pl_name, index):
         try:

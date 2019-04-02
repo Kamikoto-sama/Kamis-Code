@@ -4,3 +4,9 @@ D:\My_Programms\C#\Solution\ConturZipper\obj\Debug\ConturZipper.csprojAssemblyRe
 D:\My_Programms\C#\Solution\ConturZipper\obj\Debug\ConturZipper.csproj.CoreCompileInputs.cache
 D:\My_Programms\C#\Solution\ConturZipper\obj\Debug\ConturZipper.exe
 D:\My_Programms\C#\Solution\ConturZipper\obj\Debug\ConturZipper.pdb
+D:\My_Programms\C#\Solo\ConturZipper\bin\Debug\ConturZipper.exe
+D:\My_Programms\C#\Solo\ConturZipper\bin\Debug\ConturZipper.pdb
+D:\My_Programms\C#\Solo\ConturZipper\obj\Debug\ConturZipper.csprojAssemblyReference.cache
+D:\My_Programms\C#\Solo\ConturZipper\obj\Debug\ConturZipper.csproj.CoreCompileInputs.cache
+D:\My_Programms\C#\Solo\ConturZipper\obj\Debug\ConturZipper.exe
+D:\My_Programms\C#\Solo\ConturZipper\obj\Debug\ConturZipper.pdb

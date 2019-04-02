@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConturZipper", "ConturZippe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExMath", "ExMath\ExMath.csproj", "{D1304601-3D55-4E38-B749-6F3E5AC2105D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{CBC57741-578D-4702-867F-35F86A13408A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{D1304601-3D55-4E38-B749-6F3E5AC2105D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1304601-3D55-4E38-B749-6F3E5AC2105D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1304601-3D55-4E38-B749-6F3E5AC2105D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBC57741-578D-4702-867F-35F86A13408A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBC57741-578D-4702-867F-35F86A13408A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBC57741-578D-4702-867F-35F86A13408A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBC57741-578D-4702-867F-35F86A13408A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

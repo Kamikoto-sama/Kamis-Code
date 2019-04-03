@@ -159,10 +159,10 @@ border: none;
         </property>
        </widget>
       </item>
-      <item alignment="Qt::AlignHCenter">
+      <item>
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>seconds</string>
+         <string>miliseconds</string>
         </property>
        </widget>
       </item>

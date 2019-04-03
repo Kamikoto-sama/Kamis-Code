@@ -186,7 +186,7 @@ class Place(QWidget):
         self.ticket.setEnabled(False)
 
         self.switch_emul.show()
-        self.emulation.setInterval(1000 * delay)
+        self.emulation.setInterval(delay)
         self.emulation.start()
         events = [100 // len(services) for _ in range(len(services))]
         if not (100 / len(services)).is_integer():

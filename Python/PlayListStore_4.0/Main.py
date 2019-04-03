@@ -917,6 +917,7 @@ class RowButtons(QWidget):
     def move_title(self):
         try:
             self.p.p.paste_btn.show()
+            self.p.p.cancel.show()
             MainP.paste_row = self.p
             self.p.min_height = 0
             self.p.animOff.start(1)
@@ -1262,6 +1263,8 @@ class Playlist(QWidget):
             self.rename.clicked.connect(self.rename_playlist)
             self.paste_btn.hide()
             self.paste_btn.clicked.connect(self.paste_title)
+            self.cancel.hide()
+            self.cancel.clicked.connect(self.cancel_move)
 
             if self.con:
                 self.add_title_btn.hide()
@@ -1312,6 +1315,23 @@ class Playlist(QWidget):
         except Exception as e:
             show_exception("rename_pl", e)
 
+    def cancel_move(self):
+        try:
+            title = self.p.paste_row
+
+            if title.p.name in self.p.tab_map:
+                tab = self.p.tabWidget.widget(self.p.tab_map.index(title.p.name))
+                index = tab.get_rowid(title.id)
+                row = self.add_row(title.name, title.count.text(), title.id,
+                                   title.icon, title.color, title.ep,
+                                   int(title.is_fav) - 1, index=index)
+
+            self.p.paste_row = None
+            self.paste_btn.hide()
+            self.cancel.hide()
+        except Exception as e:
+            show_exception("cancel_move", e)
+
     def paste_title(self):
         try:
             title = self.p.paste_row
@@ -1321,10 +1341,14 @@ class Playlist(QWidget):
                         "WHERE id='%s'" % (self.name, title.id)
                 sql(query)
                 index = self.get_rowid(title.id)
-                self.add_row(title.name, title.count.text(), title.id, title.icon,
-                             title.color, title.ep, int(title.is_fav)-1, index=index)
+                row = self.add_row(title.name, title.count.text(), title.id, 
+                                   title.icon, title.color, title.ep, 
+                                   int(title.is_fav)-1, index=index)
+                row.select()
+                
                 self.p.paste_row = None
                 self.paste_btn.hide()
+                self.cancel.hide()
         except Exception as e:
             show_exception("paste_title", e)
 
@@ -1458,8 +1482,8 @@ class Playlist(QWidget):
     def add_row(self, name, count, t_id, icon_date, color, ep, fav, **kwargs):
         try:
             row = Title(self, name, count, t_id, icon_date, color, ep, fav != -1)
-            if kwargs.get("index", False):
-                index = kwargs['index']
+            if "index" in kwargs:
+                index = kwargs["index"]
             else:
                 index = self.row_list.count()
             loop = QEventLoop()

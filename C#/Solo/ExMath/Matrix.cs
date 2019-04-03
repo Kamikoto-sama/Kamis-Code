@@ -257,19 +257,25 @@ namespace ExMath
                 throw new Exception("Determinant is 0");
             
             var colCount = matrix.ColumnCount;
+            var minors = GetMinorsMatrix(matrix, colCount);
+            var algAdds = ParseValues(colCount, colCount,
+                (i, j) => i - j == 1 || j - i == 1 ? -minors[i, j] : minors[i, j])
+                .ToMatrix();
+            return new Matrix(algAdds.Transpose() / determinant);
+        }
+
+        private static Matrix GetMinorsMatrix(Matrix matrix, int colCount)
+        {
             var minors = matrix.Select((d, i) =>
             {
                 var row = i / colCount;
                 var column = i % colCount;
                 return matrix.GetMinor(row,column).Determinant;
-            }).ToMatrix(colCount);
-            minors = ParseValues(colCount, colCount,
-                (i, j) => i - j == 1 || j - i == 1 ? -minors[i, j] : minors[i, j])
-                .ToMatrix();
-            return new Matrix(minors.Transpose() / determinant);
+            });
+            return minors.ToMatrix(colCount);
         }
 
-        private static double[,] ParseValues(int rowCount, int columnCount,  
+        private static double[,] ParseValues(int rowCount, int columnCount,
             Func<int, int, double> operation)
         {
             var newValues = new double[rowCount, columnCount];

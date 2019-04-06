@@ -6,6 +6,7 @@ from random import randint
 
 db_name = "data.pls"
 alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+config_file = "db_generator.config"
 
 
 def create_db(sql):
@@ -98,7 +99,7 @@ def init():
         configurations.append(req)
     elif req == '-':
         set_conf = -1
-        with open("db_gen_config.txt", 'r') as file:
+        with open(config_file, 'r') as file:
             configurations = file.readline().split('|')
             req = configurations[0]
 
@@ -110,7 +111,7 @@ def init():
             req = input("pl_count titles_count: ")
         if set_conf == 1:
             configurations.append(req)
-            with open("db_gen_config.txt", 'w') as file:
+            with open(config_file, 'w') as file:
                 file.write('|'.join(configurations))
         elif set_conf == -1:
             req = configurations[1]
@@ -143,7 +144,7 @@ def init():
         add_titles(sql, "PL1", int(req[1]), 0, **{req[0]: True})
 
     if set_conf == 1:
-        with open("db_gen_config.txt", 'w') as file:
+        with open(config_file, 'w') as file:
             file.write('|'.join(configurations))
     db.commit()
 

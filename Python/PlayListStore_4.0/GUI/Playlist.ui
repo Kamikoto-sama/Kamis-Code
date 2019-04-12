@@ -179,7 +179,7 @@
           <string>Вставить</string>
          </property>
         </widget>
-        <widget class="QToolButton" name="cancel">
+        <widget class="QToolButton" name="cancel_moving">
          <property name="geometry">
           <rect>
            <x>154</x>
@@ -221,7 +221,7 @@
         <zorder>search_edit</zorder>
         <zorder>add_title_btn</zorder>
         <zorder>paste_btn</zorder>
-        <zorder>cancel</zorder>
+        <zorder>cancel_moving</zorder>
        </widget>
       </item>
       <item>

@@ -1,0 +1,6 @@
+D:\My_Programms\C#\Solo\UsefulExtensions\bin\Debug\UsefulExtensions.dll
+D:\My_Programms\C#\Solo\UsefulExtensions\bin\Debug\UsefulExtensions.pdb
+D:\My_Programms\C#\Solo\UsefulExtensions\obj\Debug\UsefulExtensions.csprojAssemblyReference.cache
+D:\My_Programms\C#\Solo\UsefulExtensions\obj\Debug\UsefulExtensions.csproj.CoreCompileInputs.cache
+D:\My_Programms\C#\Solo\UsefulExtensions\obj\Debug\UsefulExtensions.dll
+D:\My_Programms\C#\Solo\UsefulExtensions\obj\Debug\UsefulExtensions.pdb

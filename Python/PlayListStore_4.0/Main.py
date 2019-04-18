@@ -14,6 +14,7 @@ from PyQt5.QtGui import QPixmap
 from PyQt5.QtGui import QCursor
 from PyQt5.QtGui import QIntValidator
 from PyQt5.QtGui import QRegExpValidator
+from PyQt5.QtCore import Qt
 from PyQt5.QtCore import QRect
 from PyQt5.QtCore import QSize
 from PyQt5.QtCore import QPoint
@@ -66,6 +67,7 @@ Color = {
     'pause': '#DC143C',
     'is_con': '#FEE02F'}
 
+db_name = "data.db"
 Skin = open("style.css").read()
 SideWidth = 300
 SideAnimDur = 500
@@ -118,19 +120,6 @@ def save_data(save: str, value=1):
             sql('UPDATE Data set value=%s where name="added"' % TotalAdded)
     except Exception as e:
         show_exception("__main__save_data", e)
-
-# from PyQt5.QtCore import Qt
-class Qt:
-    AlignTop = 32
-    AlignCenter = 132
-    StrongFocus = 11
-    IBeamCursor = 4
-    PointingHandCursor = 13
-    NoFocus = 0
-    Key_Escape = 16777216
-    WindowModal = 1
-    WindowCloseButtonHint = 134217728
-    Window = 1
 
 
 class SelfStyledIcon(QProxyStyle):
@@ -1920,7 +1909,7 @@ def init():
 def load_db():
     try:
         global db, sql, data, ID, TotalAdded, TotalViewed
-        db = db_connect("data.pls")
+        db = db_connect(db_name)
         sql = db.cursor().execute
         data = [int(d[0]) for d in sql("SELECT value FROM Data")]
         ID = data[0]

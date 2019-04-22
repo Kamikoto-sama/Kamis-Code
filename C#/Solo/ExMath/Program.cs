@@ -21,17 +21,18 @@ namespace ExMath
                 {2}
             };
             var matrix = new Matrix(values1);
-//            Console.WriteLine(matrix.Determinant);
-            Console.WriteLine(matrix
-                .Inverse
-                .Clone()
-                .Round(1)
-                .Transpose()
-                .GetMinor(0, 0)
-                .Rotate2D(Math.PI)
-                .SwapRows(0 ,1)
-                .RemoveRow(0)
-            );
+            Method(values1);
+            Console.WriteLine(matrix == values1);
+//            Console.WriteLine(matrix
+//                .Inverse
+//                .Clone()
+//                .Round(1)
+//                .Transpose()
+//                .GetMinor(0, 0)
+//                .Rotate2D(Math.PI)
+//                .SwapRows(0 ,1)
+//                .RemoveRow(0)
+//            );
         }
 
         public static bool Method(Matrix matrix)

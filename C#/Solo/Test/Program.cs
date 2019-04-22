@@ -7,7 +7,6 @@ namespace Test
     {
         public static void Main(string[] args)
         {
-            var a = new A<int>{Value = 2, 2 , 3};
         }
     }
     

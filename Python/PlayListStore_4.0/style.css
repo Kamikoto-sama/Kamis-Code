@@ -67,7 +67,10 @@ QToolTip{
 /*Top bar*/
     #topBar QLineEdit{height: 25px;font-size: 16px;}
     #topBar QPushButton{font-size: 14px;}
-
+    #Playlist #cancel_moving{
+        border-radius: 15px;
+        border: 2px solid silver;
+    }
 
 /*Title row*/
 	#t_row{border:2px solid #F0F0F0;border-radius: 7px;}

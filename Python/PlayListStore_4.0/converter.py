@@ -1,9 +1,11 @@
 from sqlite3 import connect as db_connect
+# from main import db_name
 
 file_name = "titles.txt"
+db_name = "data.db"
 
 def convert():
-    db = db_connect("data.pls")
+    db = db_connect(db_name)
     sql = db.cursor().execute
     pl = ''
     icons = [0, 1, 3, 4, 5, 2]

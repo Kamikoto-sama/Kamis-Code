@@ -1,8 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Odbc;
 using System.Linq;
 using System.Text;
 
@@ -157,8 +155,6 @@ namespace ExMath
             return new Vector(this[0, 0], this[0, 1]);
         }
 
-        public double[,] ToArray2D() => (double[,]) Values.Clone();
-        
         public bool Contains(double value) => Values.Cast<double>().Contains(value);
 
         public double[] GetRow(int rowNumber) => ParseLine(ColumnCount, 
@@ -392,10 +388,18 @@ namespace ExMath
 
         public static bool operator !=(Matrix left, Matrix right) => !(left == right);
 
-        public IEnumerator<double> GetEnumerator()
-        {
-            return Values.Cast<double>().GetEnumerator();
-        }
+        public static implicit operator double[,](Matrix matrix) => matrix.Values;
+        
+        public static implicit operator double[](Matrix matrix) => matrix.ToArray();
+
+        public static implicit operator Vector(Matrix matrix) => matrix.ToVector2D();
+
+        public static implicit operator Matrix(Vector vector) => vector.ToMatrix();
+        
+        public static implicit operator Matrix(double[,] array) => array.ToMatrix();
+
+        public IEnumerator<double> GetEnumerator() 
+            => Values.Cast<double>().GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator()
         {

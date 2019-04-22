@@ -1,5 +1,6 @@
 from os import mkdir as make_dir
 from sys import argv as sys_args
+from main import db_name
 from shutil import copy as copy_file, move as move_file
 from os.path import exists as dir_exists
 from sqlite3 import connect as db_connect
@@ -87,7 +88,7 @@ class Updater(QWidget):
         param_type = None
         param_count = 0
         current_count = 0
-        db = db_connect("data.pls")
+        db = db_connect(db_name)
         sql = db.cursor().execute
         for param in params:
             self.bar.setValue(self.bar.value() + 1)

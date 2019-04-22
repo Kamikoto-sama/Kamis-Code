@@ -67,6 +67,7 @@ Color = {
     'pause': '#DC143C',
     'is_con': '#FEE02F'}
 
+db_name = "data.db"
 Skin = open("style.css").read()
 SideWidth = 300
 SideAnimDur = 500
@@ -198,7 +199,7 @@ class FavoriteTitlesForm(QWidget):
             self.selected_row = -1
             self.loaded = False
         except Exception as e:
-            show_exception("FavoriteTitlesForm__init", e)
+            show_exception("FavoriteTitlesForm", e)
 
     def set_loaded(self, state):
         self.loaded = state
@@ -371,7 +372,7 @@ class SearchTitleForm(QWidget):
             self.rows = list()
             self.selected_row = -1
         except Exception as e:
-            show_exception("SearchTitleForm__init", e, self)
+            show_exception("SearchTitleForm", e, self)
 
     # todo: искать просмотр брошен
     def do_search(self):
@@ -917,7 +918,7 @@ class RowButtons(QWidget):
     def move_title(self):
         try:
             self.p.p.paste_btn.show()
-            self.p.p.cancel.show()
+            self.p.p.cancel_moving.show()
             MainP.paste_row = self.p
             self.p.min_height = 0
             self.p.animOff.start(1)
@@ -1263,8 +1264,8 @@ class Playlist(QWidget):
             self.rename.clicked.connect(self.rename_playlist)
             self.paste_btn.hide()
             self.paste_btn.clicked.connect(self.paste_title)
-            self.cancel.hide()
-            self.cancel.clicked.connect(self.cancel_move)
+            self.cancel_moving.hide()
+            self.cancel_moving.clicked.connect(self.cancel_move)
 
             if self.con:
                 self.add_title_btn.hide()
@@ -1328,7 +1329,7 @@ class Playlist(QWidget):
 
             self.p.paste_row = None
             self.paste_btn.hide()
-            self.cancel.hide()
+            self.cancel_moving.hide()
         except Exception as e:
             show_exception("cancel_move", e)
 
@@ -1341,14 +1342,14 @@ class Playlist(QWidget):
                         "WHERE id='%s'" % (self.name, title.id)
                 sql(query)
                 index = self.get_rowid(title.id)
-                row = self.add_row(title.name, title.count.text(), title.id, 
-                                   title.icon, title.color, title.ep, 
-                                   int(title.is_fav)-1, index=index)
+                row = self.add_row(title.name, title.count.text(), title.id,
+                                   title.icon, title.color, title.ep,
+                                   int(title.is_fav) - 1, index=index)
                 row.select()
-                
+
                 self.p.paste_row = None
                 self.paste_btn.hide()
-                self.cancel.hide()
+                self.cancel_moving.hide()
         except Exception as e:
             show_exception("paste_title", e)
 
@@ -1384,11 +1385,13 @@ class Playlist(QWidget):
 
     def select_row(self, title_id, select=True):
         try:
-            row = self.row_list.itemAt(self.row_map.index(title_id)).widget()
-            if select:
-                row.select()
-            else:
-                return row
+            row = self.row_list.itemAt(self.row_map.index(title_id))
+            if row is not None:
+                row = row.widget()
+                if select:
+                    row.select()
+                else:
+                    return row
         except Exception as e:
             show_exception("select_row", e)
 
@@ -1535,60 +1538,63 @@ class MainForm(QMainWindow):
 
     def __init__(self):
         super(MainForm, self).__init__()
-        loadUi('GUI/MainForm.ui', self)
+        try:
+            loadUi('GUI/MainForm.ui', self)
 
-        global MainP, Import
-        MainP = self
-        self.setWindowTitle("PlayListStore " + Version)
-        self.setStyleSheet(Skin)
-        self.selected_tab = ""
-        self.tab_map = []
+            global MainP, Import
+            MainP = self
+            self.setWindowTitle("PlayListStore " + Version)
+            self.setStyleSheet(Skin)
+            self.selected_tab = ""
+            self.tab_map = []
 
-        close_tab = QAction(self)
-        close_tab.triggered.connect(self.shortcut_event)
-        close_tab.setShortcut("Ctrl+Tab")
-        self.addAction(close_tab)
+            close_tab = QAction(self)
+            close_tab.triggered.connect(self.shortcut_event)
+            close_tab.setShortcut("Ctrl+Tab")
+            self.addAction(close_tab)
 
-        close_tab = QAction(self)
-        close_tab.triggered.connect(self.shortcut_event)
-        close_tab.setShortcut("Ctrl+W")
-        self.addAction(close_tab)
+            close_tab = QAction(self)
+            close_tab.triggered.connect(self.shortcut_event)
+            close_tab.setShortcut("Ctrl+W")
+            self.addAction(close_tab)
 
-        self.add_pl.clicked.connect(self.switch_add_playlist)
-        self.pl_list.activated.connect(self.select_playlist)
+            self.add_pl.clicked.connect(self.switch_add_playlist)
+            self.pl_list.activated.connect(self.select_playlist)
 
-        close = QAction(self)
-        close.triggered.connect(lambda: self.anim_add_pl(False))
-        close.setShortcut('Esc')
-        self.pl_name.addAction(close)
-        self.pl_name.returnPressed.connect(self.add_pl.click)
-        self.pl_name.hide()
+            close = QAction(self)
+            close.triggered.connect(lambda: self.anim_add_pl(False))
+            close.setShortcut('Esc')
+            self.pl_name.addAction(close)
+            self.pl_name.returnPressed.connect(self.add_pl.click)
+            self.pl_name.hide()
 
-        self.close_pl_name.clicked.connect(self.anim_add_pl)
-        self.close_pl_name.hide()
+            self.close_pl_name.clicked.connect(self.anim_add_pl)
+            self.close_pl_name.hide()
 
-        self.tabBar = TabBar(self)
-        self.tabBar.currentChanged.connect(self.select_tab)
-        self.tabBar.tabCloseRequested.connect(self.close_tab)
-        self.tabBar.tabMoved.connect(self.move_tab)
-        self.tabWidget.setTabBar(self.tabBar)
+            self.tabBar = TabBar(self)
+            self.tabBar.currentChanged.connect(self.select_tab)
+            self.tabBar.tabCloseRequested.connect(self.close_tab)
+            self.tabBar.tabMoved.connect(self.move_tab)
+            self.tabWidget.setTabBar(self.tabBar)
 
-        self.options.clicked.connect(self.open_options)
-        self.con_info.clicked.connect(self.open_con_list)
-        self.con_info.hide()
+            self.options.clicked.connect(self.open_options)
+            self.con_info.clicked.connect(self.open_con_list)
+            self.con_info.hide()
 
-        self.paste_row = None
-        self.favorite_titles = FavoriteTitlesForm(self)
-        self.search_form = SearchTitleForm(self)
+            self.paste_row = None
+            self.favorite_titles = FavoriteTitlesForm(self)
+            self.search_form = SearchTitleForm(self)
 
-        self.add_pl_anim = QPropertyAnimation(self.pl_name, b"geometry")
-        self.add_pl_anim.setEasingCurve(QEasingCurve.OutExpo)
-        self.add_pl_anim.setDuration(AddPlDur)
+            self.add_pl_anim = QPropertyAnimation(self.pl_name, b"geometry")
+            self.add_pl_anim.setEasingCurve(QEasingCurve.OutExpo)
+            self.add_pl_anim.setDuration(AddPlDur)
 
-        QTimer().singleShot(1, self.launch)
-        self.launching = True
-        self.set_viewing = -1
-        Import = False
+            QTimer().singleShot(1, self.launch)
+            self.launching = True
+            self.set_viewing = -1
+            Import = False
+        except Exception as e:
+            show_exception("Main", e)
 
     def launch(self):
         try:
@@ -1747,6 +1753,7 @@ class MainForm(QMainWindow):
                     self.tabWidget.setCurrentIndex(0)
                 if self.paste_row is not None and tab_name != ConTabName:
                     new_tab.paste_btn.show()
+                    new_tab.cancel_moving.show()
         except Exception as e:
             show_exception('add_tab', e)
 
@@ -1757,8 +1764,10 @@ class MainForm(QMainWindow):
                 tab = self.tabWidget.widget(index)
                 if self.paste_row is not None and tab.name != ConTabName:
                     tab.paste_btn.show()
+                    tab.cancel_moving.show()
                 elif not tab.paste_btn.isHidden():
                     tab.paste_btn.hide()
+                    tab.cancel_moving.hide()
 
                 text = self.tabWidget.tabText(index)
                 index = self.pl_list.findText(text)
@@ -1900,7 +1909,7 @@ def init():
 def load_db():
     try:
         global db, sql, data, ID, TotalAdded, TotalViewed
-        db = db_connect("data.pls")
+        db = db_connect(db_name)
         sql = db.cursor().execute
         data = [int(d[0]) for d in sql("SELECT value FROM Data")]
         ID = data[0]

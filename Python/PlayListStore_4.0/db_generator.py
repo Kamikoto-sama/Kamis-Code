@@ -4,10 +4,9 @@ import sqlite3
 from main import Icons
 from random import randint
 
-db_name = "data.pls"
 alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 config_file = "db_generator.config"
-
+db_name = "data.db"
 
 def create_db(sql):
     sql('CREATE TABLE Playlists (name varchar(30))')

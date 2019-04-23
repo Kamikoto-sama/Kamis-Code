@@ -129,7 +129,7 @@ class Ticket(QWidget):
 
 class Place(QWidget):
     def __init__(self):
-        super().__init__(None, Qt.WindowCloseButtonHint)
+        super().__init__(None, Qt.WindowCloseButtonHint, Qt.WindowMaximize)
         loadUi("gui/Place.ui", self)
         self.windows = dict()
         self.queue = dict()

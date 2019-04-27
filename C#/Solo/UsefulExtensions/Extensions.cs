@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace UsefulExtensions
 {
@@ -23,5 +24,21 @@ namespace UsefulExtensions
         
         public static void Print<T>(this IEnumerable<T> array)
             => Console.WriteLine(array.ToPrint());
+
+        public static int IndexOf<T>(this IEnumerable<T> array, T value)
+        {
+            var index = array
+                .Select((e, i) => Tuple.Create(e, i))
+                .FirstOrDefault(v => v.Item1.Equals(value));
+            return index?.Item2 ?? -1;
+        }
+
+        public static int LastIndexOf<T>(this IEnumerable<T> array, T value)
+        {
+            var index = array
+                .Select((e, i) => Tuple.Create(e, i))
+                .LastOrDefault(v => v.Item1.Equals(value));
+            return index?.Item2 ?? -1;
+        }
     }
 }

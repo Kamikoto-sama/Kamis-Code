@@ -1,5 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using UsefulExtensions;
 
 namespace Test
 {
@@ -7,33 +10,34 @@ namespace Test
     {
         public static void Main(string[] args)
         {
+            new B().M();
         }
     }
-    
-    public class A<T>: ICollection<T>
+
+    class A
     {
-        private List<T> Values = new List<T>();
-
-        public IEnumerator<T> GetEnumerator() => Values.GetEnumerator();
-
-        IEnumerator IEnumerable.GetEnumerator()
+        public A()
         {
-            return GetEnumerator();
+            Console.WriteLine("A");
         }
 
-        public void Add(T item) => Values.Add(item);
+        public void M()
+        {
+            Console.WriteLine(this + "A");
+        }
+    }
 
-        public void Clear() => Values.Clear();
+    class B: A
+    {
+        public B()
+        {
+            Console.WriteLine("B");
+            M();
+        }
 
-        public bool Contains(T item) => Values.Contains(item);
-
-        public void CopyTo(T[] array, int arrayIndex)
-            => Values.CopyTo(array, arrayIndex);
-
-        public bool Remove(T item) => Values.Remove(item);
-
-        public int Count => Values.Count;
-        public bool IsReadOnly => false;
-        public int Value { get; set; }
+        public void M()
+        {
+            base.M();   
+        }
     }
 }

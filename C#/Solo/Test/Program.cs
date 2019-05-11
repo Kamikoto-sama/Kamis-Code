@@ -11,8 +11,24 @@ namespace Test
         
         public static void Main(string[] args)
         {
+            var a = new[] {"hello", "my", "name"};
         }
-        
-        
     }
+
+    class A
+    {
+        public virtual void M()
+        {
+            
+        }
+    }
+
+    class B: A
+    {
+        public override void M()
+        {
+            base.M();
+        }
+    }
+    
 }

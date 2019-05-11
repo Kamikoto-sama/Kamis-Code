@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace UsefulExtensions
 {
@@ -40,5 +40,8 @@ namespace UsefulExtensions
                 .LastOrDefault(v => v.Item1.Equals(value));
             return index?.Item2 ?? -1;
         }
+
+        public static bool In<T>(this T value, ICollection<T> collection) 
+            => collection.Contains(value);
     }
 }

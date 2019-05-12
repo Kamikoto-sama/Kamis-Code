@@ -41,7 +41,7 @@ namespace UsefulExtensions
             return index?.Item2 ?? -1;
         }
 
-        public static bool In<T>(this T value, ICollection<T> collection) 
-            => collection.Contains(value);
+        public static bool In<T>(this T value, ICollection<T> values) 
+            => values.Contains(value);
     }
 }

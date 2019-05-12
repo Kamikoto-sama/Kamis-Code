@@ -1,0 +1,16 @@
+D:\My_Programms\C#\Solo\ShakySnake\bin\Debug\ShakySnake.exe.config
+D:\My_Programms\C#\Solo\ShakySnake\bin\Debug\ShakySnake.exe
+D:\My_Programms\C#\Solo\ShakySnake\bin\Debug\ShakySnake.pdb
+D:\My_Programms\C#\Solo\ShakySnake\obj\Debug\ShakySnake.csprojAssemblyReference.cache
+D:\My_Programms\C#\Solo\ShakySnake\obj\Debug\ShakySnake.MainForm.resources
+D:\My_Programms\C#\Solo\ShakySnake\obj\Debug\ShakySnake.Properties.Resources.resources
+D:\My_Programms\C#\Solo\ShakySnake\obj\Debug\ShakySnake.csproj.GenerateResource.cache
+D:\My_Programms\C#\Solo\ShakySnake\obj\Debug\ShakySnake.csproj.CoreCompileInputs.cache
+D:\My_Programms\C#\Solo\ShakySnake\obj\Debug\ShakySnake.exe
+D:\My_Programms\C#\Solo\ShakySnake\obj\Debug\ShakySnake.pdb
+D:\My_Programms\C#\Solo\ShakySnake\bin\Debug\UsefulExtensions.dll
+D:\My_Programms\C#\Solo\ShakySnake\bin\Debug\UsefulExtensions.pdb
+D:\My_Programms\C#\Solo\ShakySnake\obj\Debug\ShakySnake.csproj.CopyComplete
+D:\My_Programms\C#\Solo\ShakySnake\bin\Debug\nunit.framework.dll
+D:\My_Programms\C#\Solo\ShakySnake\bin\Debug\nunit.framework.pdb
+D:\My_Programms\C#\Solo\ShakySnake\bin\Debug\nunit.framework.xml

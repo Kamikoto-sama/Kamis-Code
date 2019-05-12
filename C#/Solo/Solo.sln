@@ -1,5 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.489
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConturZipper", "ConturZipper\ConturZipper.csproj", "{A68D1FFF-065C-438A-A8DE-558B99865374}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExMath", "ExMath\ExMath.csproj", "{D1304601-3D55-4E38-B749-6F3E5AC2105D}"
@@ -9,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GUITest", "GUITest\GUITest.csproj", "{07755E3C-1992-42E9-A2FD-3FEAF17089AC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsefulExtensions", "UsefulExtensions\UsefulExtensions.csproj", "{B25E31EF-31CD-4C92-9224-F4783A244124}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShakySnake", "ShakySnake\ShakySnake.csproj", "{94C4C2DE-52EC-4182-98A3-F3E8D9EFF032}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,5 +41,15 @@ Global
 		{B25E31EF-31CD-4C92-9224-F4783A244124}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B25E31EF-31CD-4C92-9224-F4783A244124}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B25E31EF-31CD-4C92-9224-F4783A244124}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94C4C2DE-52EC-4182-98A3-F3E8D9EFF032}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94C4C2DE-52EC-4182-98A3-F3E8D9EFF032}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94C4C2DE-52EC-4182-98A3-F3E8D9EFF032}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94C4C2DE-52EC-4182-98A3-F3E8D9EFF032}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FE4E8D8F-DC96-41A4-AB2A-301236E05BC8}
 	EndGlobalSection
 EndGlobal

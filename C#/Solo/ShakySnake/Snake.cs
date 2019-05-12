@@ -8,54 +8,39 @@ using System.Reflection;
 
 namespace ShakySnake
 {
-    public class SnakeModel
+    public class Snake
     {
-        public readonly List<Point> Parts;
-        public Point Head;
+        private readonly LinkedList<Point> _parts;
+        public LinkedListNode<Point> Head => _parts.First;
+        public LinkedListNode<Point> Tail => _parts.Last;
+        public int Lenght => _parts.Count;
 
-        public SnakeModel(Point initPosition)
-        {
-            var head = initPosition;
-            Head = head;
-            Parts = new List<Point>{head};
-        }
+        public Snake(Point initPosition) => _parts = new LinkedList<Point>(new []{initPosition});
 
-        public void Move(Direction direction, int step)
+        public void AddPart() => _parts.AddLast(Point.Empty);
+
+        public IEnumerable<Point> CutTail(Point tailPartPosition)
         {
-            var xShift = 0;
-            var yShift = 0;
-            
-            switch (direction)
+            var part = _parts.Find(tailPartPosition);
+            var parts = new List<Point>();
+            while (part != null)
             {
-                case Direction.Up:
-                    yShift = -step;
-                    break;
-                case Direction.Right:
-                    xShift = step;
-                    break;
-                case Direction.Down:
-                    yShift = step;
-                    break;
-                case Direction.Left:
-                    xShift = -step;
-                    break;
+                var nextPart = part.Next;
+                yield return part.Value;
+                _parts.Remove(part);
+                part = nextPart;
             }
-            Head.Offset(xShift, yShift);
-            for (var i = 1; i < Parts.Count; i++)
-                Parts[i].Offset(Parts[i - 1]);
         }
-    }
 
-    public class SnakeView
-    {
-        public SnakeModel Model;
-        public List<PictureBox> Parts;
-        public PictureBox Head;
-
-        public SnakeView(SnakeModel model)
+        public void MoveAfterHead(Point newHeadPosition)
         {
-            Model = model;
-            var head = new PictureBox();
+            Head.Value = newHeadPosition;
+            var part = Tail;
+            while (part.Previous != null)
+            {
+                part.Value.Offset(part.Previous.Value);
+                part = part.Previous;
+            }
         }
     }
 }

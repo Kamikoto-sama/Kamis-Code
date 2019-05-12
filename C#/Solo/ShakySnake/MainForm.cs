@@ -14,32 +14,40 @@ namespace ShakySnake
     public partial class MainForm : Form
     {
         private const int _updateInterval = 100;
+        private const int _fieldSize = 10;
+        private readonly GameModel _gameModel;
         
         public MainForm()
         {
             InitializeComponent();
-            
-            this.Controls.Add();
+            _gameModel = new GameModel(_fieldSize, Point.Empty);
         }
 
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
             var key = e.KeyCode;
-            if(Enum.TryParse(key.ToString(), out Direction direction)
-            && Math.Abs(_moveDirection - direction) != 2)
-                _moveDirection = direction;
-            else if(key == Keys.Escape)
-                this.Close();
+            int xShift = 0, yShift = 0;
+            switch (key)
+            {
+                case Keys.Up:
+                    yShift--;
+                    break;
+                case Keys.Right:
+                    xShift++;
+                    break;
+                case Keys.Down:
+                    yShift++;
+                    break;
+                case Keys.Left:
+                    xShift--;
+                    break;
+            }
+            _gameModel.MoveDirection = new Point(xShift, yShift);   
         }
 
-        private void ViewModel(object sender, EventArgs e)
+        void UpdateGameModel()
         {
-            _player.Move(_moveDirection, _step);
-            
-            Head.Location = _player.Head;
-            var rotationValue = _headDirection - _moveDirection;
-            if(Math.Abs(rotationValue) != 0) 
-                RotateHead(rotationValue);
+            _gameModel.MoveSnake();
         }
     }
 }

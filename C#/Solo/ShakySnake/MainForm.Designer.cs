@@ -91,7 +91,7 @@
             // ViewTimer
             // 
             this.ViewTimer.Enabled = true;
-            this.ViewTimer.Tick += new System.EventHandler(this.ViewModel);
+//            this.ViewTimer.Tick += new System.EventHandler(this.ViewModel);
             // 
             // MainForm
             // 
@@ -105,7 +105,7 @@
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "MainForm";
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
+//            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             this.MainLayout.ResumeLayout(false);
             this.MainField.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Head)).EndInit();

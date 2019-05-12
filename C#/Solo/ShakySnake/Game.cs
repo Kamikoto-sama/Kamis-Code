@@ -12,16 +12,28 @@ namespace ShakySnake
     {
         public int FieldSize => Field.GetLength(0);
         public readonly CellState[,] Field;
-        public readonly Snake Snake;
-        public Point MoveDirection;
+        private readonly Snake _snake;
+        private Point _moveDirection;
+        public Point MoveDirection
+        {
+            get => _moveDirection;
+            set
+            {
+                if (value.X != 0 && value.X + _moveDirection.X != 0 ||
+                    value.Y != 0 && value.Y + _moveDirection.Y != 0)
+                    _moveDirection = value;
+            }
+        }
         public int Score { get; private set; }
-        public event Action ModelChanged;
+        public event Action<Snake> SnakeMoved;
+        public event Action<Snake> FruitEaten;
+        public event Action<Point> FruitSpawned;
 
         public GameModel(int fieldSize, Point playerInitPosition)
         {
             Field = new CellState[fieldSize, fieldSize];
             var head = playerInitPosition;
-            Snake = new Snake(playerInitPosition);
+            _snake = new Snake(playerInitPosition);
             Field[head.X, head.Y] = CellState.SnakePart;
             MoveDirection = new Point(1, 0);
             SpawnFruit();
@@ -29,7 +41,7 @@ namespace ShakySnake
 
         public void MoveSnake()
         {
-            var newHeadPosition = Snake.Head.Value + (Size) MoveDirection;
+            var newHeadPosition = _snake.Head.Value + (Size) MoveDirection;
             newHeadPosition = MakeInBounds(newHeadPosition.X, newHeadPosition.Y);
             var headCellState = Field[newHeadPosition.X, newHeadPosition.Y];
             switch (headCellState)
@@ -42,33 +54,38 @@ namespace ShakySnake
                     break;
             }
             Field[newHeadPosition.X, newHeadPosition.Y] = CellState.SnakePart;
-            var snakeTail = Snake.Tail.Value;
+            var snakeTail = _snake.Tail.Value;
             Field[snakeTail.X, snakeTail.Y] = CellState.Empty;
-            Snake.MoveAfterHead(newHeadPosition);
+            _snake.MoveAfterHead(newHeadPosition);
+            SnakeMoved?.Invoke(_snake);
         }
 
         void EatFruit(Point position)
         {
             Score++;
-            Snake.AddPart();
+            _snake.AddPart();
+            FruitEaten?.Invoke(_snake);
         }
 
         void EatSnakeSelfPart(Point partPosition)
         {
-            var snakeTail = Snake.CutTail(partPosition);
+            var snakeTail = _snake.CutTail(partPosition);
             foreach (var part in snakeTail)
                 Field[part.X, part.Y] = CellState.Empty;
         }
 
-        void SpawnFruit()
+        void SpawnFruit(int invokeCount = 0)
         {
             var rndGenerator = new Random();
             var xPos = rndGenerator.Next(0, FieldSize);
             var yPos = rndGenerator.Next(0, FieldSize);
             if (Field[xPos, yPos] is CellState.Empty)
+            {
                 Field[xPos, yPos] = CellState.Fruit;
-            else 
-                SpawnFruit();
+                FruitSpawned?.Invoke(new Point(xPos, yPos));
+            }
+            else if (invokeCount < FieldSize)
+                SpawnFruit(++invokeCount);
         }
 
         Point MakeInBounds(int x, int y) =>
@@ -76,10 +93,5 @@ namespace ShakySnake
             x >= FieldSize ? new Point(0, y) :
             y < 0 ? new Point(x, FieldSize) :
             y >= FieldSize ? new Point(x, 0) : new Point(x, y);
-    }
-
-    public class GameView
-    {
-        
     }
 }

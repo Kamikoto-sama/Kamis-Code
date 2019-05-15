@@ -23,47 +23,35 @@
         #region Код, автоматически созданный конструктором форм Windows
 
         /// <summary>
-        /// Требуемый метод для поддержки конструктора — не изменяйте 
-        /// содержимое этого метода с помощью редактора кода.
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
             this._timer = new System.Windows.Forms.Timer(this.components);
-            this._field = new System.Windows.Forms.Panel();
+            this._mainField = new System.Windows.Forms.Panel();
             this._gameScore = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            // 
-            // _timer
-            // 
-            this._timer.Enabled = true;
             this._timer.Tick += new System.EventHandler(this.UpdateView);
-            // 
-            // _field
-            // 
-            this._field.Location = new System.Drawing.Point(12, 12);
-            this._field.Name = "_field";
-            this._field.Size = new System.Drawing.Size(500, 500);
-            this._field.TabIndex = 0;
-            // 
-            // _gameScore
-            // 
+            this._mainField.Location = new System.Drawing.Point(12, 35);
+            this._mainField.Name = "_mainField";
+            this._mainField.Size = new System.Drawing.Size(543, 514);
+            this._mainField.TabIndex = 0;
             this._gameScore.AutoSize = true;
-            this._gameScore.Location = new System.Drawing.Point(518, 12);
+            this._gameScore.Location = new System.Drawing.Point(12, 9);
             this._gameScore.Name = "_gameScore";
             this._gameScore.Size = new System.Drawing.Size(78, 23);
             this._gameScore.TabIndex = 1;
             this._gameScore.Text = "Score: 0";
-            // 
-            // MainForm
-            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 23F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(676, 529);
+            this.ClientSize = new System.Drawing.Size(565, 561);
             this.Controls.Add(this._gameScore);
-            this.Controls.Add(this._field);
+            this.Controls.Add(this._mainField);
             this.DoubleBuffered = true;
-            this.Font = new System.Drawing.Font("Comic Sans MS", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.Font = new System.Drawing.Font("Comic Sans MS", 12F, System.Drawing.FontStyle.Bold,
+                System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.Margin = new System.Windows.Forms.Padding(5);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -73,11 +61,11 @@
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
 
         #endregion
-        private System.Windows.Forms.Panel _field;
+
+        private System.Windows.Forms.Panel _mainField;
         private System.Windows.Forms.Label _gameScore;
         private System.Windows.Forms.Timer _timer;
     }

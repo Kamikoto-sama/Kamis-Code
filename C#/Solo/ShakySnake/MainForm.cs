@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Net.Mime;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -16,45 +17,83 @@ namespace ShakySnake
     public partial class MainForm : Form
     {
         private const int _updateInterval = 100;
-        private const int _fieldSize = 20;
         private const int _cellSize = 25;
-        private readonly Point _playerInitialPosition = Point.Empty;
-        private readonly GameModel _gameModel;
-        private readonly List<PictureBox> _snakeView;
-        private PictureBox _head => _snakeView.FirstOrDefault();
-        
+        private Size _fieldSize => 
+            new Size(_mainField.Width / _cellSize, _mainField.Height / _cellSize);
+        private Point _playerInitialPosition = Point.Empty;
+
+        private GameModel _gameModel;
+
+        private List<PictureBox> _snakeView;
+
+        private PictureBox _fruit;
+
         public MainForm()
         {
             InitializeComponent();
+            AlignFieldToCellSize();
             _timer.Interval = _updateInterval;
             _gameModel = new GameModel(_fieldSize, _playerInitialPosition);
             _gameModel.SnakeMoved += OnSnakeMoved;
             _gameModel.FruitEaten += OnFruitEaten;
-            _gameModel.FruitSpawned += OnFruitSpawned;
+            _gameModel.SnakeAteSelfPart += OnSnakeAteItSelf;
+            _gameModel.GameOver += OnGameOver;
             _snakeView = new List<PictureBox>();
             CreateHead();
+            _timer.Start();
         }
 
-        private void OnFruitSpawned(Point position)
+        void AlignFieldToCellSize()
         {
-            var pos = new Point(position.X * _cellSize, position.Y * _cellSize);
-            var fruit = new PictureBox();
-            fruit.Location = pos;
-            fruit.BackColor = Color.Gold;
-            fruit.Size = new Size(_cellSize, _cellSize);
+            var widthAlign = _cellSize * (_mainField.Width / _cellSize);
+            var heightAlign = _cellSize * (_mainField.Height / _cellSize);
+            var widthShift = _mainField.Width - widthAlign;
+            var heightShift = _mainField.Height - heightAlign;
+            _mainField.Size = new Size(widthAlign, heightAlign);
+            this.Size -= new Size(widthShift, heightShift);
+        }
+
+        private void OnGameOver(GameEnd gameEndType)
+        {
+            _timer.Stop();
+            var text = $"Your score is: {_gameModel.Score}";
+            MessageBox.Show(text, "Game is over!");
+            this.Close();
+        }
+
+        private void OnSnakeAteItSelf(List<Point> eatenParts)
+        {
+            var partsCount = eatenParts.Count;
+            foreach (var part in _snakeView.Skip(_snakeView.Count - partsCount))
+                part.Dispose();
+            _snakeView.RemoveRange(_snakeView.Count - partsCount, partsCount);
+        }
+
+        private void DrawFruit()
+        {
+            var fruitPosition = _gameModel.Fruit;
+            fruitPosition = new Point(fruitPosition.X * _cellSize, 
+                                          fruitPosition.Y * _cellSize);
+            if (_fruit == null)
+            {
+                var fruit = new PictureBox();
+                fruit.BackColor = Color.Gold;
+                fruit.Size = new Size(_cellSize, _cellSize);
+                _mainField.Controls.Add(fruit);
+                _fruit = fruit;
+            }
+            _fruit.Location = fruitPosition;
         }
 
         void CreateHead()
         {
-//            var headImage = new Bitmap("../../Resources/SnakeHead.png");
             var head = new PictureBox
             {
-                BackColor = Color.Red,
                 Size = new Size(_cellSize, _cellSize),
                 Location = _playerInitialPosition
             };
             _snakeView.Add(head);
-            _field.Controls.Add(head);
+            _mainField.Controls.Add(head);
         }
 
         void OnSnakeMoved(Snake snake)
@@ -65,22 +104,33 @@ namespace ShakySnake
                 var position = new Point(snakePart.X * _cellSize,
                                          snakePart.Y * _cellSize);
                 _snakeView[partIndex].Location = position;
+                RotateSnakePart(_gameModel.MoveDirection, _snakeView[partIndex],
+                                partIndex == 0);
                 partIndex++;
             }
         }
         
+        void RotateSnakePart(Point newDirection, PictureBox part, bool isHead)
+        {
+            var direction = newDirection.X == 1 ? "Right" :
+                newDirection.X == -1 ? "Left" :
+                newDirection.Y == 1 ? "Down" : "Up";
+
+            var image = isHead ? Source.SnakeHead[direction] :
+                                Source.SnakeParts[direction];
+            part.Image = new Bitmap(image);
+        }
+        
         private void OnFruitEaten(Snake snake)
         {
-            _gameScore.Text = $"Score: {_gameModel.Score}";
-            
             var newPart = new PictureBox
             {
-                BackColor = Color.PaleGreen,
+                BackColor = Color.FromArgb(144, 197, 15),
                 Size = new Size(_cellSize, _cellSize),
                 Location = snake.Tail.Value
             };
             _snakeView.Add(newPart);
-            _field.Controls.Add(newPart);
+            _mainField.Controls.Add(newPart);
         }
         
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
@@ -101,13 +151,21 @@ namespace ShakySnake
                 case Keys.Left:
                     xShift--;
                     break;
+                case Keys.Escape:
+                    this.Close();
+                    break;
+                case Keys.Space:
+                    _gameModel.StopDebug = !_gameModel.StopDebug;
+                    break;
             }
             _gameModel.MoveDirection = new Point(xShift, yShift);   
         }
         
         private void UpdateView(object sender, EventArgs e)
         {
-            _gameModel.MoveSnake();
+            _gameModel.Update();
+            DrawFruit();
+            _gameScore.Text = $"Score: {_gameModel.Score}";
         }
     }
 }

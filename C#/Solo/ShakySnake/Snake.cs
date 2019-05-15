@@ -13,34 +13,36 @@ namespace ShakySnake
         public readonly LinkedList<Point> Parts;
         public LinkedListNode<Point> Head => Parts.First;
         public LinkedListNode<Point> Tail => Parts.Last;
-        public int Lenght => Parts.Count;
+        public int Length => Parts.Count;
 
-        public Snake(Point initPosition) => Parts = new LinkedList<Point>(new []{initPosition});
+        public Snake(Point initPosition) 
+            => Parts = new LinkedList<Point>(new []{initPosition});
 
-        public void AddPart() => Parts.AddLast(Point.Empty);
+        public void AddPart() => Parts.AddLast(Tail.Value);
 
-        public IEnumerable<Point> CutTail(Point tailPartPosition)
+        public List<Point> CutTail(Point tailPartPosition)
         {
             var part = Parts.Find(tailPartPosition);
-            var parts = new List<Point>();
+            var parts = new List<Point>(Length);
             while (part != null)
             {
                 var nextPart = part.Next;
-                yield return part.Value;
+                parts.Add(part.Value);
                 Parts.Remove(part);
                 part = nextPart;
             }
+            return parts;
         }
 
         public void MoveAfterHead(Point newHeadPosition)
         {
-            Head.Value = newHeadPosition;
             var part = Tail;
             while (part.Previous != null)
             {
-                part.Value.Offset(part.Previous.Value);
+                part.Value = part.Previous.Value;
                 part = part.Previous;
             }
+            Head.Value = newHeadPosition;
         }
     }
 }

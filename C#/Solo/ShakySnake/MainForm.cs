@@ -71,7 +71,7 @@ namespace ShakySnake
 
         private void DrawFruit()
         {
-            var fruitPosition = _gameModel.Fruit;
+            var fruitPosition = _gameModel.Fruits;
             fruitPosition = new Point(fruitPosition.X * _cellSize, 
                                           fruitPosition.Y * _cellSize);
             if (_fruit == null)
@@ -153,9 +153,6 @@ namespace ShakySnake
                     break;
                 case Keys.Escape:
                     this.Close();
-                    break;
-                case Keys.Space:
-                    _gameModel.StopDebug = !_gameModel.StopDebug;
                     break;
             }
             _gameModel.MoveDirection = new Point(xShift, yShift);   

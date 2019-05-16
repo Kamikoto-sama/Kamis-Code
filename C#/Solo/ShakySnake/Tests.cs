@@ -21,23 +21,29 @@ namespace ShakySnake
         [Test]
         public void SnakeCutsTail()
         {
-            var snake = new Snake(new Point(1, 1));
-            for (var i = 0; i < 5; i++) snake.AddPart();
-            var tail = snake.CutTail(Point.Empty);
-            var expected = new Point[5];
+            var snake = new Snake(Point.Empty);
+            for (var i = 0; i < 5; i++)
+            {
+                snake.AddPart();
+                snake.MoveAfterHead(new Point(i + 1, 0));
+            }
+            var tail = snake.CutTail(new Point(4, 0));
+            var expected = Enumerable.Range(-3, 4)
+                .Select(x => new Point(-x, 0))
+                .ToList();
             
             Assert.AreEqual(1, snake.Length);
             Assert.AreEqual(expected, tail);
         }
         
-        [TestCase(1, 0, TestName = "Go right")]
-        [TestCase(-1, 0, TestName = "Go left")]
-        [TestCase(0, 1, TestName = "Go down")]
-        [TestCase(0, -1, TestName = "Go up")]
-        public void CorrectWhenHeadOutOfBounds(int directionX, int directionY)
+        [TestCase(Direction.Right, TestName = "Go right")]
+        [TestCase(Direction.Left, TestName = "Go left")]
+        [TestCase(Direction.Down, TestName = "Go down")]
+        [TestCase(Direction.Up, TestName = "Go up")]
+        public void CorrectWhenHeadOutOfBounds(Direction direction)
         {
-            var gameModel = new GameModel(new Size(2, 2), Point.Empty);
-            gameModel.MoveDirection = new Point(directionX, directionY);
+            var gameModel = new GameModel(new Size(2, 2), Point.Empty, Direction.Right);
+            gameModel.MoveDirection = direction;
             for (var i = 0; i < 2; i++)
                 gameModel.Update();
             var actual = gameModel.Snake.Head.Value;
@@ -48,14 +54,13 @@ namespace ShakySnake
         [Test]
         public void WhenEatFruit()
         {
-            var gameModel = new GameModel(new Size(2, 2), Point.Empty);
-            gameModel.MoveDirection = new Point(1 , 0);
+            var gameModel = new GameModel(new Size(2, 2), Point.Empty, Direction.Right);
             gameModel.Update();
-            gameModel.MoveDirection = new Point(0 , 1);
+            gameModel.MoveDirection = Direction.Down;
             gameModel.Update();
-            gameModel.MoveDirection = new Point(-1 , 0);
+            gameModel.MoveDirection = Direction.Left;
             gameModel.Update();
-            gameModel.MoveDirection = new Point(0 , -1);
+            gameModel.MoveDirection = Direction.Up;
             
             Assert.IsTrue(gameModel.Score > 0, "Score > 0");
             Assert.IsTrue(gameModel.Snake.Length > 1, "Snake length > 1");

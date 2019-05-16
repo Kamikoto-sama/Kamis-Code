@@ -12,22 +12,26 @@ namespace ShakySnake
         private const int _cellSize = 25;
         private Size _fieldSize => 
             new Size(_mainField.Width / _cellSize, _mainField.Height / _cellSize);
-        private Point _playerInitialPosition = Point.Empty;
-
-        private GameModel _gameModel;
-        private List<PictureBox> _snakeView;
-        private PictureBox[,] _fieldView;
+        
+        private readonly Point _initialPosition = Point.Empty;
+        private readonly GameModel _gameModel;
+        private readonly List<PictureBox> _snakeView;
+        private readonly PictureBox[,] _fieldView;
+        private List<PictureBox> _cutTail;
+        private List<Point> _blownObjects;
+        private int _explosionTimer = -1;
         
         public MainForm()
         {
             InitializeComponent();
             AlignFieldToCellSize();
-            _timer.Interval = _updateInterval;
-            _gameModel = new GameModel(_fieldSize, _playerInitialPosition, new Point(1, 0));
+            _gameModel = new GameModel(_fieldSize, _initialPosition, Direction.Right);
+            _fieldView = new PictureBox[_fieldSize.Width, _fieldSize.Height];
             HundleGameModelEvents();
             _snakeView = new List<PictureBox>();
             CreateHead();
-            _timer.Start();
+            _viewTimer.Interval = _updateInterval;
+            _viewTimer.Start();
         }
 
         private void HundleGameModelEvents()
@@ -36,9 +40,14 @@ namespace ShakySnake
             _gameModel.FruitEaten += OnFruitEaten;
             _gameModel.SnakeAteSelfPart += OnSnakeAteItSelf;
             _gameModel.GameOver += OnGameOver;
+            _gameModel.ItemAppeared += DrawItem;
+            _gameModel.SnakeCrashed += OnSnakeCrashed;
+            _gameModel.PlayerGotKey += OnGetKey;
+            _gameModel.PlayerUsedKey += OnPlayerUsedKey;
+            _gameModel.ObjectsBlown += OnObjectsBlown;
         }
 
-        void AlignFieldToCellSize()
+        private void AlignFieldToCellSize()
         {
             var widthAlign = _cellSize * (_mainField.Width / _cellSize);
             var heightAlign = _cellSize * (_mainField.Height / _cellSize);
@@ -50,77 +59,121 @@ namespace ShakySnake
 
         private void OnGameOver(GameOverReason gameOverReasonType)
         {
-            _timer.Stop();
-            var text = $"Your score is: {_gameModel.Score}";
+            _viewTimer.Stop();
+            var text = gameOverReasonType == GameOverReason.HeadBlown ? 
+                "Oh shit your head has blown! XD" : 
+                "Your can't left move than one tail! :(";
             MessageBox.Show(text, "Game is over!");
             this.Close();
         }
 
         private void OnSnakeAteItSelf(List<Point> eatenParts)
         {
-            var partsCount = eatenParts.Count;
-            foreach (var part in _snakeView.Skip(_snakeView.Count - partsCount))
-                part.Dispose();
+            var partsCount = eatenParts.Count + 1;
+            _cutTail = _snakeView.GetRange(_snakeView.Count - partsCount, partsCount);
             _snakeView.RemoveRange(_snakeView.Count - partsCount, partsCount);
         }
-
-        private void DrawFruit()
+        
+        private void OnObjectsBlown(List<Point> objects, FieldObjects blownReason)
         {
-            var fruitPosition = _gameModel.Fruits;
-            fruitPosition = new Point(fruitPosition.X * _cellSize, 
-                                          fruitPosition.Y * _cellSize);
-            if (_fruit == null)
-            {
-                var fruit = new PictureBox();
-                fruit.BackColor = Color.Gold;
-                fruit.Size = new Size(_cellSize, _cellSize);
-                _mainField.Controls.Add(fruit);
-                _fruit = fruit;
-            }
-            _fruit.Location = fruitPosition;
+            var image = Source.GetImage("Explosion");
+            if (blownReason == FieldObjects.LostSnakeTail)
+                foreach (var part in _cutTail)
+                    part.Image = image;
+            foreach (var obj in objects)
+                _fieldView[obj.X, obj.Y].Image = image;
+            _explosionTimer = 3;
+            _blownObjects = objects;
+        }
+        
+        private void ClearExplosion()
+        {
+            if (_cutTail != null)
+                foreach (var part in _cutTail)
+                    _mainField.Controls.Remove(part);
+            _cutTail = null;
+            if (_blownObjects != null)
+                foreach (var blownObject in _blownObjects)
+                    RemoveObject(blownObject);
+            _blownObjects = null;
         }
 
-        void CreateHead()
+        private void OnGetKey(Point position)
+        {
+            RemoveObject(position);
+            _keyBox.Location = new Point(_gameScore.Right + 10, 5);
+            _keyBox.Image = Source.GetImage("KeyIcon");
+            _keyBox.Visible = true;
+        }
+
+        private void RemoveObject(Point objPosition)
+        {
+            var obj = _fieldView[objPosition.X, objPosition.Y];
+            _mainField.Controls.Remove(obj);
+            _fieldView[objPosition.X, objPosition.Y] = null;
+        }
+        
+        private void OnPlayerUsedKey(Point position)
+        {
+            RemoveObject(position);
+            _keyBox.Visible = false;
+        }
+        
+        private void OnSnakeCrashed(Point position)
+        {
+            MessageBox.Show("You've crashed, choose another direction");
+        }
+        
+        private void DrawItem(Point position, FieldObjects objType)
+        {
+            var location = new Point(position.X * _cellSize, position.Y * _cellSize);
+            var newItem = new PictureBox();
+            newItem.Image = Source.GetImage(objType.ToString());
+            newItem.Size = new Size(_cellSize, _cellSize);
+            newItem.Location = location;
+            if (_fieldView[position.X, position.Y] == null)
+            {
+                _fieldView[position.X, position.Y] = newItem;
+                _mainField.Controls.Add(newItem);
+            }
+            else
+            {
+                RemoveObject(position);
+                DrawItem(position, objType);
+            }
+        }
+
+        private void CreateHead()
         {
             var head = new PictureBox
             {
                 Size = new Size(_cellSize, _cellSize),
-                Location = _playerInitialPosition
+                Location = _initialPosition
             };
             _snakeView.Add(head);
             _mainField.Controls.Add(head);
         }
 
-        void OnSnakeMoved(Snake snake)
+        private void OnSnakeMoved(Snake snake)
         {
             var partIndex = 0;
+            _snakeView[0].Image = Source.GetImage(FieldObjects.SnakeHead.ToString() +
+                                                    _gameModel.MoveDirection);
             foreach (var snakePart in snake.Parts)
             {
                 var position = new Point(snakePart.X * _cellSize,
                                          snakePart.Y * _cellSize);
                 _snakeView[partIndex].Location = position;
-                RotateSnakePart(_gameModel.MoveDirection, _snakeView[partIndex],
-                                partIndex == 0);
                 partIndex++;
             }
         }
         
-        void RotateSnakePart(Point newDirection, PictureBox part, bool isHead)
-        {
-            var direction = newDirection.X == 1 ? "Right" :
-                newDirection.X == -1 ? "Left" :
-                newDirection.Y == 1 ? "Down" : "Up";
-
-            var image = isHead ? Source.SnakeHead[direction] :
-                                Source.SnakeParts[direction];
-            part.Image = new Bitmap(image);
-        }
-        
         private void OnFruitEaten(Point fruitPosition)
         {
+            RemoveObject(fruitPosition);
             var newPart = new PictureBox
             {
-                BackColor = Color.FromArgb(144, 197, 15),
+                Image = Source.GetImage($"{FieldObjects.SnakePart}"),
                 Size = new Size(_cellSize, _cellSize),
                 Location = _gameModel.Snake.Tail.Value
             };
@@ -131,33 +184,34 @@ namespace ShakySnake
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
             var key = e.KeyCode;
-            int xShift = 0, yShift = 0;
             switch (key)
             {
                 case Keys.Up:
-                    yShift--;
+                    _gameModel.MoveDirection = Direction.Up;
                     break;
                 case Keys.Right:
-                    xShift++;
+                    _gameModel.MoveDirection = Direction.Right;
                     break;
                 case Keys.Down:
-                    yShift++;
+                    _gameModel.MoveDirection = Direction.Down;
                     break;
                 case Keys.Left:
-                    xShift--;
+                    _gameModel.MoveDirection = Direction.Left;
                     break;
                 case Keys.Escape:
                     this.Close();
                     break;
             }
-            _gameModel.MoveDirection = new Point(xShift, yShift);   
         }
         
         private void UpdateView(object sender, EventArgs e)
         {
             _gameModel.Update();
-            DrawFruit();
             _gameScore.Text = $"Score: {_gameModel.Score}";
+            if (_explosionTimer == 0)
+                ClearExplosion();
+            else
+                _explosionTimer--;
         }
     }
 }

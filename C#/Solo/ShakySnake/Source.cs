@@ -1,27 +1,25 @@
+using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace ShakySnake
 {
     public static class Source
     {
         public const string Path = @"../../Resources/";
+        public const string ImageFormat = ".png";
 
-        public static readonly Dictionary<string, string> SnakeHead =
-            new Dictionary<string, string>
+        public static Image GetImage(string imageName)
+        {
+            try
             {
-                {"Up", Path + "SnakeHeadUp.png"},
-                {"Down", Path + "SnakeHeadDown.png"},
-                {"Left", Path + "SnakeHeadLeft.png"},
-                {"Right", Path + "SnakeHeadRight.png"},
-            };
-        
-        public static readonly Dictionary<string, string> SnakeParts =
-            new Dictionary<string, string>
+                return Image.FromFile(Path + imageName + ImageFormat);
+            }
+            catch (System.IO.FileNotFoundException)
             {
-                {"Up", Path + "SnakePart.png"},
-                {"Down", Path + "SnakePart.png"},
-                {"Left", Path + "SnakePart.png"},
-                {"Right", Path + "SnakePart.png"},
-            };
+                return Image.FromFile(Path + "Default" + ImageFormat);
+            }
+        }
     }
 }

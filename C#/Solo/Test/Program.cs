@@ -10,6 +10,7 @@ using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace Test
 {
@@ -22,9 +23,7 @@ namespace Test
         
         public static void Main(string[] args)
         {
-            var a = new State[2];
-            Console.WriteLine(a[0]);
-            Console.WriteLine(a[1]);
+            Console.WriteLine(Image.FromFile("file.png"));
         }
     }
 

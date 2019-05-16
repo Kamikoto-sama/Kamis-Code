@@ -2,31 +2,38 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using NUnit.Framework;
 
 namespace ShakySnake
 {
     public enum GameOverReason{AteTail, HeadBlown}
-    public enum FieldObjects{Empty, SnakeHead, SnakePart, LostSnakeTail, Fruit, Chest, Key}
+
+    public enum FieldObjects
+    {
+        Empty, SnakeHead, SnakePart, LostSnakeTail, Fruit, Chest, Key
+    }
     
     public class GameModel
     {
-        private const int MaxFruitCount = 6;
-        private const int NewFruitProbability = 300;
-        private const int MaxChestCount = 4;
-        private const int NewChestProbability = 100;
-        private const int NewKeyProbability = 50;
+        private const int MaxFruitCount = 5;
+        private const int NewFruitProbability = 100;
+        private const int MaxChestCount = 2;
+        private const int NewChestProbability = 10;
+        private const int NewKeyProbability = 5;
         private const int MaxProbabilityValue = 1000;
-        private const int StepsToTailExplosion = 3;
+        private const int StepsToTailExplosion = 20;
 
         private int _leftStepsToTailExplosion = -1;
         private readonly FieldObjects[,] _field;
         private readonly Size _fieldSize;
-        private Point _moveDirection;
-        private Point _nextMoveDirection;
+        private Direction _moveDirection;
+        private Direction _nextMoveDirection;
         private bool _keyExists;
         private bool _gameIsOver;
+        private int _fruitsCount;
+        private int _chestsCount;
 
-        public Point MoveDirection
+        public Direction MoveDirection
         {
             get => _moveDirection;
             set => _nextMoveDirection = value;
@@ -35,20 +42,19 @@ namespace ShakySnake
         public List<Point> SnakeTail = new List<Point>();
         public int Score { get; private set; }
         public bool PlayerHasKey { get; private set; }
-        public readonly HashSet<Point> Fruits;
-        public readonly HashSet<Point> Chests;
 
-        public event Action<List<Tuple<Point, FieldObjects>>> ObjectsBlown;
+        public event Action<List<Point>, FieldObjects> ObjectsBlown;
+        public event Action<Point, FieldObjects> ItemAppeared;
         public event Action<List<Point>> SnakeAteSelfPart;
         public event Action<GameOverReason> GameOver;
         public event Action<Point> SnakeCrashed;
-        public event Action<Point> ChestOpened;
         public event Action<Point> FruitEaten;
         public event Action<Snake> SnakeMoved;
-        public event Action PlayerUsedKey;
-        public event Action PlayerGotKey;
+        public event Action<Point> PlayerUsedKey;
+        public event Action<Point> PlayerGotKey;
 
-        public GameModel(Size fieldSize, Point playerInitPosition, Point initDirection)
+        public GameModel(Size fieldSize, Point playerInitPosition, 
+            Direction initDirection)
         {
             _field = new FieldObjects[fieldSize.Width, fieldSize.Height];
             _fieldSize = fieldSize;
@@ -56,8 +62,6 @@ namespace ShakySnake
             _field[playerInitPosition.X, playerInitPosition.Y] = FieldObjects.SnakeHead;
 
             MoveDirection = initDirection;
-            Fruits = new HashSet<Point>();
-            Chests = new HashSet<Point>();
         }
 
         public void Update()
@@ -65,12 +69,20 @@ namespace ShakySnake
             if (_gameIsOver) return;
             if (_leftStepsToTailExplosion == 0)
                 MakeTailKaBoom();
+            else
+                _leftStepsToTailExplosion--;
             UpdateMoveDirection();
             MoveSnake();
-            SpawnItem(FieldObjects.Fruit, NewFruitProbability, MaxFruitCount, Fruits);
-            SpawnItem(FieldObjects.Chest, NewChestProbability, MaxChestCount, Chests);
+            GenerateItems();
+        }
+
+        private void GenerateItems()
+        {
+            SpawnItem(FieldObjects.Fruit, NewFruitProbability, ref _fruitsCount, MaxFruitCount);
+            SpawnItem(FieldObjects.Chest, NewChestProbability, ref _chestsCount, MaxChestCount);
             if (PlayerHasKey || _keyExists) return;
-            _keyExists = SpawnItem(FieldObjects.Key, NewKeyProbability, itemState: _keyExists);
+            var count = 0;
+            _keyExists = SpawnItem(FieldObjects.Key, NewKeyProbability, ref count);
         }
 
         private void MakeGameOver(GameOverReason reason)
@@ -81,46 +93,40 @@ namespace ShakySnake
         
         private void MakeTailKaBoom()
         {
-            var blownObjects = new List<Tuple<Point, FieldObjects>>();
+            var blownObjects = new List<Point>();
             foreach (var part in SnakeTail)
             {
                 _field[part.X, part.Y] = FieldObjects.Empty;
                 foreach (var cell in GetSurroundingCells(part))
-                    if (BlowUpObject(MakeInBounds(cell.X, cell.Y), out var obj))
-                        blownObjects.Add(obj);
+                    if (BlowUpObject(MakeInBounds(cell.X, cell.Y)))
+                        blownObjects.Add(cell);
             }
             if (_leftStepsToTailExplosion == 0) _leftStepsToTailExplosion = -1;
-            ObjectsBlown?.Invoke(blownObjects);
+            ObjectsBlown?.Invoke(blownObjects, FieldObjects.LostSnakeTail);
         }
 
-        private bool BlowUpObject(Point objPosition, out Tuple<Point, FieldObjects> obj)
+        private bool BlowUpObject(Point objPosition)
         {
             switch (_field[objPosition.X, objPosition.Y])
             {
                 case FieldObjects.Fruit:
                     _field[objPosition.X, objPosition.Y] = FieldObjects.Empty;
-                    Fruits.Remove(objPosition);
-                    obj = Tuple.Create(objPosition, FieldObjects.Fruit);
+                    _fruitsCount--;
                     return true;
                 case FieldObjects.Chest:
                     TryOpenChest(objPosition, true);
-                    obj = Tuple.Create(objPosition, FieldObjects.Chest);
                     return true;
                 case FieldObjects.Key:
                     _field[objPosition.X, objPosition.Y] = FieldObjects.Empty;
                     _keyExists = false;
-                    obj = Tuple.Create(objPosition, FieldObjects.Key);
                     return true;
                 case FieldObjects.SnakePart:
                     CutSnakeTail(objPosition, true);
-                    obj = Tuple.Create(objPosition, FieldObjects.SnakePart);
                     return true;
                 case FieldObjects.SnakeHead:
                     MakeGameOver(GameOverReason.HeadBlown);
-                    obj = Tuple.Create(objPosition, FieldObjects.SnakeHead);
                     return true;
             }
-            obj = null;
             return false;
         }
         
@@ -137,21 +143,22 @@ namespace ShakySnake
 
         private void UpdateMoveDirection()
         {
-            var value = _nextMoveDirection;
-            if (value.X != 0 && value.X + _moveDirection.X != 0 ||
-                value.Y != 0 && value.Y + _moveDirection.Y != 0)
-                _moveDirection = value;
+            if ((int)_moveDirection + _nextMoveDirection != 0 && 
+                _nextMoveDirection != Direction.None)
+                _moveDirection = _nextMoveDirection;
         }
 
         private void MoveSnake()
         {
-            var newHeadPosition = Snake.Head.Value + (Size) MoveDirection;
+            var headPosition = Snake.Head.Value;
+            var newHeadPosition = headPosition + DirectionToSize(_moveDirection);
             newHeadPosition = MakeInBounds(newHeadPosition.X, newHeadPosition.Y);
             var headCellState = _field[newHeadPosition.X, newHeadPosition.Y];
             
             var snakeCanMove = InteractWithFieldObject(newHeadPosition, headCellState);
             if (snakeCanMove)
             {
+                _field[headPosition.X, headPosition.Y] = FieldObjects.SnakePart;
                 _field[newHeadPosition.X, newHeadPosition.Y] = FieldObjects.SnakeHead;
                 var snakeTail = Snake.Tail.Value;
                 if (_field[snakeTail.X, snakeTail.Y] == FieldObjects.SnakePart)
@@ -161,11 +168,18 @@ namespace ShakySnake
             }
             else
             {
-                SnakeCrashed?.Invoke(newHeadPosition);
-                _moveDirection = Point.Empty;
+                MoveDirection = Direction.None;
+//                SnakeCrashed?.Invoke(newHeadPosition);
             }
         }
-        
+
+        private Size DirectionToSize(Direction direction) =>
+            direction == Direction.Up ? new Size(0, -1) :
+            direction == Direction.Right ? new Size(1, 0) :
+            direction == Direction.Down ? new Size(0, 1) :
+            direction == Direction.Left ? new Size(-1, 0) :
+            Size.Empty;
+
         private Point MakeInBounds(int x, int y) =>
             x < 0 ? new Point(_fieldSize.Width - 1, y) :
             x >= _fieldSize.Width ? new Point(0, y) :
@@ -189,11 +203,18 @@ namespace ShakySnake
                 case FieldObjects.SnakeHead:
                     throw new Exception("You've crashed with your head :(");
                 case FieldObjects.Key:
-                    PlayerHasKey = true;
-                    PlayerGotKey?.Invoke();
-                    break;
+                    TakeKey(objPosition);
+                    return true;
             }
             return true;
+        }
+
+        private void TakeKey(Point keyPosition)
+        {
+            PlayerHasKey = true;
+            _keyExists = false;
+            _field[keyPosition.X, keyPosition.Y] = FieldObjects.Empty;
+            PlayerGotKey?.Invoke(keyPosition);
         }
 
         private bool TryOpenChest(Point chestPosition, bool byExplosion = false)
@@ -202,8 +223,8 @@ namespace ShakySnake
             {
                 Score += 5;
                 PlayerHasKey = false;
-                ChestOpened?.Invoke(chestPosition);
-                PlayerUsedKey?.Invoke();
+                _chestsCount--;
+                PlayerUsedKey?.Invoke(chestPosition);
                 return true;
             }
             if (byExplosion)
@@ -215,7 +236,7 @@ namespace ShakySnake
 
         private void EatFruit(Point fruitPosition)
         {
-            Fruits.Remove(fruitPosition);
+            _fruitsCount--;
             Score++;
             Snake.AddPart();
             FruitEaten?.Invoke(fruitPosition);
@@ -240,24 +261,25 @@ namespace ShakySnake
                 SnakeAteSelfPart?.Invoke(eatenParts);
         }
 
-        private bool SpawnItem(FieldObjects itemType , int probability, int maxItemCount = 0,
-            HashSet<Point> items = null, bool itemState = true)
+        private bool SpawnItem(FieldObjects itemType , int probability, ref int count,
+            int maxItemCount = 1)
         {
-            var randomGenerator = new Random(new Random().Next());
+            var randomGenerator = new Random();
             var spawnItem = randomGenerator.Next(MaxProbabilityValue);
 
-            if (spawnItem < MaxProbabilityValue - probability || itemState && 
-                (items == null || items.Count >= maxItemCount && items.Count != 0))
-                return true;
+            if (spawnItem < MaxProbabilityValue - probability || count == maxItemCount)
+                return false;
             var fieldArea = _fieldSize.Width * _fieldSize.Height;
-            for (var count = 0; count < fieldArea; count++)
+            for (var i = 0; i < fieldArea; i++)
             {
                 var xPos = randomGenerator.Next(0, _fieldSize.Width);
                 var yPos = randomGenerator.Next(0, _fieldSize.Height);
                 if (_field[xPos, yPos] != FieldObjects.Empty) continue;
 
                 _field[xPos, yPos] = itemType;
-                items?.Add(new Point(xPos, yPos));
+                var position = new Point(xPos, yPos);
+                count++;
+                ItemAppeared?.Invoke(position, itemType);
                 return true;
             }
             return false;

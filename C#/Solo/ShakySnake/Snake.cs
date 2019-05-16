@@ -15,7 +15,7 @@ namespace ShakySnake
         public LinkedListNode<Point> Tail => Parts.Last;
         public int Length => Parts.Count;
 
-        public Snake(Point initPosition) 
+        public Snake(Point initPosition)
             => Parts = new LinkedList<Point>(new []{initPosition});
 
         public void AddPart() => Parts.AddLast(Tail.Value);

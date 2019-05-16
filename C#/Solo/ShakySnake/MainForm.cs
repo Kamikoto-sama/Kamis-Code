@@ -1,16 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Net.Mime;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using UsefulExtensions;
 
 namespace ShakySnake
 {
@@ -23,24 +15,27 @@ namespace ShakySnake
         private Point _playerInitialPosition = Point.Empty;
 
         private GameModel _gameModel;
-
         private List<PictureBox> _snakeView;
-
-        private PictureBox _fruit;
-
+        private PictureBox[,] _fieldView;
+        
         public MainForm()
         {
             InitializeComponent();
             AlignFieldToCellSize();
             _timer.Interval = _updateInterval;
-            _gameModel = new GameModel(_fieldSize, _playerInitialPosition);
+            _gameModel = new GameModel(_fieldSize, _playerInitialPosition, new Point(1, 0));
+            HundleGameModelEvents();
+            _snakeView = new List<PictureBox>();
+            CreateHead();
+            _timer.Start();
+        }
+
+        private void HundleGameModelEvents()
+        {
             _gameModel.SnakeMoved += OnSnakeMoved;
             _gameModel.FruitEaten += OnFruitEaten;
             _gameModel.SnakeAteSelfPart += OnSnakeAteItSelf;
             _gameModel.GameOver += OnGameOver;
-            _snakeView = new List<PictureBox>();
-            CreateHead();
-            _timer.Start();
         }
 
         void AlignFieldToCellSize()
@@ -53,7 +48,7 @@ namespace ShakySnake
             this.Size -= new Size(widthShift, heightShift);
         }
 
-        private void OnGameOver(GameEnd gameEndType)
+        private void OnGameOver(GameOverReason gameOverReasonType)
         {
             _timer.Stop();
             var text = $"Your score is: {_gameModel.Score}";
@@ -121,13 +116,13 @@ namespace ShakySnake
             part.Image = new Bitmap(image);
         }
         
-        private void OnFruitEaten(Snake snake)
+        private void OnFruitEaten(Point fruitPosition)
         {
             var newPart = new PictureBox
             {
                 BackColor = Color.FromArgb(144, 197, 15),
                 Size = new Size(_cellSize, _cellSize),
-                Location = snake.Tail.Value
+                Location = _gameModel.Snake.Tail.Value
             };
             _snakeView.Add(newPart);
             _mainField.Controls.Add(newPart);

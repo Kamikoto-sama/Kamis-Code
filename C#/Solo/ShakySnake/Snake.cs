@@ -27,7 +27,8 @@ namespace ShakySnake
             while (part != null)
             {
                 var nextPart = part.Next;
-                parts.Add(part.Value);
+                if (part.Value != tailPartPosition)
+                    parts.Add(part.Value);
                 Parts.Remove(part);
                 part = nextPart;
             }

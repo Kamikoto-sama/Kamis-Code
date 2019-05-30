@@ -9,7 +9,6 @@ Python/Test/*
 Python/PyQt5_Examples/*
 C#/Solution/*
 
-*test.*
 t.*
 *.jpg
 *.exe
@@ -22,3 +21,4 @@ C#/*.zip
 
 Android/*
 C#/Solo/.vs/
+Kotlin/Test/Test.iml

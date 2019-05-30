@@ -21,7 +21,7 @@ namespace ShakySnake
         private const int NewChestProbability = 10;
         private const int NewKeyProbability = 5;
         private const int MaxProbabilityValue = 1000;
-        private const int StepsToTailExplosion = 20;
+        private const int StepsToTailExplosion = 40;
 
         private int _leftStepsToTailExplosion = -1;
         private readonly FieldObjects[,] _field;
@@ -250,11 +250,6 @@ namespace ShakySnake
                     _field[part.X, part.Y] = FieldObjects.LostSnakeTail;
 
             Score -= eatenParts.Count + 1;
-            if (_leftStepsToTailExplosion > 0)
-            {
-                MakeGameOver(GameOverReason.AteTail);
-                return;
-            }
             _leftStepsToTailExplosion = StepsToTailExplosion;
             SnakeTail = eatenParts;
             if (!byExplosion)

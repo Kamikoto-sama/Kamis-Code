@@ -17,9 +17,7 @@ namespace ShakySnake
         private readonly GameModel _gameModel;
         private readonly List<PictureBox> _snakeView;
         private readonly PictureBox[,] _fieldView;
-        private List<PictureBox> _cutTail;
-        private List<Point> _blownObjects;
-        private int _explosionTimer = -1;
+        private readonly Queue<List<PictureBox>> _cutTails;
         
         public MainForm()
         {
@@ -27,14 +25,15 @@ namespace ShakySnake
             AlignFieldToCellSize();
             _gameModel = new GameModel(_fieldSize, _initialPosition, Direction.Right);
             _fieldView = new PictureBox[_fieldSize.Width, _fieldSize.Height];
-            HundleGameModelEvents();
+            HandleGameModelEvents();
             _snakeView = new List<PictureBox>();
+            _cutTails = new Queue<List<PictureBox>>();
             CreateHead();
             _viewTimer.Interval = _updateInterval;
             _viewTimer.Start();
         }
 
-        private void HundleGameModelEvents()
+        private void HandleGameModelEvents()
         {
             _gameModel.SnakeMoved += OnSnakeMoved;
             _gameModel.FruitEaten += OnFruitEaten;
@@ -70,32 +69,37 @@ namespace ShakySnake
         private void OnSnakeAteItSelf(List<Point> eatenParts)
         {
             var partsCount = eatenParts.Count + 1;
-            _cutTail = _snakeView.GetRange(_snakeView.Count - partsCount, partsCount);
+            var tail = _snakeView.GetRange(_snakeView.Count - partsCount, partsCount);
+            _cutTails.Enqueue(tail);
             _snakeView.RemoveRange(_snakeView.Count - partsCount, partsCount);
         }
         
         private void OnObjectsBlown(List<Point> objects, FieldObjects blownReason)
         {
             var image = Source.GetImage("Explosion");
-            if (blownReason == FieldObjects.LostSnakeTail)
-                foreach (var part in _cutTail)
-                    part.Image = image;
+            var tailParts = _cutTails.Any() ? _cutTails.Dequeue() : null;
+            foreach (var part in tailParts ?? new List<PictureBox>())
+                part.Image = image;
             foreach (var obj in objects)
                 _fieldView[obj.X, obj.Y].Image = image;
-            _explosionTimer = 3;
-            _blownObjects = objects;
+            
+            var countdown = new Timer{Interval = 300};
+            countdown.Tick += (sender, args) =>
+            {
+                ClearExplosion(tailParts, objects);
+                countdown.Stop();
+            };
+            countdown.Start();
         }
         
-        private void ClearExplosion()
+        private void ClearExplosion(List<PictureBox> tailParts, List<Point> objs)
         {
-            if (_cutTail != null)
-                foreach (var part in _cutTail)
+            if (tailParts.Any())
+                foreach (var part in tailParts)
                     _mainField.Controls.Remove(part);
-            _cutTail = null;
-            if (_blownObjects != null)
-                foreach (var blownObject in _blownObjects)
+            if (objs.Any())
+                foreach (var blownObject in objs)
                     RemoveObject(blownObject);
-            _blownObjects = null;
         }
 
         private void OnGetKey(Point position)
@@ -208,10 +212,6 @@ namespace ShakySnake
         {
             _gameModel.Update();
             _gameScore.Text = $"Score: {_gameModel.Score}";
-            if (_explosionTimer == 0)
-                ClearExplosion();
-            else
-                _explosionTimer--;
         }
     }
 }

@@ -23,8 +23,7 @@ namespace Test
         
         public static void Main(string[] args)
         {
-            var obj = Create(new T_T());
-            Console.WriteLine(obj);
+            var a = new Point() == Point.Empty;
         }
 
         private static T Create<T>(T tObj)

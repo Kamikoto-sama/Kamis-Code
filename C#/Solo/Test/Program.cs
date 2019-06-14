@@ -13,17 +13,15 @@ namespace Test
 {
     internal class Program
     {
-        [Flags]
-        public enum E
-        {
-            First = 0,
-            Second = 1,
-            Third = 2
-        }
         
         public static void Main(string[] args)
         {
-            var a = new Point() == Point.Empty;
+            var dict = new Dictionary<List<int>, int>();
+            var list = new List<int>{1, 2, 3};
+            dict.Add(list, 10);
+            Console.WriteLine(dict[list]);
+            list[1] = 0;
+            Console.WriteLine(dict.ContainsKey(list));
         }
 
         private static T Create<T>(T tObj)
@@ -42,7 +40,7 @@ namespace Test
         }
     }
 
-    class T_T
+    sealed class T_T
     {
         public int Count { get; set; }
         public List<int> List { get; set; }

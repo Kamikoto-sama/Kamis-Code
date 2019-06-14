@@ -149,7 +149,7 @@ border: none;
 }</string>
         </property>
         <property name="text">
-         <string>5</string>
+         <string>1500</string>
         </property>
         <property name="maxLength">
          <number>4</number>

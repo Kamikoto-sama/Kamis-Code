@@ -129,7 +129,7 @@ class Ticket(QWidget):
 
 class Place(QWidget):
     def __init__(self):
-        super().__init__(None, Qt.WindowCloseButtonHint, Qt.WindowMaximize)
+        super().__init__(None, Qt.WindowCloseButtonHint)
         loadUi("gui/Place.ui", self)
         self.windows = dict()
         self.queue = dict()
@@ -201,7 +201,7 @@ class Place(QWidget):
             self.select_service(index)
             print("\rTime for client %s!" % self.client_count, end='')
         else:
-            print("\rNo client ...", end='')
+            print("\rNo client ...      ", end='')
 
     def switch_emulation(self, turn_on):
         try:

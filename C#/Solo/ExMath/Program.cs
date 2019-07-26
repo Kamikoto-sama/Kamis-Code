@@ -10,29 +10,13 @@ namespace ExMath
     {
         public static void Main(string[] args)
         {
-            var values1 = new double[,]
-            {
-                {1, 3, 1}, 
-                {3, 1, -4},
-                {-1 , 4, 1}
-            };
-            var values2 = new double[,]
-            {
-                {2}
-            };
-            var matrix = new Matrix(values1);
-            Method(values1);
-            Console.WriteLine(matrix == values1);
-//            Console.WriteLine(matrix
-//                .Inverse
-//                .Clone()
-//                .Round(1)
-//                .Transpose()
-//                .GetMinor(0, 0)
-//                .Rotate2D(Math.PI)
-//                .SwapRows(0 ,1)
-//                .RemoveRow(0)
-//            );
+            Console.WriteLine(Combinatorics.Permutations(5) == 120);
+            Console.WriteLine(Combinatorics.Permutations(10, 2, 3, 2) == 151200);
+            Console.WriteLine(Combinatorics.Allocations(5, 3) == 5 * 4 * 3);
+            Console.WriteLine(Combinatorics.Allocations(5, 5) == Combinatorics.Factorial(5));
+            Console.WriteLine(Enumerable.Range(0, 6)
+                .Aggregate(0,(x, y) => x + Combinatorics.Combinations(5, y)));
+            Console.WriteLine(Combinatorics.CombinationsWithRep(3, 10) == 66);
         }
 
         public static bool Method(Matrix matrix)

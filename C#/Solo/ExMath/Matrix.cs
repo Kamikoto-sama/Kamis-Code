@@ -204,18 +204,17 @@ namespace ExMath
             return new Matrix(newValues, ColumnCount);
         }
 
-        public Matrix GetMinor(int row, int column) 
-            => GetMinor(this, row, column);
+        public Matrix GetMinor(int row, int column) => GetMinor(this, row, column);
 
         public double GetMainMinor(int number)
         {
             if(RowCount != ColumnCount)
                 throw new Exception("Matrix must be square");
             if(number > RowCount)
-                throw new Exception("Minor number is grater " +
-                                    "than matrix order");
-            return GetRange(0, 0, 
-                number - 1, number - 1).Determinant;
+                throw new Exception("Minor number is grater than matrix order");
+            if(number <= 0)
+                throw new Exception("Minor number must be >= 1");
+            return GetRange(0, 0, number - 1, number - 1).Determinant;
         }
 
         public Matrix GetRange(int rowStart, int columnStart, 

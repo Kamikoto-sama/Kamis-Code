@@ -7,6 +7,7 @@ from PyQt5.QtCore import QPoint
 from PyQt5.QtCore import QTimer
 from PyQt5.QtCore import QEasingCurve
 from PyQt5.QtCore import QPropertyAnimation
+from excollections import Queue
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtWidgets import QMessageBox
 from PyQt5.QtWidgets import QPushButton
@@ -42,7 +43,7 @@ class Window(QWidget):
         except Exception as e:
             print("Window", e)
 
-    def order(self, client):
+    def makeOrder(self, client):
         try:
             self.display_item = QListWidgetItem("%s --> %s" % (client, self.title))
             self.display_item.setTextAlignment(Qt.AlignHCenter)
@@ -101,9 +102,12 @@ class Window(QWidget):
             print("on_client_clear", e)
 
     def check_orders(self):
-        if len(self.p.queue[self.service]) > 0:
-            client = self.p.queue[self.service].pop(0)
-            self.order(client)
+        try:
+            if len(self.p.queue[self.service]) > 0:
+                client = self.p.queue[self.service].dequeue()
+                self.makeOrder(client)
+        except Exception as e:
+            print("check_orders:", e)
 
 
 class TButton(QPushButton):
@@ -129,9 +133,9 @@ class Ticket(QWidget):
 
 class Place(QWidget):
     def __init__(self):
-        super().__init__(None, Qt.WindowCloseButtonHint)
+        super().__init__(None, Qt.WindowCloseButtonHint | Qt.WindowMaximizeButtonHint)
         loadUi("gui/Place.ui", self)
-        self.windows = dict()
+        self.services = dict()
         self.queue = dict()
         self.client_count = 0
 
@@ -150,15 +154,16 @@ class Place(QWidget):
         self.emulation_events = None
         self.client_event = RandomEvent(100 - ClientProb, ClientProb)
 
-        self.switch_emul.hide()
         self.switch_emul.clicked.connect(self.switch_emulation)
+        self.display.mousePressEvent = lambda: None
+        self.top_left.setAlignment(Qt.AlignLeft)
+        self.delay.setValidator(QIntValidator(0, 99999))
+        self.delay.returnPressed.connect(lambda: self.emulation.setInterval(int(self.delay.text())))
 
-        self.display.mousePressEvent = lambda _: None
-
-    def init(self, services, emulation):
+    def init(self, services: dict, emulation):
         try:
             if bool(emulation):
-                self.init_emulation(services, emulation)
+                self.init_emulation(len(services), emulation)
 
             win_index = 0
             for index, service in enumerate(services):
@@ -167,10 +172,10 @@ class Place(QWidget):
                 option.clicked.connect(self.select_service)
                 self.terminal.addWidget(option, index // 2, index % 2)
                 for i in range(services[service]):
-                    if not self.windows.get(Alpha[index], False):
-                        self.windows[Alpha[index]] = list()
+                    if not self.services.get(Alpha[index], False):
+                        self.services[Alpha[index]] = list()
                     window = Window(self, win_index + 1, index)
-                    self.windows[Alpha[index]].append(window)
+                    self.services[Alpha[index]].append(window)
                     self.windows_place.addWidget(window, win_index // 3, win_index % 3)
                     win_index += 1
             self.show()
@@ -179,32 +184,32 @@ class Place(QWidget):
         except Exception as e:
             print("init", e)
 
-    def init_emulation(self, services, delay):
+    def init_emulation(self, servicesCount: int, delay):
         global Emulation
         Emulation = True
         self.bottom_area.setEnabled(False)
         self.ticket.setEnabled(False)
 
-        self.switch_emul.show()
+        self.switch_emul.setChecked(True)
+        self.delay.setText(str(delay))
         self.emulation.setInterval(delay)
         self.emulation.start()
-        events = [100 // len(services) for _ in range(len(services))]
-        if not (100 / len(services)).is_integer():
+        events = [100 // servicesCount for _ in range(servicesCount)]
+        if not (100 / servicesCount).is_integer():
             events.append(100 - sum(events))
         self.emulation_events = RandomEvent(*events, shuffle=True)
 
     def emulate(self):
         if self.client_event.event() and Emulation:
             index = self.emulation_events.event()
-            if index == len(self.windows):
+            if index == len(self.services):
                 return self.emulate()
             self.select_service(index)
-            print("\rTime for client %s!" % self.client_count, end='')
-        else:
-            print("\rNo client ...      ", end='')
 
     def switch_emulation(self, turn_on):
         try:
+            if self.emulation.interval() == 0:
+                self.init_emulation(len(self.services), 1500)
             global Emulation
             Emulation = turn_on
             self.bottom_area.setEnabled(not turn_on)
@@ -228,8 +233,8 @@ class Place(QWidget):
             self.client_count += 1
             client = service + str(self.client_count)
             if not self.queue.get(service, False):
-                self.queue[service] = list()
-            self.queue[service].append(client)
+                self.queue[service] = Queue()
+            self.queue[service].enqueue(client)
 
             self.print_ticket(client)
             self.check_windows(client)
@@ -253,10 +258,10 @@ class Place(QWidget):
 
     def check_windows(self, client):
         try:
-            for window in self.windows[client[0]]:
+            for window in self.services[client[0]]:
                 if window.client is None:
-                    window.order(client)
-                    self.queue[client[0]].remove(client)
+                    window.makeOrder(client)
+                    self.queue[client[0]].dequeue()
                     return
         except Exception as e:
             print("check_windows", e)
@@ -337,7 +342,7 @@ class PlaceConstructor(QMainWindow):
                 self.place.init(services, emulation)
             elif self.services.count() > len(Alpha):
                 text = "Где тут '%s' %s символ ???" % (Alpha, len(Alpha) + 1)
-                QMessageBox.warning(self, 'Ohuel?', text)
+                QMessageBox().warning(self, 'Ohuel?', text)
         except Exception as e:
             print("create_place", e)
 

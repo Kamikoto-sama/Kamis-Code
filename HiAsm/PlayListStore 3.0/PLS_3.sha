@@ -200,7 +200,7 @@ Add(StringTableMT,14347712,1043,335)
  Point(onMouseUp)
  MakeTrans(Hint)
  link(onClick,1623779:doEvent1,[])
- link(onChange,12523216:doEvent1,[(1108,348)(1108,513)])
+ link(onChange,319892:doWork1,[(1108,348)(1108,512)(1031,512)(1031,546)])
  link(onLineChange,9577335:doWork1,[(1121,355)(1121,498)])
  link(onDblClick,5294513:doEvent,[(1265,362)(1265,276)])
  link(FileName,5755892:Var1,[(1056,325)(1173,325)(1173,395)(1731,395)])
@@ -217,22 +217,7 @@ Add(Image,14328680,-137,-133)
  ViewStyle=0
  Point(doColor)
 }
-Add(Label,4615599,1152,611)
-{
- Left=600
- Top=16
- Width=175
- Height=17
- Color=12632256
- Font=[Consolas,11,1,255,204]
- Hint="This is the count of titles in this playlist"
- HintManager="Hints"
- Caption="Titles in playlist:0"
- ColorHover=-16777208
- MakeTrans(Hint)
- AddHint(-29,39,94,13,Caption)
-}
-Add(Label,5584058,1152,569)
+Add(Label,5584058,1145,561)
 {
  Left=600
  Top=16
@@ -243,7 +228,6 @@ Add(Label,5584058,1152,569)
  Hint="This is the count of titles in this playlist"
  HintManager="Hints"
  Caption="Titles in playlist:0"
- Point(doVisible)
  MakeTrans(Hint)
 }
 Add(MainForm,15182796,418,25)
@@ -1003,10 +987,10 @@ BEGIN_SDK
   {
    @Hint=#12:INFO MESSAGE|
    DataCount=1
-   Mask="ver [%1]\r\n\r\n1) Исправлен баг с счетчиками количества просмотреных\r\nи добавленных тайлов.\r\n\r\n||Author: Kamikoto;\r\nEmail:update.pls@yandex.ru;\r\nVK: https://vk.com/playliststore_project\r\nDonate(YandexMoney): 410011968947376||"
+   Mask="ver [%1]\r\n\r\n1) Отключена подсветка кол-ва тайтлов.\r\n\r\n||Author: Kamikoto;\r\nEmail:update.pls@yandex.ru;\r\nVK: https://vk.com/playliststore_project\r\nDonate(YandexMoney): 410011968947376||"
    link(onFString,11432545:doMessage,[])
    link(Str1,16040346:Var2,[])
-   AddHint(-72,33,95,13,@Hint)
+   AddHint(-115,30,95,13,@Hint)
   }
   Add(GetDataEx,16040346,646,140)
   {
@@ -1766,14 +1750,14 @@ Add(Hub,12937000,462,604)
  link(onEvent1,5693718:doData,[])
  link(onEvent2,11026930:doData,[(486,617)(486,674)])
 }
-Add(LineBreak,1389346,560,320)
+Add(LineBreak,9664214,560,320)
 {
  Caption="Vis"
  Color=16776960
  link(Out,3859674:doVisible,[])
  Primary=[3445455,617,-124]
 }
-Add(LineBreak,487556,-49,420)
+Add(LineBreak,11939167,-49,420)
 {
  Caption="Vis"
  Color=16776960
@@ -1786,59 +1770,60 @@ Add(MultiElement,319892,1043,540)
  @Color=16733695
  link(onEvent1,14347712:doWidth,[(1090,546)(1090,462)(1031,462)(1031,383)])
  link(Data1,7126537:Var2,[])
+ link(onEvent2,4486117:doStrCat,[(1088,553)(1088,567)])
  AddHint(-39,40,76,13,@Hint)
 }
 BEGIN_SDK
   Add(EditMulti,10539873,21,21)
   {
-   EventCount=1
+   EventCount=2
    WorkCount=1
    DataCount=1
-   Width=202
-   Height=102
-   link(doWork1,2611169:doEvent1,[(35,27)(35,55)])
+   Width=237
+   Height=109
+   link(doWork1,2611169:doEvent1,[(35,27)(35,58)])
   }
-  Add(If_else,410898,114,49)
+  Add(If_else,410898,149,52)
   {
    Type=2
    Op2=Integer(28)
    link(onTrue,8174560:doData,[])
-   link(onFalse,10543421:doData,[(162,62)(162,94)])
-   link(Op1,10539873:Data1,[(120,35)(27,35)])
+   link(onFalse,10543421:doData,[(197,65)(197,97)])
+   link(Op1,10539873:Data1,[(155,42)(27,42)])
   }
-  Add(DoData,10543421,170,88)
+  Add(DoData,10543421,205,91)
   {
    Data=Integer(540)
-   link(onEventData,5043144:doWork3,[(214,94)])
+   link(onEventData,5043144:doWork3,[(249,97)])
   }
-  Add(DoData,8174560,170,49)
+  Add(DoData,8174560,205,52)
   {
    Data=Integer(557)
    link(onEventData,5043144:doWork2,[])
   }
-  Add(HubEx,5043144,210,49)
+  Add(HubEx,5043144,245,52)
   {
    Angle=3
-   link(onEvent,10539873:onEvent1,[(214,27)])
+   link(onEvent,10539873:onEvent1,[(249,27)])
   }
-  Add(Hub,2611169,43,49)
+  Add(Hub,2611169,43,52)
   {
-   link(onEvent1,14206340:doStop,[(64,55)(64,62)])
-   link(onEvent2,14206340:doTimer,[(64,62)(64,55)])
+   link(onEvent1,14206340:doStop,[(64,58)(64,65)])
+   link(onEvent2,14206340:doTimer,[(64,65)(64,58)])
   }
-  Add(Timer,14206340,71,49)
+  Add(Timer,14206340,71,52)
   {
    Interval=1
    Enable=1
    AutoStop=1
-   link(onTimer,410898:doCompare,[])
+   link(onTimer,6425479:doEvent1,[])
+  }
+  Add(Hub,6425479,112,52)
+  {
+   link(onEvent1,410898:doCompare,[])
+   link(onEvent2,10539873:onEvent2,[(139,65)(139,34)])
   }
 END_SDK
-Add(Hub,12523216,1123,507)
-{
- link(onEvent1,319892:doWork1,[(1163,513)(1163,482)(1031,482)(1031,546)])
- link(onEvent2,7060725:doWork1,[(1149,520)(1149,557)(1085,557)(1085,575)])
-}
 Add(GetDataEx,7126537,1043,521)
 {
  link(Data,14347712:Count,[])
@@ -1979,7 +1964,7 @@ Add(GLabel,3991300,700,543)
  link(Text,13860320:Var1,[(706,535)(691,535)(691,583)(657,583)])
  AddHint(-17,42,75,13,@Hint)
 }
-Add(LineBreak,585357,588,585)
+Add(LineBreak,2966792,588,585)
 {
  @Color=5635840
  Caption="Add"
@@ -3572,7 +3557,7 @@ Add(GetDataEx,16314538,1218,418)
 {
  link(Data,15047573:Var2,[])
 }
-Add(LineBreak,12504099,802,342)
+Add(LineBreak,2045542,802,342)
 {
  Caption="Update"
  Color=65535
@@ -3584,7 +3569,7 @@ Add(Hub,7321965,1860,513)
  link(onEvent1,11871916:doWork1,[])
  link(onEvent2,14906478:doWork1,[(1969,526)])
 }
-Add(LineBreak,1503219,1993,440)
+Add(LineBreak,352086,1993,440)
 {
  Caption="Vied"
  Color=65280
@@ -3826,7 +3811,7 @@ Add(GetDataEx,11336753,1774,481)
  Angle=3
  link(Data,11204165:Var3,[(1584,486)(1584,502)(1479,502)])
 }
-Add(LineBreak,13809863,1906,532)
+Add(LineBreak,12206964,1906,532)
 {
  Caption="DelT"
  Color=16776960
@@ -5427,7 +5412,7 @@ Add(GetDataEx,6916240,1459,425)
  Angle=3
  link(Data,4238524:Var3,[])
 }
-Add(LineBreak,5335886,756,346)
+Add(LineBreak,13597224,756,346)
 {
  Caption="FindT"
  Type=1
@@ -5435,21 +5420,21 @@ Add(LineBreak,5335886,756,346)
  link(Data,6317184:Var2,[])
  Primary=[15343789,1320,242]
 }
-Add(LineBreak,11090543,1989,616)
+Add(LineBreak,4831370,1989,616)
 {
  Caption="ON"
  Color=16776960
  link(Out,2670315:doEvent1,[])
  Primary=[8846522,-1263,-687]
 }
-Add(LineBreak,8160823,599,293)
+Add(LineBreak,15556598,599,293)
 {
  Caption="FindT"
  Color=65535
  link(Out,6138279:doWork1,[(674,299)])
  Primary=[2529076,1599,369]
 }
-Add(LineBreak,6083030,926,391)
+Add(LineBreak,123562,926,391)
 {
  Caption="FindT"
  Color=65535
@@ -5521,7 +5506,7 @@ Add(GetDataEx,4458253,1173,436)
  Angle=3
  link(Data,2150447:Var3,[])
 }
-Add(LineBreak,15238429,1217,552)
+Add(LineBreak,4812426,1217,552)
 {
  Caption="FindT"
  Type=1
@@ -6156,7 +6141,7 @@ Add(HubEx,4942821,2059,520)
 {
  link(onEvent,11641710:doWork2,[])
 }
-Add(LineBreak,14739865,1993,458)
+Add(LineBreak,16441338,1993,458)
 {
  Caption="DelP"
  Color=16776960
@@ -7765,7 +7750,7 @@ Add(GetDataEx,13214870,535,165)
  Angle=3
  link(Data,16536674:Var3,[(492,170)(492,170)])
 }
-Add(LineBreak,5081179,288,234)
+Add(LineBreak,16040727,288,234)
 {
  Caption="OpenP"
  Color=65535
@@ -7854,7 +7839,7 @@ BEGIN_SDK
    link(onEvent2,807475:doClear,[(187,90)(187,28)(109,28)(109,47)])
   }
 END_SDK
-Add(LineBreak,15788833,1669,344)
+Add(LineBreak,12528663,1669,344)
 {
  Caption="OpP"
  Color=16776960
@@ -7870,7 +7855,7 @@ Add(GetDataEx,4390914,493,392)
 {
  link(Data,16177219:Var1,[])
 }
-Add(LineBreak,15812835,518,413)
+Add(LineBreak,10022250,518,413)
 {
  Caption="OpP"
  Type=1
@@ -7878,7 +7863,7 @@ Add(LineBreak,15812835,518,413)
  link(Data,10100023:Var2,[])
  Primary=[7397204,1214,-122]
 }
-Add(LineBreak,4254495,386,351)
+Add(LineBreak,12836954,386,351)
 {
  Caption="OpP"
  Color=16776960
@@ -8023,7 +8008,7 @@ BEGIN_SDK
    Format="Y.M.D"
   }
 END_SDK
-Add(LineBreak,11017911,598,413)
+Add(LineBreak,5328110,598,413)
 {
  Caption="ID"
  Type=1
@@ -8044,7 +8029,7 @@ Add(InfoTip,7123853,1615,200)
  Width=242
  Height=171
 }
-Add(LineBreak,9647539,931,370)
+Add(LineBreak,10612192,931,370)
 {
  Caption="FL"
  Color=65535
@@ -8279,7 +8264,7 @@ Add(HubEx,11375153,714,26)
  Angle=1
  link(onEvent,4661319:doWork1,[])
 }
-Add(LineBreak,1058739,1997,698)
+Add(LineBreak,4890657,1997,698)
 {
  Caption="CList"
  Color=16776960
@@ -8436,7 +8421,7 @@ Add(GetDataEx,4238524,1274,425)
  Angle=3
  link(Data,14936585:Var3,[])
 }
-Add(LineBreak,2425506,1899,224)
+Add(LineBreak,10025300,1899,224)
 {
  Caption="Lang"
  Color=65280
@@ -8444,7 +8429,7 @@ Add(LineBreak,2425506,1899,224)
  link(Out,10686572:doWork1,[])
  Primary=[6484029,-1222,-120]
 }
-Add(LineBreak,16066644,-53,441)
+Add(LineBreak,11160485,-53,441)
 {
  Caption="AdT"
  Color=33023
@@ -8760,7 +8745,7 @@ Add(HubEx,8404904,105,485)
  Angle=1
  link(onEvent,8083924:doNext,[(109,512)])
 }
-Add(LineBreak,6426580,2083,700)
+Add(LineBreak,11476673,2083,700)
 {
  Caption="SetV"
  Color=16776960
@@ -8789,7 +8774,7 @@ Add(HubEx,7173464,168,657)
 {
  link(onEvent,10641799:doEvent1,[])
 }
-Add(LineBreak,1083796,266,-18)
+Add(LineBreak,14642383,266,-18)
 {
  Caption="Update"
  Color=16776960
@@ -8817,7 +8802,7 @@ Add(DSC_Query,9004277,426,-43)
  link(onQuery,14773068:doVisible,[])
  link(onError,8919347:doWork1,[(466,-23)(466,-95)])
 }
-Add(LineBreak,13347994,497,106)
+Add(LineBreak,13137849,497,106)
 {
  Caption="INFO"
  Color=65535
@@ -8832,70 +8817,6 @@ Add(GetDataEx,8681197,1760,472)
 {
  link(Data,16368880:Var3,[(1766,423)])
 }
-Add(MultiElement,7060725,1095,569)
-{
- link(onEvent1,5584058:doText,[])
- link(onEvent2,5584058:doVisible,[])
- link(onEvent3,4615599:doText,[(1135,589)(1135,617)])
- link(Data1,7126537:Var3,[(1101,526)])
-}
-BEGIN_SDK
-  Add(EditMulti,248183,21,21)
-  {
-   EventCount=3
-   WorkCount=1
-   DataCount=1
-   Width=258
-   Height=123
-   link(doWork1,16076141:doCompare,[(45,27)(45,63)])
-  }
-  Add(StrCat,4486117,177,64)
-  {
-   Str1="Titles in playlist:"
-   MakeTrans(Str1)
-   link(onStrCat,14562856:doEvent1,[])
-   link(Str2,11908327:Var3,[(190,43)])
-  }
-  Add(If_else,16076141,70,57)
-  {
-   Type=4
-   Op2=Integer(60)
-   link(onTrue,14895330:doEvent1,[(114,63)(114,91)])
-   link(onFalse,2493701:doEvent1,[])
-   link(Op1,11908327:Var2,[])
-  }
-  Add(Hub,2493701,126,64)
-  {
-   link(onEvent1,15638681:doWork2,[])
-   link(onEvent2,3786514:doOn,[(165,77)(165,124)])
-  }
-  Add(GetDataEx,11908327,70,38)
-  {
-   Angle=3
-   link(Data,248183:Data1,[(27,43)])
-  }
-  Add(Hub,14562856,221,64)
-  {
-   link(onEvent1,248183:onEvent1,[(259,70)(259,27)])
-   link(onEvent2,248183:onEvent3,[(268,77)(268,41)])
-  }
-  Add(Switch,3786514,176,104)
-  {
-   DataOn=Integer(1)
-   DataOff=Integer(0)
-   Point(doOn)
-   link(onSwitch,248183:onEvent2,[(251,110)(251,34)])
-  }
-  Add(Hub,14895330,126,85)
-  {
-   link(onEvent1,15638681:doWork3,[(154,91)])
-   link(onEvent2,3786514:doReset,[(153,98)(153,117)])
-  }
-  Add(HubEx,15638681,150,64)
-  {
-   link(onEvent,4486117:doStrCat,[])
-  }
-END_SDK
 Add(StrPart,759735,263,28)
 {
  Char="."
@@ -9466,7 +9387,7 @@ BEGIN_SDK
   {
   }
 END_SDK
-Add(LineBreak,9525493,1275,343)
+Add(LineBreak,11017460,1275,343)
 {
  Caption="TabVi"
  Color=65535
@@ -9482,7 +9403,7 @@ Add(Hub,6553047,1449,595)
  link(onEvent1,11464812:doWork2,[])
  link(onEvent2,1936124:In,[(1471,608)(1471,613)])
 }
-Add(LineBreak,5762953,1750,777)
+Add(LineBreak,4376380,1750,777)
 {
  @Color=5636095
  Caption="Move"
@@ -9505,7 +9426,7 @@ Add(Hub,11590624,688,-64)
  link(onEvent1,8846522:In,[(714,-58)(714,-65)])
  link(onEvent2,10765293:doWork1,[(993,-51)])
 }
-Add(LineBreak,6206429,1036,196)
+Add(LineBreak,16571640,1036,196)
 {
  Caption="VIS"
  Color=65535
@@ -9524,7 +9445,7 @@ Add(IndexToChanel,10912741,2660,1050)
  link(onEvent2,3218692:doLoad,[(2706,1063)(2706,1056)])
  link(Index,15486197:Var,[])
 }
-Add(LineBreak,15039174,2604,1050)
+Add(LineBreak,16409927,2604,1050)
 {
  @Color=5636095
  Caption="Img"
@@ -9542,7 +9463,7 @@ Add(PopupMenu,998819,1652,112)
  Menu=#15:Add to favorite|1:-|18:Show favorite list|
  link(onClick,5385078:doWork1,[])
 }
-Add(LineBreak,467878,1546,105)
+Add(LineBreak,1452294,1546,105)
 {
  Caption="AdFav"
  Color=65535
@@ -10536,7 +10457,7 @@ Add(GetDataEx,403441,1734,211)
 }
 Add(hcVisualText,12706445,2044,21)
 {
- Lines=#2:37|
+ Lines=#2:38|
 }
 Add(hcKeyHandler,10580050,1988,21)
 {
@@ -11020,7 +10941,7 @@ BEGIN_SDK
   {
    link(onEvent,7776193:doWrite,[])
   }
-  Add(LineBreak,4624624,455,-63)
+  Add(LineBreak,13927683,455,-63)
   {
    link(Out,7776193:doRead,[(562,-57)(562,-43)])
    Primary=[15472165,-284,309]
@@ -11417,7 +11338,7 @@ Add(GlobalVar,3442104,322,-98)
  @Hint=#7:VERSION|
  @Color=255
  Name="CURRENT"
- Data=String(3.16.29)
+ Data=String(3.16.30)
  AddHint(39,-18,63,13,@Hint)
 }
 Add(Hub,12454236,396,-43)
@@ -11495,7 +11416,7 @@ BEGIN_SDK
    link(onEvent,7784258:doString,[])
   }
 END_SDK
-Add(LineBreak,13262350,791,315)
+Add(LineBreak,9248372,791,315)
 {
  Caption="SaveSel"
  Color=16776960
@@ -11506,7 +11427,7 @@ Add(HubEx,10788532,861,342)
 {
  link(onEvent,11994160:doWork3,[])
 }
-Add(LineBreak,7947475,2083,714)
+Add(LineBreak,1840649,2083,714)
 {
  Caption="SetV"
  Color=16776960
@@ -11551,4 +11472,11 @@ Add(HubEx,16489708,634,525)
 {
  Angle=1
  link(onEvent,13860320:doWork1,[(638,549)])
+}
+Add(StrCat,4486117,1101,561)
+{
+ Str1="Titles in playlist:"
+ MakeTrans(Str1)
+ link(onStrCat,5584058:doText,[])
+ link(Str2,7126537:Var3,[(1114,526)])
 }

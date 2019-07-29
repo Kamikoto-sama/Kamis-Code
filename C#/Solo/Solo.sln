@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLiteAPI", "SQLiteAPI\SQLiteAPI.csproj", "{B1CAC702-AC5C-46C1-BE2A-80638D7FF2A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayListStore", "PlayListStore\PlayListStore.csproj", "{78A8B282-1414-4870-8A53-9A4DB5A4A2A9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JSONSerializer", "JSONSerializer\JSONSerializer.csproj", "{B04EBB0D-05A5-4B11-95D7-D6E70A89C535}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,14 +27,17 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{A68D1FFF-065C-438A-A8DE-558B99865374}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A68D1FFF-065C-438A-A8DE-558B99865374}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A68D1FFF-065C-438A-A8DE-558B99865374}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D1304601-3D55-4E38-B749-6F3E5AC2105D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1304601-3D55-4E38-B749-6F3E5AC2105D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1304601-3D55-4E38-B749-6F3E5AC2105D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B25E31EF-31CD-4C92-9224-F4783A244124}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B25E31EF-31CD-4C92-9224-F4783A244124}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B25E31EF-31CD-4C92-9224-F4783A244124}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B25E31EF-31CD-4C92-9224-F4783A244124}.Release|Any CPU.Build.0 = Release|Any CPU
 		{94C4C2DE-52EC-4182-98A3-F3E8D9EFF032}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{94C4C2DE-52EC-4182-98A3-F3E8D9EFF032}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94C4C2DE-52EC-4182-98A3-F3E8D9EFF032}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{959372A5-29BF-45AA-A072-82168F130788}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{959372A5-29BF-45AA-A072-82168F130788}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{959372A5-29BF-45AA-A072-82168F130788}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -43,10 +46,11 @@ Global
 		{B1CAC702-AC5C-46C1-BE2A-80638D7FF2A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B1CAC702-AC5C-46C1-BE2A-80638D7FF2A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B1CAC702-AC5C-46C1-BE2A-80638D7FF2A7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{78A8B282-1414-4870-8A53-9A4DB5A4A2A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{78A8B282-1414-4870-8A53-9A4DB5A4A2A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{78A8B282-1414-4870-8A53-9A4DB5A4A2A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{78A8B282-1414-4870-8A53-9A4DB5A4A2A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B04EBB0D-05A5-4B11-95D7-D6E70A89C535}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B04EBB0D-05A5-4B11-95D7-D6E70A89C535}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B04EBB0D-05A5-4B11-95D7-D6E70A89C535}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B04EBB0D-05A5-4B11-95D7-D6E70A89C535}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07755E3C-1992-42E9-A2FD-3FEAF17089AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,11 @@
+{
+  "name": "TypeName",
+  "fields": [
+    {
+      "name": "FieldName",
+      "isPublic": false,
+      "isStatic": false,
+      "value": "value"
+    }
+  ]
+}

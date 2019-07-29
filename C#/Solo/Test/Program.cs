@@ -1,27 +1,17 @@
 ﻿using System;
-using System.Data;
-using SQLiteAPI;
-using UsefulExtensions;
+using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Json;
+using ExMath;
 
 namespace Test
 {
-    internal class Program
+    class Program
     {
         public static void Main(string[] args)
         {
-            throw new Lol("HELLO");
-        }
-    }
-
-    class Lol : Exception
-    {
-        public Lol(string message): base(message)
-        {
-        }
-
-        public Lol()
-        {
-            
+            var m = Matrix.RandomIntMatrix(3, 10, 0);
+            new DataContractJsonSerializer(m)
         }
     }
 }

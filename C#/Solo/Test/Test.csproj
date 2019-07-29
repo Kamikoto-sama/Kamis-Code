@@ -48,6 +48,7 @@
           <HintPath>..\packages\System.Data.SQLite.Core.1.0.111.0\lib\net46\System.Data.SQLite.dll</HintPath>
           <Private>True</Private>
         </Reference>
+        <Reference Include="System.Runtime.Serialization" />
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
@@ -59,6 +60,10 @@
       <None Include="packages.config" />
     </ItemGroup>
     <ItemGroup>
+      <ProjectReference Include="..\ExMath\ExMath.csproj">
+        <Project>{d1304601-3d55-4e38-b749-6f3e5ac2105d}</Project>
+        <Name>ExMath</Name>
+      </ProjectReference>
       <ProjectReference Include="..\SQLiteAPI\SQLiteAPI.csproj">
         <Project>{b1cac702-ac5c-46c1-be2a-80638d7ff2a7}</Project>
         <Name>SQLiteAPI</Name>

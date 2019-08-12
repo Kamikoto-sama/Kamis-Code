@@ -11,7 +11,6 @@ namespace JSONSerializer
         {
             var type = typeof(T);
             var f = type.GetField("a");
-            f.
         }
     }
 }

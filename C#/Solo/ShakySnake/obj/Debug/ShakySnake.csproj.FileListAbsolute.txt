@@ -12,5 +12,4 @@ D:\My_Programms\C#\Solo\ShakySnake\bin\Debug\UsefulExtensions.dll
 D:\My_Programms\C#\Solo\ShakySnake\bin\Debug\UsefulExtensions.pdb
 D:\My_Programms\C#\Solo\ShakySnake\obj\Debug\ShakySnake.csproj.CopyComplete
 D:\My_Programms\C#\Solo\ShakySnake\bin\Debug\nunit.framework.dll
-D:\My_Programms\C#\Solo\ShakySnake\bin\Debug\nunit.framework.pdb
 D:\My_Programms\C#\Solo\ShakySnake\bin\Debug\nunit.framework.xml

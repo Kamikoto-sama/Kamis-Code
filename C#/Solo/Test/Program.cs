@@ -11,7 +11,6 @@ namespace Test
         public static void Main(string[] args)
         {
             var m = Matrix.RandomIntMatrix(3, 10, 0);
-            new DataContractJsonSerializer(m)
         }
     }
 }

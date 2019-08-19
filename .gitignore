@@ -24,3 +24,4 @@ C#/Solo/.vs/
 Kotlin/Test/Test.iml
 *.pdb
 *.cache
+!SenchaProject/*.exe

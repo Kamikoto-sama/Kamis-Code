@@ -3,3 +3,5 @@
 nt[yjkjubb
 
 dd.yarlan.ru
+
+psql -h localhost -U drylab -w drylab

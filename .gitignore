@@ -10,7 +10,6 @@ Python/PyQt5_Examples/*
 C#/Solution/*
 
 t.*
-*.jpg
 *.exe
 *.pyc
 C#/*.zip

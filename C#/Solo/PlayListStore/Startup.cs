@@ -20,12 +20,17 @@ namespace PlayListStore
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+//            if (env.IsDevelopment())
+//                app.UseDeveloperExceptionPage();
+            app.Map("/home", Do);
 
-            app.Run(async (context) => { await context.Response.WriteAsync("Hello World!"); });
+            app.Run(async context => { await context.Response.WriteAsync("404"); });
+        }
+
+        private void Do(IApplicationBuilder app)
+        {
+            Console.WriteLine("OK");
+            app.Run(async c => await c.Response.WriteAsync("<h1>Home</h1>"));
         }
     }
 }

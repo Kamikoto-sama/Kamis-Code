@@ -19,5 +19,3 @@ D:\My_Programms\C#\Solo\Test\bin\Debug\UsefulExtensions.dll
 D:\My_Programms\C#\Solo\Test\bin\Debug\UsefulExtensions.pdb
 D:\My_Programms\C#\Solo\Test\bin\Debug\ExMath.exe
 D:\My_Programms\C#\Solo\Test\bin\Debug\ExMath.pdb
-D:\My_Programms\C#\Solo\Test\bin\Debug\Newtonsoft.Json.dll
-D:\My_Programms\C#\Solo\Test\bin\Debug\Newtonsoft.Json.xml

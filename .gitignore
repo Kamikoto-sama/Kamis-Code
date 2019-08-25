@@ -24,3 +24,4 @@ Kotlin/Test/Test.iml
 *.pdb
 *.cache
 !SenchaProject/*.exe
+PLS/debug.log

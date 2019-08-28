@@ -12,3 +12,12 @@ D:\My_Programms\C#\Solo\PlayListStore\obj\Debug\netcoreapp2.2\PlayListStore.Asse
 D:\My_Programms\C#\Solo\PlayListStore\obj\Debug\netcoreapp2.2\PlayListStore.RazorTargetAssemblyInfo.cache
 D:\My_Programms\C#\Solo\PlayListStore\obj\Debug\netcoreapp2.2\PlayListStore.dll
 D:\My_Programms\C#\Solo\PlayListStore\obj\Debug\netcoreapp2.2\PlayListStore.pdb
+D:\My_Programms\C#\Solo\PlayListStore\bin\Debug\netcoreapp2.2\PlayListStore.Views.dll
+D:\My_Programms\C#\Solo\PlayListStore\bin\Debug\netcoreapp2.2\PlayListStore.Views.pdb
+D:\My_Programms\C#\Solo\PlayListStore\obj\Debug\netcoreapp2.2\PlayListStore.TagHelpers.input.cache
+D:\My_Programms\C#\Solo\PlayListStore\obj\Debug\netcoreapp2.2\PlayListStore.TagHelpers.output.cache
+D:\My_Programms\C#\Solo\PlayListStore\obj\Debug\netcoreapp2.2\PlayListStore.RazorCoreGenerate.cache
+D:\My_Programms\C#\Solo\PlayListStore\obj\Debug\netcoreapp2.2\Razor\Root\index.g.cshtml.cs
+D:\My_Programms\C#\Solo\PlayListStore\obj\Debug\netcoreapp2.2\PlayListStore.RazorTargetAssemblyInfo.cs
+D:\My_Programms\C#\Solo\PlayListStore\obj\Debug\netcoreapp2.2\PlayListStore.Views.pdb
+D:\My_Programms\C#\Solo\PlayListStore\obj\Debug\netcoreapp2.2\PlayListStore.csproj.CopyComplete

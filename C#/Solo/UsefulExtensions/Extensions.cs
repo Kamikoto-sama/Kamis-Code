@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 namespace UsefulExtensions
 {
@@ -18,13 +18,11 @@ namespace UsefulExtensions
 
         public static int ToInt(this double value) => (int) value;
 
-        public static string ToPrint<T>(this IEnumerable<T> array)
-            => "{" + ", ".Join(array) + "}";
+        public static string ToPrint<T>(this IEnumerable<T> array) => "{" + ", ".Join(array) + "}";
 
         public static void Print(this string value) => Console.WriteLine(value);
         
-        public static void Print<T>(this IEnumerable<T> array)
-            => Console.WriteLine(array.ToPrint());
+        public static void Print<T>(this IEnumerable<T> array) => Console.WriteLine(array.ToPrint());
 
         public static int IndexOf<T>(this IEnumerable<T> array, T value)
         {
@@ -47,5 +45,22 @@ namespace UsefulExtensions
         public static bool In<T>(this T value, ICollection<T> values) => values.Contains(value);
         
         public static bool In<T>(this T value, IEnumerable<T> values) => values.Contains(value);
+    }
+    
+    public static class AsyncWorker
+    {
+        public static Task Do(Action action)
+        {
+            var task = new Task(action);
+            task.Start();
+            return task;
+        }
+
+        public static Task<T> Do<T>(Func<T> action)
+        {
+            var task = new Task<T>(action); 
+            task.Start();
+            return task;
+        }
     }
 }

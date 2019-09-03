@@ -19,10 +19,19 @@ namespace Test
 
         public static void Main(string[] args)
         {
+	        M("hello");
+        }
+
+        private static void M(A a)
+        {
+	        
         }
     }
 
     public class A
     {
+	    public string Value;
+
+	    public static implicit operator A(string value) => new A {Value = value};
     }
 }

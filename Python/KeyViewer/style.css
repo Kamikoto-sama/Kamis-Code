@@ -1,0 +1,12 @@
+QLabel{
+    color: black;
+    /*font-family: Arial;*/
+    /*font-size: 55px;*/
+    /*font-weight: bold;*/
+    /*text-align: center;*/
+    /*text-shadow: 5px 5px 5px black;*/
+}
+
+#frame:hover{
+    border: 2px solid darkred;
+}

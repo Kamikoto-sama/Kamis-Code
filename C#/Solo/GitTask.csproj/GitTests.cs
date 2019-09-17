@@ -18,9 +18,9 @@ namespace GitTask
         public void SimpleTest()
         {
             _git.Update(0, 5);
-            Assert.AreEqual(0, _git.Commit());
+            Assert.AreEqual(0, _git.Commit(), "Commit return");
             _git.Update(0, 6);
-            Assert.AreEqual(5, _git.Checkout(0, 0));
+            Assert.AreEqual(5, _git.Checkout(0, 0), "Checkout");
         }
         
         [Test]

@@ -1,0 +1,10 @@
+D:\My_Programms\C#\Solo\ImageParser.csproj\bin\Debug\image.png
+D:\My_Programms\C#\Solo\ImageParser.csproj\bin\Debug\ImageParser.exe
+D:\My_Programms\C#\Solo\ImageParser.csproj\bin\Debug\ImageParser.pdb
+D:\My_Programms\C#\Solo\ImageParser.csproj\bin\Debug\Newtonsoft.Json.dll
+D:\My_Programms\C#\Solo\ImageParser.csproj\bin\Debug\nunit.framework.dll
+D:\My_Programms\C#\Solo\ImageParser.csproj\obj\Debug\ImageParser.csprojAssemblyReference.cache
+D:\My_Programms\C#\Solo\ImageParser.csproj\obj\Debug\ImageParser.csproj.CoreCompileInputs.cache
+D:\My_Programms\C#\Solo\ImageParser.csproj\obj\Debug\ImageParser.csproj.CopyComplete
+D:\My_Programms\C#\Solo\ImageParser.csproj\obj\Debug\ImageParser.exe
+D:\My_Programms\C#\Solo\ImageParser.csproj\obj\Debug\ImageParser.pdb

@@ -1,0 +1,8 @@
+D:\My_Programms\C#\Solo\GitTask.csproj\obj\Debug\GitTask.csprojAssemblyReference.cache
+D:\My_Programms\C#\Solo\GitTask.csproj\obj\Debug\GitTask.csproj.CoreCompileInputs.cache
+D:\My_Programms\C#\Solo\GitTask.csproj\bin\Debug\GitTask.exe
+D:\My_Programms\C#\Solo\GitTask.csproj\bin\Debug\GitTask.pdb
+D:\My_Programms\C#\Solo\GitTask.csproj\bin\Debug\nunit.framework.dll
+D:\My_Programms\C#\Solo\GitTask.csproj\obj\Debug\GitTask.csproj.CopyComplete
+D:\My_Programms\C#\Solo\GitTask.csproj\obj\Debug\GitTask.exe
+D:\My_Programms\C#\Solo\GitTask.csproj\obj\Debug\GitTask.pdb

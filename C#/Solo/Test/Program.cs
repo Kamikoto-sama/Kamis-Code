@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -17,9 +18,19 @@ namespace Test
                                           | BindingFlags.NonPublic
                                           | BindingFlags.Public;
 
+        enum E
+        {
+	        A, B, C
+        }
+        
         public static void Main(string[] args)
         {
-	        M("hello");
+	        var bytes = new byte[] {00, 00, 00, 05};
+
+	        foreach (var hexIn in bytes.Select(b => (int)b))
+	        {
+		        Console.WriteLine($"{hexIn:X2}");
+	        }
         }
 
         private static void M(A a)

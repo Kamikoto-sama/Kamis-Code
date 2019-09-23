@@ -41,6 +41,10 @@
       "frameworks": {
         "netcoreapp2.2": {
           "dependencies": {
+            "EntityFramework": {
+              "target": "Package",
+              "version": "[6.3.0-rc1-19458-04, )"
+            },
             "Microsoft.AspNetCore.App": {
               "suppressParent": "All",
               "target": "Package",

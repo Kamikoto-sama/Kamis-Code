@@ -1,0 +1,11 @@
+﻿# Example of program on SimpleAsmLanguage
+$20 00 00 00	# Instruction pointer (addr = 0x00)
+$00 00 00 00
+$00 00 00 00
+$00 00 00 00
+$00 00 00 00	# Variable (addr = 0x10)
+$00 00 00 00
+$00 00 00 00
+$00 00 00 00	
+add-caa		$00 00 00 01 $10 00 00 00 $10 00 00 00	# Variable = Variable + 1 (addr = 0x20)
+move-cai	$20 00 00 00 $00 00 00 00 $00 00 00 00	# IP = 0x14 (addr = 0x30)

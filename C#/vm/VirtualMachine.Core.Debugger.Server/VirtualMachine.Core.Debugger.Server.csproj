@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>7.0</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="3.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\VirtualMachine.Core.Debugger\VirtualMachine.Core.Debugger.csproj" />
+    <ProjectReference Include="..\VirtualMachine.CPU\VirtualMachine.CPU.csproj" />
+  </ItemGroup>
+
+</Project>

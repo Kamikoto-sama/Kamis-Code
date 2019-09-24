@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "VirtualMachine.SimpleAssembler": {
+      "commandName": "Project",
+      "commandLineArgs": "VirtualMachine.CPU.InstructionSet.SimpleOne.dll hello.sasm hello.xs1"
+    }
+  }
+}

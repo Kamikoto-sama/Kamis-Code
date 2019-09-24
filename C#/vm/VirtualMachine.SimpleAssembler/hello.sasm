@@ -1,0 +1,28 @@
+﻿# Example of program on SimpleAsmLanguage
+$20 00 00 00	# Instruction pointer (addr = 0x00)
+$00 00 00 00
+$00 00 00 00
+$00 00 00 00
+$00 00 00 00	# Variable (addr = 0x10)
+$00 00 00 00
+$00 00 00 00
+$00 00 00 00	
+
+# REQUEST READ			(20)						# 2048 = 0x800 - Terminal descriptor
+move-cai	$00 A0 00 00 $04 08 00 00 $00 00 00 00	# Terminal.Read.Buffer = 2560
+move-cai	$FF 00 00 00 $08 08 00 00 $00 00 00 00	# Terminal.Read.BufferLength = 256
+move-cai	$A0 00 00 00 $00 08 00 00 $00 00 00 00	# Terminal.Read.State = ReadRequested
+
+# WAIT READ COMPLETEED	(50)
+move-aai	$00 08 00 00 $10 00 00 00 $00 00 00 00  # Variable = Terminal.Read.State
+sub-aca		$10 00 00 00 $A2 00 00 00 $10 00 00 00  # Variable = Variable - 0xA2
+if-cac		$01 00 00 00 $10 00 00 00 $90 00 00 00  # if Variable == 0 then goto PRINT
+move-cai	$50 00 00 00 $00 00 00 00 $00 00 00 00	# goto WAIT READ COMPLETED
+
+#PRINT
+move-cai	$00 A0 00 00 $14 08 00 00 $00 00 00 00	# Terminal.Write.Buffer = 2560
+move-aai	$0C 08 00 00 $1C 08 00 00 $00 00 00 00	# Terminal.Read.StringLength = Terminal.Write.StringLength
+move-cai	$B0 00 00 00 $10 08 00 00 $00 00 00 00	# Terminal.Read.State = WriteRequested
+
+move-cai	$20 00 00 00 $00 00 00 00 $00 00 00 00	# goto REQUEST READ
+

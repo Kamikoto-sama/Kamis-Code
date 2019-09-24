@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "VirtualMachine.Runner": {
+      "commandName": "Project",
+      "commandLineArgs": "hello.xs1 --verbose-error"
+    }
+  }
+}

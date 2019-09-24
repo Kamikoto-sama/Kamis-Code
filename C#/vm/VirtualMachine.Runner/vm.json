@@ -1,0 +1,36 @@
+﻿{
+  "InstructionSet": {
+    "AssemblyName": "VirtualMachine.CPU.InstructionSet.dll",
+    "TypeName": "VirtualMachine.CPU.InstructionSet.InstructionSet"
+  },
+  "Supervisor": {
+    "AssemblyName": "VirtualMachine.Debugger.Server.dll",
+    "TypeName": "VirtualMachine.Debugger.Server.RemoteDebugger",
+    "Parameters": {
+      "Host": "localhost",
+      "Port": 31337,
+      "Mode": "Continuing"
+    } 
+  },
+  "Cpu": {
+    "AssemblyName": "VirtualMachine.CPU.dll",
+    "TypeName": "VirtualMachine.CPU.Cpu"
+  },
+  "Memory": {
+    "AssemblyName": "VirtualMachine.Core.dll",
+    "TypeName": "VirtualMachine.Core.Ram",
+    "Parameters": {
+      "BaseAddress": 0,
+      "Size": 65536
+    }
+  },
+  "Devices": [
+    {
+      "AssemblyName": "VirtualMachine.Periphery.Terminal.dll",
+      "TypeName": "VirtualMachine.Periphery.Terminal.Terminal",
+      "Parameters": {
+        "Address":  2048 
+      } 
+    }
+  ] 
+}

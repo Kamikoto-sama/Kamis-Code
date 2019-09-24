@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <LangVersion>7.0</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\VirtualMachine.CPU.InstructionSet\VirtualMachine.CPU.InstructionSet.csproj" />
+    <ProjectReference Include="..\VirtualMachine.CPU\VirtualMachine.CPU.csproj" />
+    <ProjectReference Include="..\VirtualMachine.Debugger.Server\VirtualMachine.Debugger.Server.csproj" />
+    <ProjectReference Include="..\VirtualMachine.Periphery.Terminal\VirtualMachine.Periphery.Terminal.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="hello.xs1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="incrementer.xs1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="infinite.xs1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="vm.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

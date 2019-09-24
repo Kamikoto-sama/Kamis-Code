@@ -1,6 +1,6 @@
 from time import time
 
-def m(function=None, output=print):
+def measurable(function=None, output=print):
 	def decorator(function):
 		def measurerWrap(*args, **kwargs):
 			startTime = time()

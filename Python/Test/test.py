@@ -1,12 +1,12 @@
-from measurer import m
+from measurer import measurable
 from time import sleep
 
-@m
+@measurable
 def a():
 	sleep(0.5)
 	print("1 done")
 
-@m(output=lambda x: print(round(x, 4)))
+@measurable(output=lambda x: print(round(x, 4)))
 def b():
 	sleep(0.5)
 	print("2")

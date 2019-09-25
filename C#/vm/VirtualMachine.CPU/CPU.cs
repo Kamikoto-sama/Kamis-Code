@@ -32,6 +32,8 @@ namespace VirtualMachine.CPU
 
             while (true)
             {
+                if (InstructionPointer == new Word(-1))
+                    break;
                 Step();
                 Thread.Sleep(StepDelay);
             }

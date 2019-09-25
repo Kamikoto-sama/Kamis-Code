@@ -19,7 +19,6 @@ namespace VirtualMachine.Core.Debugger.Client
             Add(new SetDebugModeCommand());
             Add(new WriteIpCommand());
             Add(new WriteMemoryCommand());
-            Add(new ExitCommand());
         }
         
         public bool TryFindCommand(string commandName, out ICommand command) => commands.TryGetValue(commandName, out command);

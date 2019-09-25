@@ -21,8 +21,6 @@ namespace VirtualMachine.Core.Debugger.Client
         public Task<bool> IsPausedAsync() => Get<bool>("IsPaused");
         public Task ContinueAsync() => Post("Continue", "VOID");
 
-        public Task ExitAsync() => Post("Exit", "VOID");
-
         public Task<uint> ReadIpAsync() => Get<uint>("ReadIp");
         public Task WriteIpAsync(uint ip) => Post("WriteIp", ip);
 

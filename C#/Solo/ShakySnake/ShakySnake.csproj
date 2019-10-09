@@ -92,13 +92,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\UsefulExtensions\UsefulExtensions.csproj">
-      <Project>{b25e31ef-31cd-4c92-9224-f4783a244124}</Project>
-      <Name>UsefulExtensions</Name>
-    </ProjectReference>
+    <None Include="Resources\SnakeHead.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\SnakeHead.png" />
+    <ProjectReference Include="..\Useful\Useful.csproj">
+      <Project>{b25e31ef-31cd-4c92-9224-f4783a244124}</Project>
+      <Name>Useful</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -1,11 +1,7 @@
 D:\My_Programms\C#\Solo\Test\bin\Debug\Test.exe.config
 D:\My_Programms\C#\Solo\Test\bin\Debug\Test.exe
 D:\My_Programms\C#\Solo\Test\bin\Debug\Test.pdb
-D:\My_Programms\C#\Solo\Test\bin\Debug\EntityFramework.dll
-D:\My_Programms\C#\Solo\Test\bin\Debug\EntityFramework.SqlServer.dll
 D:\My_Programms\C#\Solo\Test\bin\Debug\System.Data.SQLite.dll
-D:\My_Programms\C#\Solo\Test\bin\Debug\EntityFramework.xml
-D:\My_Programms\C#\Solo\Test\bin\Debug\EntityFramework.SqlServer.xml
 D:\My_Programms\C#\Solo\Test\bin\Debug\System.Data.SQLite.xml
 D:\My_Programms\C#\Solo\Test\bin\Debug\System.Data.SQLite.dll.config
 D:\My_Programms\C#\Solo\Test\obj\Debug\Test.csprojAssemblyReference.cache
@@ -13,5 +9,5 @@ D:\My_Programms\C#\Solo\Test\obj\Debug\Test.csproj.CoreCompileInputs.cache
 D:\My_Programms\C#\Solo\Test\obj\Debug\Test.csproj.CopyComplete
 D:\My_Programms\C#\Solo\Test\obj\Debug\Test.exe
 D:\My_Programms\C#\Solo\Test\obj\Debug\Test.pdb
-D:\My_Programms\C#\Solo\Test\bin\Debug\UsefulExtensions.dll
-D:\My_Programms\C#\Solo\Test\bin\Debug\UsefulExtensions.pdb
+D:\My_Programms\C#\Solo\Test\bin\Debug\Useful.dll
+D:\My_Programms\C#\Solo\Test\bin\Debug\Useful.pdb

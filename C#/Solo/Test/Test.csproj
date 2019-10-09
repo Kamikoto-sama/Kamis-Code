@@ -53,9 +53,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\UsefulExtensions\UsefulExtensions.csproj">
-      <Project>{b25e31ef-31cd-4c92-9224-f4783a244124}</Project>
-      <Name>UsefulExtensions</Name>
+    <ProjectReference Include="..\Useful\Useful.csproj">
+      <Project>{456f5e4a-3366-49f3-a09d-14885b6f8769}</Project>
+      <Name>Useful</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

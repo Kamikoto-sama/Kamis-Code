@@ -1,0 +1,6 @@
+D:\My_Programms\C#\Solo\Useful\bin\Debug\Useful.dll
+D:\My_Programms\C#\Solo\Useful\bin\Debug\Useful.pdb
+D:\My_Programms\C#\Solo\Useful\obj\Debug\Useful.csprojAssemblyReference.cache
+D:\My_Programms\C#\Solo\Useful\obj\Debug\Useful.csproj.CoreCompileInputs.cache
+D:\My_Programms\C#\Solo\Useful\obj\Debug\Useful.dll
+D:\My_Programms\C#\Solo\Useful\obj\Debug\Useful.pdb

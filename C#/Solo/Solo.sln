@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConturZipper", "ConturZippe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExMath", "ExMath\ExMath.csproj", "{D1304601-3D55-4E38-B749-6F3E5AC2105D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsefulExtensions", "UsefulExtensions\UsefulExtensions.csproj", "{B25E31EF-31CD-4C92-9224-F4783A244124}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShakySnake", "ShakySnake\ShakySnake.csproj", "{94C4C2DE-52EC-4182-98A3-F3E8D9EFF032}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GUITest", "GUITest\GUITest.csproj", "{07755E3C-1992-42E9-A2FD-3FEAF17089AC}"
@@ -25,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitTask", "GitTask.csproj\G
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageParser", "ImageParser.csproj\ImageParser.csproj", "{23AB99A4-9687-429F-91B8-F750E9A1B1E8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Useful", "Useful\Useful.csproj", "{456F5E4A-3366-49F3-A09D-14885B6F8769}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,10 +37,6 @@ Global
 		{D1304601-3D55-4E38-B749-6F3E5AC2105D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1304601-3D55-4E38-B749-6F3E5AC2105D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D1304601-3D55-4E38-B749-6F3E5AC2105D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B25E31EF-31CD-4C92-9224-F4783A244124}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B25E31EF-31CD-4C92-9224-F4783A244124}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B25E31EF-31CD-4C92-9224-F4783A244124}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B25E31EF-31CD-4C92-9224-F4783A244124}.Release|Any CPU.Build.0 = Release|Any CPU
 		{94C4C2DE-52EC-4182-98A3-F3E8D9EFF032}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{94C4C2DE-52EC-4182-98A3-F3E8D9EFF032}.Release|Any CPU.Build.0 = Release|Any CPU
 		{94C4C2DE-52EC-4182-98A3-F3E8D9EFF032}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -69,6 +65,10 @@ Global
 		{23AB99A4-9687-429F-91B8-F750E9A1B1E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23AB99A4-9687-429F-91B8-F750E9A1B1E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{23AB99A4-9687-429F-91B8-F750E9A1B1E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{456F5E4A-3366-49F3-A09D-14885B6F8769}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{456F5E4A-3366-49F3-A09D-14885B6F8769}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{456F5E4A-3366-49F3-A09D-14885B6F8769}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{456F5E4A-3366-49F3-A09D-14885B6F8769}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

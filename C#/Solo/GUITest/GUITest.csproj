@@ -49,9 +49,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\UsefulExtensions\UsefulExtensions.csproj">
+    <ProjectReference Include="..\Useful\Useful.csproj">
       <Project>{b25e31ef-31cd-4c92-9224-f4783a244124}</Project>
-      <Name>UsefulExtensions</Name>
+      <Name>Useful</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

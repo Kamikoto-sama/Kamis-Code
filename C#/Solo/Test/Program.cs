@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Reflection;
 using System.Runtime.Serialization.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using UsefulExtensions;
+using Useful;
 
 namespace Test
 {
@@ -25,24 +26,37 @@ namespace Test
         
         public static void Main(string[] args)
         {
-	        var bytes = new byte[] {00, 00, 00, 05};
-
-	        foreach (var hexIn in bytes.Select(b => (int)b))
-	        {
-		        Console.WriteLine($"{hexIn:X2}");
-	        }
+	        var d = new Dictionary<A, int>();
+	        d.Re
         }
 
-        private static void M(A a)
+        private static async void M()
         {
-	        
+	        var worker = new BackgroundWorker();
+	        worker.DoWork += (sender, args) =>
+	        {
+		        for (var i = 0; i < 3; i++)
+		        {
+			        Thread.Sleep(300);
+			        worker.ReportProgress(i);
+		        }
+	        };
+	        worker.WorkerReportsProgress = true;
+	        worker.ProgressChanged += (sender, args) => Console.WriteLine(args.ProgressPercentage);
+	        worker.RunWorkerAsync();
         }
     }
 
     public class A
     {
-	    public string Value;
+	    public override int GetHashCode()
+	    {
+		    return 1;
+	    }
 
-	    public static implicit operator A(string value) => new A {Value = value};
+	    public override bool Equals(object obj)
+	    {
+		    return ReferenceEquals(obj, this);
+	    }
     }
 }

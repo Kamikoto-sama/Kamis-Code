@@ -7,7 +7,7 @@ from PyQt5.QtCore import QPoint
 from PyQt5.QtCore import QTimer
 from PyQt5.QtCore import QEasingCurve
 from PyQt5.QtCore import QPropertyAnimation
-from excollections import Queue
+from Сollections import Queue
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtWidgets import QMessageBox
 from PyQt5.QtWidgets import QPushButton

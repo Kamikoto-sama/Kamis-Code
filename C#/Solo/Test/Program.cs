@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
@@ -26,8 +28,11 @@ namespace Test
         
         public static void Main(string[] args)
         {
-	        var d = new Dictionary<A, int>();
-	        d.Re
+	        var d = new ListDictionary();
+	        foreach (DictionaryEntry entry in d)
+	        {
+		        
+	        }
         }
 
         private static async void M()

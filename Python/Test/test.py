@@ -1,8 +1,5 @@
-l, r = [int(i) for i in input().split()]
+class D(dict):
+	def __getitem__(self, key):
+		value = super().__getitem__(key)
+		return value() if callable(value) else value
 
-if r < 40:
-	print(r * 2 + 40 + (l - 40) * 2)
-elif r < l:
-	print(40 + (l - 40) * 2 + r)
-else:
-	print(r * 2 + 40)

@@ -5,7 +5,6 @@ venv
 .idea
 
 HiAsm/PlayListStore 3.0/Data.db
-Python/PyQt5_Examples/*
 C#/Solution/*
 
 t.*

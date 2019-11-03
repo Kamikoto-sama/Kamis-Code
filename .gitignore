@@ -23,4 +23,3 @@ Kotlin/Test/Test.iml
 *.cache
 !SenchaProject/*.exe
 PLS/debug.log
-#C#/vm/*

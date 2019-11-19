@@ -1,2 +1,11 @@
-a = lambda s,e: "\n".join([f'{i})' for i in range(s,e+1)])
-print(a(31,52))
+from mine.collections import Queue
+
+class A:
+	def __del__(self):
+		print("deleted")
+
+if __name__ == '__main__':
+	q = Queue()
+	q.enqueue(A())
+	q.dequeue()
+	input()

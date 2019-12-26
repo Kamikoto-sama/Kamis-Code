@@ -16,52 +16,18 @@ namespace Test
 {
     class Program
     {
-        public const BindingFlags Flags = BindingFlags.Instance 
-                                          | BindingFlags.Static 
-                                          | BindingFlags.NonPublic
-                                          | BindingFlags.Public;
-
-        enum E
-        {
-	        A, B, C
-        }
-        
         public static void Main(string[] args)
         {
-	        var d = new ListDictionary();
-	        foreach (DictionaryEntry entry in d)
-	        {
-		        
-	        }
+            M();
         }
 
-        private static async void M()
+        private static unsafe void M()
         {
-	        var worker = new BackgroundWorker();
-	        worker.DoWork += (sender, args) =>
-	        {
-		        for (var i = 0; i < 3; i++)
-		        {
-			        Thread.Sleep(300);
-			        worker.ReportProgress(i);
-		        }
-	        };
-	        worker.WorkerReportsProgress = true;
-	        worker.ProgressChanged += (sender, args) => Console.WriteLine(args.ProgressPercentage);
-	        worker.RunWorkerAsync();
+            var a = "abc";
+            var b = "abc";
+            var x = &a;
+            var y = &x;
+            Console.WriteLine((uint) x);
         }
-    }
-
-    public class A
-    {
-	    public override int GetHashCode()
-	    {
-		    return 1;
-	    }
-
-	    public override bool Equals(object obj)
-	    {
-		    return ReferenceEquals(obj, this);
-	    }
     }
 }

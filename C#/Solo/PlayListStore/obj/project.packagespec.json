@@ -1,10 +1,10 @@
 ﻿{
   "version": "1.0.0",
   "restore": {
-    "projectUniqueName": "D:\\My_Programms\\C#\\Solo\\PlayListStore\\PlayListStore.csproj",
+    "projectUniqueName": "D:\\MyPrograms\\C#\\Solo\\PlayListStore\\PlayListStore.csproj",
     "projectName": "PlayListStore",
-    "projectPath": "D:\\My_Programms\\C#\\Solo\\PlayListStore\\PlayListStore.csproj",
-    "outputPath": "D:\\My_Programms\\C#\\Solo\\PlayListStore\\obj\\",
+    "projectPath": "D:\\MyPrograms\\C#\\Solo\\PlayListStore\\PlayListStore.csproj",
+    "outputPath": "D:\\MyPrograms\\C#\\Solo\\PlayListStore\\obj\\",
     "projectStyle": "PackageReference",
     "fallbackFolders": [
       "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

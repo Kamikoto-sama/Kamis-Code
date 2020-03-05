@@ -10,7 +10,7 @@
 		<type label="Real" default="0" length="0" sql="REAL" quote="" color="rgb(238,238,170)"/>
 		<type label="None" default="" length="0" sql="NONE" quote="" color="rgb(200,255,200)"/>
 	</group>
-</datatypes><table x="276" y="150" name="Books">
+</datatypes><table x="407" y="174" name="Books">
 <row name="id" null="0" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -20,13 +20,13 @@
 <row name="size" null="0" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>0</default></row>
-<row name="author id" null="1" autoincrement="0">
+<row name="author_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="Authors" row="id" />
 </row>
-<row name="publishing house id" null="1" autoincrement="0">
+<row name="publisher_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
-<default>NULL</default><relation table="Publishing houses" row="id" />
+<default>NULL</default><relation table="Publishers" row="id" />
 </row>
 <row name="count" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
@@ -35,15 +35,15 @@
 <part>id</part>
 </key>
 </table>
-<table x="529" y="100" name="Bookings">
+<table x="618" y="127" name="Bookings">
 <row name="id" null="0" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
-<row name="book id" null="1" autoincrement="0">
+<row name="book_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="Books" row="id" />
 </row>
-<row name="user id" null="1" autoincrement="0">
+<row name="user_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="Users" row="id" />
 </row>
@@ -51,21 +51,24 @@
 <part>id</part>
 </key>
 </table>
-<table x="707" y="223" name="Users">
+<table x="788" y="239" name="Users">
 <row name="id" null="0" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
-<row name="login" null="1" autoincrement="0">
+<row name="login" null="0" autoincrement="0">
+<datatype>TEXT</datatype>
+<default>'NULL'</default></row>
+<row name="password" null="1" autoincrement="0">
 <datatype>TEXT</datatype>
 <default>NULL</default></row>
-<row name="password" null="1" autoincrement="0">
+<row name="accsess" null="1" autoincrement="0">
 <datatype>TEXT</datatype>
 <default>NULL</default></row>
 <key type="PRIMARY" name="">
 <part>id</part>
 </key>
 </table>
-<table x="514" y="341" name="Publishing houses">
+<table x="608" y="355" name="Publishers">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -76,14 +79,14 @@
 <part>id</part>
 </key>
 </table>
-<table x="529" y="219" name="Authors">
+<table x="616" y="237" name="Authors">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
-<row name="first name" null="1" autoincrement="0">
+<row name="first_name" null="1" autoincrement="0">
 <datatype>TEXT</datatype>
 <default>NULL</default></row>
-<row name="last name" null="1" autoincrement="0">
+<row name="last_name" null="1" autoincrement="0">
 <datatype>TEXT</datatype>
 <default>NULL</default></row>
 <key type="PRIMARY" name="">

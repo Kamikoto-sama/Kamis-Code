@@ -14,18 +14,18 @@
 <row name="id" null="0" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
-<row name="name" null="1" autoincrement="0">
+<row name="name" null="0" autoincrement="0">
 <datatype>TEXT</datatype>
-<default>NULL</default></row>
+<default>'NULL'</default></row>
 <row name="genres" null="1" autoincrement="0">
 <datatype>TEXT</datatype>
-<default>NULL</default></row>
+<default>'Unknown genre'</default></row>
 <row name="page_count" null="0" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>0</default></row>
 <row name="author_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
-<default>NULL</default><relation table="Authors" row="id" />
+<default>0</default><relation table="Authors" row="id" />
 </row>
 <row name="publisher_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
@@ -33,10 +33,10 @@
 </row>
 <row name="count" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
-<default>NULL</default></row>
+<default>0</default></row>
 <row name="price" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
-<default>NULL</default></row>
+<default>0</default></row>
 <key type="PRIMARY" name="">
 <part>id</part>
 </key>
@@ -67,12 +67,12 @@
 <row name="login" null="0" autoincrement="0">
 <datatype>TEXT</datatype>
 <default>'NULL'</default></row>
-<row name="password" null="1" autoincrement="0">
+<row name="password" null="0" autoincrement="0">
 <datatype>TEXT</datatype>
-<default>NULL</default></row>
+<default>'NULL'</default></row>
 <row name="accsess" null="1" autoincrement="0">
 <datatype>TEXT</datatype>
-<default>NULL</default></row>
+<default>'client'</default></row>
 <key type="PRIMARY" name="">
 <part>id</part>
 </key>
@@ -91,8 +91,8 @@
 <part>id</part>
 </key>
 </table>
-<table x="602" y="255" name="Authors">
-<row name="id" null="1" autoincrement="1">
+<table x="616" y="248" name="Authors">
+<row name="id" null="0" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
 <row name="name" null="1" autoincrement="0">
@@ -100,10 +100,10 @@
 <default>NULL</default></row>
 <row name="birth_date" null="1" autoincrement="0">
 <datatype>TEXT</datatype>
-<default>NULL</default></row>
+<default>'Unknow'</default></row>
 <row name="bio" null="1" autoincrement="0">
 <datatype>TEXT</datatype>
-<default>NULL</default></row>
+<default>'Unknow'</default></row>
 <key type="PRIMARY" name="">
 <part>id</part>
 </key>

@@ -1,12 +1,10 @@
-from socket import socket
+from dbProvider import DataBaseProvider
+from NET.authenticationController import AuthenticationController
 
-s = socket()
-s.connect(('localhost', 2000))
+db = DataBaseProvider().getDbConnection()
+controller = AuthenticationController(db)
+res = controller.getUserByLogin("hello")
+print(res)
 
-while 1:
-	req = input(">")
-	if req == "q":
-		break
-	s.send(bytes(req, "utf-8"))
-	if req == "stop":
-		break
+if __name__ == '__main__':
+	pass

@@ -1,5 +1,4 @@
 from threading import Thread
-# from NET.server import Server
 from sqlite3 import Connection
 
 class ServerTerminal(Thread):
@@ -15,11 +14,38 @@ class ServerTerminal(Thread):
 		self.commands = {
 			'stop': self.server.stop,
 			'sql': self.runSql,
-			'clients': self.listClients
+			'clients': self.listClients,
+			'disconnect': self.disconnectClient,
+			'commands': self.showCommands,
+			'send': self.sendToClient,
 		}
 		
+	def sendToClient(self, clientIndex, message:str):
+		client = self.getClient(clientIndex)
+		if client is None:
+			return 
+		client.respond(message.encode("utf-8"))
+		
+	def disconnectClient(self, clientIndex):
+		client = self.getClient(clientIndex)
+		if client is None:
+			return 
+		client.disconnect()
+	
+	def getClient(self, clientIndex):
+		clientIndex = int(clientIndex)
+		if not clientIndex in self.server.clients:
+			print(f"No such client {clientIndex}")
+			return
+		return self.server.clients[clientIndex]
+		
+	def showCommands(self):
+		print("Supported commands:")
+		for command in self.commands:
+			print(command)
+		
 	def listClients(self):
-		clients = self.server.clients
+		clients = self.server.clients.values()
 		print("Connected clients:" if len(clients) > 0 else "No clients connected")
 		for client in clients:
 			print(client.index, client.address, client.connectionTime)
@@ -39,7 +65,7 @@ class ServerTerminal(Thread):
 		except Exception as e:
 			print(e)
 			return
-		if "select" == query[:6].lower():
+		if query[:6].lower() in ["select", "pragma"]:
 			for row in list(res):
 				print(row)
 		else:

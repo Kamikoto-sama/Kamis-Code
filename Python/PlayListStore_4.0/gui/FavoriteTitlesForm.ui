@@ -125,14 +125,14 @@
      <attribute name="horizontalHeaderCascadingSectionResizes">
       <bool>false</bool>
      </attribute>
+     <attribute name="horizontalHeaderMinimumSectionSize">
+      <number>60</number>
+     </attribute>
      <attribute name="horizontalHeaderDefaultSectionSize">
       <number>102</number>
      </attribute>
      <attribute name="horizontalHeaderHighlightSections">
       <bool>true</bool>
-     </attribute>
-     <attribute name="horizontalHeaderMinimumSectionSize">
-      <number>60</number>
      </attribute>
      <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
       <bool>false</bool>

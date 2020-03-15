@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\MyPrograms\\C#\\Solo\\PlayListStore\\PlayListStore.csproj": {}
+    "D:\\My_Programms\\C#\\Solo\\PlayListStore\\PlayListStore.csproj": {}
   },
   "projects": {
-    "D:\\MyPrograms\\C#\\Solo\\PlayListStore\\PlayListStore.csproj": {
+    "D:\\My_Programms\\C#\\Solo\\PlayListStore\\PlayListStore.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\MyPrograms\\C#\\Solo\\PlayListStore\\PlayListStore.csproj",
+        "projectUniqueName": "D:\\My_Programms\\C#\\Solo\\PlayListStore\\PlayListStore.csproj",
         "projectName": "PlayListStore",
-        "projectPath": "D:\\MyPrograms\\C#\\Solo\\PlayListStore\\PlayListStore.csproj",
-        "packagesPath": "C:\\Users\\danmo\\.nuget\\packages\\",
-        "outputPath": "D:\\MyPrograms\\C#\\Solo\\PlayListStore\\obj\\",
+        "projectPath": "D:\\My_Programms\\C#\\Solo\\PlayListStore\\PlayListStore.csproj",
+        "packagesPath": "C:\\Users\\Dan\\.nuget\\packages\\",
+        "outputPath": "D:\\My_Programms\\C#\\Solo\\PlayListStore\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\danmo\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Dan\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp2.2"

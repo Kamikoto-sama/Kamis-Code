@@ -2,8 +2,10 @@ from dataclasses import dataclass
 
 @dataclass
 class User:
-	pass
-
+	login:str
+	password:str
+	access:str
+	
 @dataclass
 class Book:
 	pass

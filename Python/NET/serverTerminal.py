@@ -1,5 +1,5 @@
-from threading import Thread
 from sqlite3 import Connection
+from threading import Thread
 
 class ServerTerminal(Thread):
 	commands: dict
@@ -17,14 +17,14 @@ class ServerTerminal(Thread):
 			'clients': self.listClients,
 			'disconnect': self.disconnectClient,
 			'commands': self.showCommands,
-			'send': self.sendToClient,
+			'send': self.sendMessageToClient,
 		}
 		
-	def sendToClient(self, clientIndex, message:str):
+	def sendMessageToClient(self, clientIndex, *message):
 		client = self.getClient(clientIndex)
 		if client is None:
 			return 
-		client.respond(message.encode("utf-8"))
+		client.respond(' '.join(message))
 		
 	def disconnectClient(self, clientIndex):
 		client = self.getClient(clientIndex)

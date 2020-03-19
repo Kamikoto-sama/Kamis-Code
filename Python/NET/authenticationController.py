@@ -1,6 +1,6 @@
 from sqlite3 import Connection
-
-from .dataBaseController import DataBaseController
+from dataBaseController import DataBaseController
+from models import User
 
 class AuthenticationController(DataBaseController):
 	def __init__(self, db: Connection):
@@ -8,6 +8,12 @@ class AuthenticationController(DataBaseController):
 
 	def getUserByLogin(self, userLogin):
 		params = f"login={userLogin!r}"
-		res = self.get("users", params)
-		result = list(self.toDictObj("users", res))
-		return result[0] if len(result) > 0 else None
+		result = self.get("users", params)
+		if len(result) == 0:
+			return None
+		user = User(**(result[0]))
+		return user
+
+	def registerUser(self, user: User):
+		values = (user.login, user.password, user.access)
+		self.add("users", values)

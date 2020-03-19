@@ -1,4 +1,5 @@
 from dbProvider import DataBaseProvider
+
 from NET.authenticationController import AuthenticationController
 
 db = DataBaseProvider().getDbConnection()

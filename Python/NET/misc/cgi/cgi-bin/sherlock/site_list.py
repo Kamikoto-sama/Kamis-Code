@@ -3,11 +3,12 @@ This module generates the listing of supported sites.
 """
 import json
 import sys
-import requests
 import threading
 import xml.etree.ElementTree as ET
-from datetime import datetime
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
+from datetime import datetime
+
+import requests
 
 pool = list()
 

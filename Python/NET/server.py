@@ -1,8 +1,9 @@
 import socket as Socket
 from threading import Thread
-from serverTerminal import ServerTerminal
-from dbProvider import DataBaseProvider
+
 from clientHandler import ClientHandler
+from dbProvider import DataBaseProvider
+from serverTerminal import ServerTerminal
 
 
 class Server:

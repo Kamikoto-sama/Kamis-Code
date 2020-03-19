@@ -1,7 +1,8 @@
 import csv
-import requests
 import time
 from collections import namedtuple
+
+import requests
 from colorama import Fore, Style
 
 

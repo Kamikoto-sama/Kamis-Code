@@ -1,5 +1,5 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from random import randint
+
 
 class HttpProcessor(BaseHTTPRequestHandler):
 	def do_GET(self):

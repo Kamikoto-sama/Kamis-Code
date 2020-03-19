@@ -15,7 +15,7 @@ class Ui_Form(object):
         Form.setObjectName("Form")
         Form.resize(400, 300)
         self.pushButton = QtWidgets.QPushButton(Form)
-        self.pushButton.setGeometry(QtCore.QRect(200, 130, 121, 111))
+        self.pushButton.setGeometry(QtCore.QRect(30, 30, 121, 111))
         self.pushButton.setObjectName("pushButton")
 
         self.retranslateUi(Form)

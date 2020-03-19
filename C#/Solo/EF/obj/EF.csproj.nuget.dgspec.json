@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\MyPrograms\\C#\\Solo\\EF\\EF.csproj": {}
+    "D:\\My_Programms\\C#\\Solo\\EF\\EF.csproj": {}
   },
   "projects": {
-    "D:\\MyPrograms\\C#\\Solo\\EF\\EF.csproj": {
+    "D:\\My_Programms\\C#\\Solo\\EF\\EF.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\MyPrograms\\C#\\Solo\\EF\\EF.csproj",
+        "projectUniqueName": "D:\\My_Programms\\C#\\Solo\\EF\\EF.csproj",
         "projectName": "EF",
-        "projectPath": "D:\\MyPrograms\\C#\\Solo\\EF\\EF.csproj",
-        "packagesPath": "C:\\Users\\danmo\\.nuget\\packages\\",
-        "outputPath": "D:\\MyPrograms\\C#\\Solo\\EF\\obj\\",
+        "projectPath": "D:\\My_Programms\\C#\\Solo\\EF\\EF.csproj",
+        "packagesPath": "C:\\Users\\Dan\\.nuget\\packages\\",
+        "outputPath": "D:\\My_Programms\\C#\\Solo\\EF\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\danmo\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Dan\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
@@ -63,7 +63,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.200\\RuntimeIdentifierGraph.json"
         }
       }
     }

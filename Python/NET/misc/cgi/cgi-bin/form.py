@@ -1,5 +1,5 @@
-import os, cgi
-import sys
+import cgi
+import os
 import subprocess
 
 # Получаем GET параметр nick переданный из HTML формы

@@ -1,10 +1,10 @@
 ﻿{
   "version": "1.0.0",
   "restore": {
-    "projectUniqueName": "D:\\My_Programms\\C#\\Solo\\WebApplication\\WebApplication.csproj",
+    "projectUniqueName": "D:\\MyPrograms\\C#\\Solo\\WebApplication\\WebApplication.csproj",
     "projectName": "WebApplication",
-    "projectPath": "D:\\My_Programms\\C#\\Solo\\WebApplication\\WebApplication.csproj",
-    "outputPath": "D:\\My_Programms\\C#\\Solo\\WebApplication\\obj\\",
+    "projectPath": "D:\\MyPrograms\\C#\\Solo\\WebApplication\\WebApplication.csproj",
+    "outputPath": "D:\\MyPrograms\\C#\\Solo\\WebApplication\\obj\\",
     "projectStyle": "PackageReference",
     "fallbackFolders": [
       "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -46,7 +46,7 @@
           "privateAssets": "all"
         }
       },
-      "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.200\\RuntimeIdentifierGraph.json"
+      "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
     }
   }
 }

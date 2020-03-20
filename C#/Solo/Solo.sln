@@ -27,10 +27,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graphs", "Graphs\Graphs.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EF", "EF\EF.csproj", "{13568859-3676-49E5-9D6A-DF14F33FAB48}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASP.NETCoreWebApplication", "ASP.NETCoreWebApplication\ASP.NETCoreWebApplication.csproj", "{464ADD1E-D6B8-4B23-B680-A875D2C8E2A9}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASPCore", "ASPCore\ASPCore.csproj", "{40CE62D1-731C-4E5F-B430-A31D7ED11B06}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,14 +75,6 @@ Global
 		{13568859-3676-49E5-9D6A-DF14F33FAB48}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13568859-3676-49E5-9D6A-DF14F33FAB48}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13568859-3676-49E5-9D6A-DF14F33FAB48}.Release|Any CPU.Build.0 = Release|Any CPU
-		{464ADD1E-D6B8-4B23-B680-A875D2C8E2A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{464ADD1E-D6B8-4B23-B680-A875D2C8E2A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{464ADD1E-D6B8-4B23-B680-A875D2C8E2A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{464ADD1E-D6B8-4B23-B680-A875D2C8E2A9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{40CE62D1-731C-4E5F-B430-A31D7ED11B06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{40CE62D1-731C-4E5F-B430-A31D7ED11B06}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{40CE62D1-731C-4E5F-B430-A31D7ED11B06}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{40CE62D1-731C-4E5F-B430-A31D7ED11B06}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

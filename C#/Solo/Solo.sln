@@ -27,8 +27,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graphs", "Graphs\Graphs.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EF", "EF\EF.csproj", "{13568859-3676-49E5-9D6A-DF14F33FAB48}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication", "WebApplication\WebApplication.csproj", "{3F0B7384-4641-4E3E-A7F8-D806241D129D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,10 +75,6 @@ Global
 		{13568859-3676-49E5-9D6A-DF14F33FAB48}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13568859-3676-49E5-9D6A-DF14F33FAB48}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13568859-3676-49E5-9D6A-DF14F33FAB48}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3F0B7384-4641-4E3E-A7F8-D806241D129D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3F0B7384-4641-4E3E-A7F8-D806241D129D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3F0B7384-4641-4E3E-A7F8-D806241D129D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3F0B7384-4641-4E3E-A7F8-D806241D129D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

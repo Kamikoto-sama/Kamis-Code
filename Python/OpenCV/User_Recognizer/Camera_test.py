@@ -6,7 +6,7 @@ count = 0
 
 while True:
 	count+=1
-	rat,frame = camera.read()
+	rat,frame = camera._read()
 	gray = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
 
 	faces = cascades.detectMultiScale(gray,1.3,5)

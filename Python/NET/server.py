@@ -1,10 +1,9 @@
 import socket as Socket
 from threading import Thread
-
 from clientHandler import ClientHandler
 from dbProvider import DataBaseProvider
+from models import ClientInfo
 from serverTerminal import ServerTerminal
-
 
 class Server:
 	def __init__(self, address="", port=2000, dbProvider=DataBaseProvider()):
@@ -32,21 +31,24 @@ class Server:
 				return
 
 			clientIndex = len(self.clients)
-			clientHandler = ClientHandler(self, clientInfo, clientIndex, self.dbProvider)
+			clientDbConnection = self.dbProvider.getDbConnection()
+			clientHandler = ClientHandler(self, clientInfo, clientIndex, clientDbConnection)
 			self.clients[clientIndex] = clientHandler
 			clientHandler.start()
-			print(f"\r{clientHandler.address} has connected")
+			
+			print(f"\r{clientHandler.clientAddress} has connected")
 	
 	def waitClientConnection(self):
 		try:
-			return self.socket.accept()
+			clientInfo = self.socket.accept()
+			return ClientInfo(clientInfo)
 		except OSError:
 			if self.__isWorking:
 				raise
 		
 	def onClientDisconnected(self, client: ClientHandler):
-		self.clients.pop(client.index)
-		print(f"\r{client.index} {client.address} has disconnected")
+		self.clients.pop(client.clientIndex)
+		print(f"\r{client.clientIndex} {client.clientAddress} has disconnected")
 
 	def stop(self):
 		self.__isWorking = False

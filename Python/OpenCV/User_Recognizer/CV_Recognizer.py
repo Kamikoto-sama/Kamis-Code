@@ -3,7 +3,7 @@ import numpy as np
 import os 
 
 recognizer = cv2.face.LBPHFaceRecognizer_create()
-recognizer.read('trainer/trainer.yml')
+recognizer._read('trainer/trainer.yml')
 faceCascade = cv2.CascadeClassifier("face.xml");
 
 font = cv2.FONT_HERSHEY_SIMPLEX
@@ -20,12 +20,12 @@ cam.set(3, 640) # set video widht
 cam.set(4, 480) # set video height
 
 # Define min window size to be recognized as a face
-minW = 0.1*cam.get(3)
-minH = 0.1*cam.get(4)
+minW = 0.1*cam._read(3)
+minH = 0.1*cam._read(4)
 
 while True:
 
-    ret, img =cam.read()
+    ret, img =cam._read()
 
     gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
 

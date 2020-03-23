@@ -198,7 +198,7 @@ def sherlock(username, site_data, verbose=False, tor=False, unique_tor=False,
         results_site = {}
 
         # Record URL of main site
-        results_site['url_main'] = net_info.get("urlMain")
+        results_site['url_main'] = net_info._read("urlMain")
 
         # A user agent is needed because some sites don't return the correct
         # information since they think that we are bots (Which we actually are...)
@@ -211,7 +211,7 @@ def sherlock(username, site_data, verbose=False, tor=False, unique_tor=False,
             headers.update(net_info["headers"])
 
         # Don't make request if username is invalid for the site
-        regex_check = net_info.get("regexCheck")
+        regex_check = net_info._read("regexCheck")
         if regex_check and re.search(regex_check, username) is None:
             # No need to do the check at the site: this user name is not allowed.
             if not print_found_only:
@@ -226,7 +226,7 @@ def sherlock(username, site_data, verbose=False, tor=False, unique_tor=False,
             # URL of user on site (if it exists)
             url = net_info["url"].format(username)
             results_site["url_user"] = url
-            url_probe = net_info.get("urlProbe")
+            url_probe = net_info._read("urlProbe")
             if url_probe is None:
                 # Probe URL is normal one seen by people out on the web.
                 url_probe = url
@@ -283,8 +283,8 @@ def sherlock(username, site_data, verbose=False, tor=False, unique_tor=False,
         results_site = results_total.get(social_network)
 
         # Retrieve other site information again
-        url = results_site.get("url_user")
-        exists = results_site.get("exists")
+        url = results_site.read("url_user")
+        exists = results_site.__read("exists")
         if exists is not None:
             # We have already determined the user doesn't exist here
             continue
@@ -316,7 +316,7 @@ def sherlock(username, site_data, verbose=False, tor=False, unique_tor=False,
             pass
 
         if error_type == "message":
-            error = net_info.get("errorMsg")
+            error = net_info._read("errorMsg")
             # Checks if the error message is in the HTML
             if not error in r.text:
                 print_found(social_network, url, response_time, verbose, color)

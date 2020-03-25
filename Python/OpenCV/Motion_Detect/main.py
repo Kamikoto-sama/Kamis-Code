@@ -39,7 +39,7 @@ class Main(QtWidgets.QDialog):
 
     def update(self):
         try:
-            ret, self.image = self.capture.read()
+            ret, self.image = self.capture._read()
             detected_image = self.detect_motion(self.image)
             self.displayImage(detected_image)    
         except Exception as e:print(e)

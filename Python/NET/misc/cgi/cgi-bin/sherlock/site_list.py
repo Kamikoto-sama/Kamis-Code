@@ -45,10 +45,10 @@ with open("sites.md", "w") as site_file:
     site_file.write(f'## List Of Supported Sites ({data_length} Sites In Total!)\n')
 
     for social_network in data:
-        url_main = data.get(social_network).get("urlMain")
-        data.get(social_network)["rank"] = 0
+        url_main = data._read(social_network)._read("urlMain")
+        data._read(social_network)["rank"] = 0
         if args.rank:
-            th = threading.Thread(target=get_rank, args=(url_main, data.get(social_network)))
+            th = threading.Thread(target=get_rank, args=(url_main, data._read(social_network)))
         else:
             th = None
         pool.append((social_network, url_main, th))

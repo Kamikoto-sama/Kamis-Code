@@ -14,13 +14,9 @@ D:\My_Programms\C#\Solo\Test\obj\Debug\Test.csproj.CoreCompileInputs.cache
 D:\MyPrograms\C#\Solo\Test\bin\Debug\Test.exe.config
 D:\MyPrograms\C#\Solo\Test\bin\Debug\Test.exe
 D:\MyPrograms\C#\Solo\Test\bin\Debug\Test.pdb
-D:\MyPrograms\C#\Solo\Test\bin\Debug\EntityFramework.dll
-D:\MyPrograms\C#\Solo\Test\bin\Debug\EntityFramework.SqlServer.dll
 D:\MyPrograms\C#\Solo\Test\bin\Debug\System.Data.SQLite.dll
 D:\MyPrograms\C#\Solo\Test\bin\Debug\Useful.dll
 D:\MyPrograms\C#\Solo\Test\bin\Debug\Useful.pdb
-D:\MyPrograms\C#\Solo\Test\bin\Debug\EntityFramework.xml
-D:\MyPrograms\C#\Solo\Test\bin\Debug\EntityFramework.SqlServer.xml
 D:\MyPrograms\C#\Solo\Test\bin\Debug\System.Data.SQLite.xml
 D:\MyPrograms\C#\Solo\Test\bin\Debug\System.Data.SQLite.dll.config
 D:\MyPrograms\C#\Solo\Test\obj\Debug\Test.csprojAssemblyReference.cache

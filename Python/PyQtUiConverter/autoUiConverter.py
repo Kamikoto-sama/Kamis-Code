@@ -2,34 +2,56 @@ import os
 from time import sleep
 from json import JSONEncoder, JSONDecoder
 
+# Config
 saveRegisteredFiles = True
+removeUnregisteredFiles = True
 dataStoreName = "registeredUiFiles.txt"
 jsonEncoder = JSONEncoder(indent= 2)
-
 sourceFilesPath = "ui"
 outputFilePath = "ui/convertedUi"
 
 def convertUi(fileName):
-	print(f"{fileName} has changed")
+	print(f"Converting {fileName} ... ", end="\r")
 	convertingConfig = f"{sourceFilesPath}//{fileName} -o {outputFilePath}//{fileName[:-3]}.py"
-	code = os.system(f"python -m PyQt5.uic.pyuic -x " + convertingConfig)
+	code = os.system("python -m PyQt5.uic.pyuic -x " + convertingConfig)
+	print(f"{fileName} has converted")
 	if code != 0:
 		exit(code)
 
 def monitorChanges():
+	print("Monitoring files...", end="\r")
 	registeredFiles = getRegisteredFiles() if saveRegisteredFiles else {}
 	while 1:
-		for file in os.listdir(sourceFilesPath):
-			if not file.endswith(".ui"):
-				continue
-			lastModifiedTime = os.path.getmtime(f"{sourceFilesPath}//{file}")
-			if not file in registeredFiles or lastModifiedTime > registeredFiles[file]:
-				registeredFiles[file] = lastModifiedTime
-				convertUi(file)
-				if saveRegisteredFiles:	
-					saveChanges(registeredFiles)
+		checkedFiles, filesHaveChanged = checkUiFiles(registeredFiles)
 		sleep(1)
-		
+		if removeUnregisteredFiles:
+			filesHaveChanged = checkConvertedFiles(registeredFiles, checkedFiles, filesHaveChanged)
+		if saveRegisteredFiles and filesHaveChanged:
+			saveChanges(registeredFiles)
+
+def checkUiFiles(registeredFiles):
+	sourceFiles = os.listdir(sourceFilesPath)
+	filesHaveChanged = False
+	checkedFiles = []
+	for file in filter(lambda f: f.endswith(".ui"), sourceFiles):
+		lastModifiedTime = os.path.getmtime(f"{sourceFilesPath}//{file}")
+		if not file in registeredFiles or lastModifiedTime > registeredFiles[file]:
+			registeredFiles[file] = lastModifiedTime
+			convertUi(file)
+			filesHaveChanged = True
+		checkedFiles.append(file)
+	return checkedFiles, filesHaveChanged
+				
+def checkConvertedFiles(registeredFiles, checkedFiles, filesHaveChanged):
+	convertedFiles = os.listdir(outputFilePath)
+	for file in filter(lambda f: f.endswith(".py"), convertedFiles):
+		if (sourceFile := f"{file[:-3]}.ui") not in checkedFiles:
+			os.remove(f"{outputFilePath}//{file}")
+			registeredFiles.pop(sourceFile)
+			print(f"Unregistered {file} has removed")
+			filesHaveChanged = True
+	return filesHaveChanged
+
 def getRegisteredFiles():
 	if not os.path.exists(dataStoreName):
 		return {}

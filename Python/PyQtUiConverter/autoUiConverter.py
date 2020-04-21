@@ -9,6 +9,7 @@ dataStoreName = "registeredUiFiles.txt"
 jsonEncoder = JSONEncoder(indent= 2)
 sourceFilesPath = "ui"
 outputFilePath = "ui/convertedUi"
+checkDelaySeconds = 1
 
 def convertUi(fileName):
 	print(f"Converting {fileName} ... ", end="\r")
@@ -20,14 +21,23 @@ def convertUi(fileName):
 
 def monitorChanges():
 	print("Monitoring files...", end="\r")
-	registeredFiles = getRegisteredFiles() if saveRegisteredFiles else {}
+	if saveRegisteredFiles:
+		checkExistingOutputDir()
+		registeredFiles = getRegisteredFiles()
+	else:
+		registeredFiles = {}
+		
 	while 1:
 		checkedFiles, filesHaveChanged = checkUiFiles(registeredFiles)
-		sleep(1)
+		sleep(checkDelaySeconds)
 		if removeUnregisteredFiles:
 			filesHaveChanged = checkConvertedFiles(registeredFiles, checkedFiles, filesHaveChanged)
 		if saveRegisteredFiles and filesHaveChanged:
 			saveChanges(registeredFiles)
+			
+def checkExistingOutputDir():
+	if not os.path.exists(outputFilePath):
+		os.makedirs(outputFilePath)
 
 def checkUiFiles(registeredFiles):
 	sourceFiles = os.listdir(sourceFilesPath)

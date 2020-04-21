@@ -20,7 +20,6 @@ def convertUi(fileName):
 		exit(code)
 
 def monitorChanges():
-	print("Monitoring files...", end="\r")
 	if saveRegisteredFiles:
 		checkExistingOutputDir()
 		registeredFiles = getRegisteredFiles()
@@ -34,7 +33,9 @@ def monitorChanges():
 			filesHaveChanged = checkConvertedFiles(registeredFiles, checkedFiles, filesHaveChanged)
 		if saveRegisteredFiles and filesHaveChanged:
 			saveChanges(registeredFiles)
-			
+		print("Monitoring files...", end="\r")
+
+
 def checkExistingOutputDir():
 	if not os.path.exists(outputFilePath):
 		os.makedirs(outputFilePath)

@@ -1,10 +1,10 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 
-namespace Useful
+namespace Useful.Extensions.Collection
 {
-    public static class Extensions
+    public static class CollectionExtensions
     {
         public static string Join<T>(this string separator, IEnumerable<T> values)
             => string.Join(separator, values);

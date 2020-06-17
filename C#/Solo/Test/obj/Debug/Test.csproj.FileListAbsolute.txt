@@ -25,3 +25,5 @@ D:\MyPrograms\C#\Solo\Test\obj\Debug\Test.exe
 D:\MyPrograms\C#\Solo\Test\obj\Debug\Test.pdb
 D:\MyPrograms\C#\Solo\Test\bin\Debug\System.Data.SqlClient.dll
 D:\MyPrograms\C#\Solo\Test\bin\Debug\System.Data.SqlClient.xml
+D:\My_Programms\C#\Solo\Test\bin\Debug\System.Data.SqlClient.dll
+D:\My_Programms\C#\Solo\Test\bin\Debug\System.Data.SqlClient.xml

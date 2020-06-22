@@ -1,0 +1,13 @@
+D:\My_Programms\C#\Solo\BooksAndShelvesTask\bin\Debug\netcoreapp3.1\BooksAndShelvesTask.exe
+D:\My_Programms\C#\Solo\BooksAndShelvesTask\bin\Debug\netcoreapp3.1\BooksAndShelvesTask.deps.json
+D:\My_Programms\C#\Solo\BooksAndShelvesTask\bin\Debug\netcoreapp3.1\BooksAndShelvesTask.runtimeconfig.json
+D:\My_Programms\C#\Solo\BooksAndShelvesTask\bin\Debug\netcoreapp3.1\BooksAndShelvesTask.runtimeconfig.dev.json
+D:\My_Programms\C#\Solo\BooksAndShelvesTask\bin\Debug\netcoreapp3.1\BooksAndShelvesTask.dll
+D:\My_Programms\C#\Solo\BooksAndShelvesTask\bin\Debug\netcoreapp3.1\BooksAndShelvesTask.pdb
+D:\My_Programms\C#\Solo\BooksAndShelvesTask\obj\Debug\netcoreapp3.1\BooksAndShelvesTask.csprojAssemblyReference.cache
+D:\My_Programms\C#\Solo\BooksAndShelvesTask\obj\Debug\netcoreapp3.1\BooksAndShelvesTask.csproj.CoreCompileInputs.cache
+D:\My_Programms\C#\Solo\BooksAndShelvesTask\obj\Debug\netcoreapp3.1\BooksAndShelvesTask.AssemblyInfoInputs.cache
+D:\My_Programms\C#\Solo\BooksAndShelvesTask\obj\Debug\netcoreapp3.1\BooksAndShelvesTask.AssemblyInfo.cs
+D:\My_Programms\C#\Solo\BooksAndShelvesTask\obj\Debug\netcoreapp3.1\BooksAndShelvesTask.dll
+D:\My_Programms\C#\Solo\BooksAndShelvesTask\obj\Debug\netcoreapp3.1\BooksAndShelvesTask.pdb
+D:\My_Programms\C#\Solo\BooksAndShelvesTask\obj\Debug\netcoreapp3.1\BooksAndShelvesTask.genruntimeconfig.cache
